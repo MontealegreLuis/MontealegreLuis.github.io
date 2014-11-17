@@ -1,0 +1,21 @@
+{
+    "name": "montelagreluis/blog",
+    "description": "Personal blog",
+    "type": "sculpin-skeleton",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Luis Montealegre",
+            "email": "montealegreluis@gmail.com",
+            "homepage": "http://blog.com"
+        }
+    ],
+    "require": {
+        "components/bootstrap": "~2.3.1",
+        "components/jquery": "~1.9.1",
+        "components/highlightjs": "~7.3.0"
+    },
+    "config": {
+        "component-dir": "source/components"
+    }
+}
