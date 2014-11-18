@@ -2,31 +2,24 @@
 {% block content_wrapper %}
     <article>
         <header>
-            <h2>{{ page.title }} <small>{{ page.date|date("j M Y") }}</small></h2>
+            <div class="page-header"><h1>{{ page.title }}</h1></div>
+            <p>
+                <span class="glyphicon glyphicon-time"></span> {{ page.date|date("j M Y") }}&nbsp;
+                <span class="glyphicon glyphicon-bookmark"></span>
+                <a href="{{ site.url }}/blog/categories/{{ page.categories[0]|url_encode(true) }}">
+                    {{ page.categories[0] }}
+                </a>&nbsp;
+                <span class="glyphicon glyphicon-tags"></span>&nbsp;
+                {% for tag in page.tags %}
+                    <a href="{{ site.url }}/blog/tags/{{ tag|url_encode(true) }}">
+                        {{ tag }}
+                    </a>{% if not loop.last %}, {% endif %}
+                {% endfor %}
+            </p>
         </header>
         <div>
             {{ page.blocks.content|raw }}
         </div>
-        {% if page.categories %}
-            <p class="categories">
-            Categories:
-            {% for category in page.categories %}
-                <a href="{{ site.url }}/blog/categories/{{ category|url_encode(true) }}">
-                    {{ category }}
-                </a>{% if not loop.last %}, {% endif %}
-            {% endfor %}
-            </p>
-        {% endif %}
-        {% if page.tags %}
-            <p class="tags">
-            Tags:
-            {% for tag in page.tags %}
-                <a href="{{ site.url }}/blog/tags/{{ tag|url_encode(true) }}">
-                    {{ tag }}
-                </a>{% if not loop.last %}, {% endif %}
-            {% endfor %}
-            </p>
-        {% endif %}
 
         {% if page.previous_post or page.next_post %}
             <nav class="article">

@@ -1,3 +1,12 @@
+body {
+    font-family: 'Raleway', sans-serif;
+    font-size: 1.6em;
+}
+
+pre {
+    font-family: Monaco, Consolas, monospace !important;
+}
+
 .link-icon:hover {
     text-decoration: none;
 }
@@ -36,6 +45,11 @@ footer {
     color: #fff;
 }
 
+pre, code {
+    background: #fdf6e3;
+    font-family: monospace;
+}
+
 @media (min-width: 980px) {
     body {
         padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
@@ -51,11 +65,11 @@ footer {
 }
 
 .navigation .navbar-nav li a {
-    line-height: 2.2em;
+    line-height: 1.8em;
 }
 
 .navigation .navbar-brand {
-    line-height: 1.6em;
+    line-height: 1.5em;
 }
 
 .image-bg-fluid-height,
