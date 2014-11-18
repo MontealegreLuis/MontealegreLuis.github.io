@@ -11,9 +11,10 @@ use:
     - posts_categories
 ---
 Recientemente encontré un [artículo][1] que trataba sobre como separar el código JavaScript de modo que podamos hacer
-pruebas unitarias a código que involucre la manipulación de [DOM][2] y solicitudes [XHR][3].
+pruebas unitarias a código que involucre la manipulación de [DOM][2] y solicitudes [XHR][3]. Me di cuenta de lo poco que
+se sobre testing y código desacoplado en JavaScript y me decidí a escribir un ejemplo.
 
-En este post desarrollaré un ejemplo usando `selects` encadenados, donde al seleccionar un valor del primer `select` se
+El ejemplo trata de los clásicos `selects` encadenados, donde al seleccionar un valor del primer `select` se
 actualizan los valores del segundo, usando la típica relación estados-ciudades.
 
 El código que generalmente escribimos para tener este comportamiento es más o menos así:
@@ -45,8 +46,8 @@ El código que generalmente escribimos para tener este comportamiento es más o 
 </script>
 ~~~
 
-Para simplificar la aplicación, `/app/cities.json` es un archivo con extensión `.json` que tiene un contenido
-similar al siguiente.
+Para simplificar el ejemplo, `/app/cities.json` es un archivo con extensión `.json` que tiene un contenido similar al
+siguiente.
 
 ~~~json
 [
@@ -68,19 +69,19 @@ similar al siguiente.
 Este código si bien no es difícil de entender, resulta muy difícil de testear. El primero de los problemas
 que encontramos es que el código JavaScript está dentro del HTML y resulta imposible testearlo por separado. Segundo
 aunque estuviera en un archivo separado no cuenta con una interfaz pública que podamos validar a través de pruebas.
-Un punto más en contra del código es que tampoco es posible hacer pruebas a las funciones anónimas que utiliza.
-Además el uso de manejadores de eventos que actualizan el DOM es una muestra de la mezcla responsabilidades dentro del
-código. Para terminar, el uso de solicitudes XHR sin un mecanismo que nos permita saber cuando terminaron complica aún
+Un punto más en contra es que tampoco es posible hacer pruebas a las funciones anónimas que utiliza. Además el uso de
+manejadores de eventos que actualizan el DOM es una muestra de la mezcla de responsabilidades dentro del código.
+Para terminar, el uso de solicitudes XHR sin un mecanismo que nos permita saber cuando terminaron, complica aún
 más las cosas.
 
 ## Separando responsabilidades
 
 Podemos comenzar reemplazando el código que genera HTML concatenando cadenas, por una librería de plantillas que genere
-los elementos `option` de nuestro select, lo cual nos ayudará a empezar a separar responsabilidades en nuestro código.
-Para nuestro ejemplo usaremos [Twig.js][5] que es una implementación en JavaScript de [Twig][6].
+los elementos `option` de nuestro select, lo cual nos ayudará a empezar a separar responsabilidades. Para nuestro
+ejemplo usaremos [Twig.js][5] que es una implementación en JavaScript de [Twig][6].
 
-Para generar los elementos `option` con Twig crearemos una plantilla en `js/app/templates/cities.html.twig` que iterará
-sobre los resultados que nos devuelve nuestra llamada AJAX generando nuestros elementos `option`.
+Para generar los elementos `option` con Twig usamos una plantilla que itera sobre los resultados que nos devuelve
+nuestra llamada AJAX generando nuestros elementos `option`.
 
 ~~~twig
 { % for city in cities % }
@@ -91,7 +92,7 @@ sobre los resultados que nos devuelve nuestra llamada AJAX generando nuestros el
 Para poder usar la plantilla debemos cargarla primero.
 
 ~~~javascript
-twig({href: '/js/app/templates/cities.html.twig', id: 'cities'}); // load the template
+twig({href: '/js/app/templates/cities.html.twig', id: 'cities', async: false}); // load the template
 twig({ref: 'cities'}).render({cities: cities});
 ~~~
 
@@ -103,22 +104,21 @@ $.ajax({
     dataType: 'json',
     data: {'state': $(this).val()},
     success: function(cities) {
-        twig({href: '/js/app/templates/cities.html.twig', id: 'cities'});
+        twig({href: '/js/app/templates/cities.html.twig', id: 'cities', async: false});
         $('#cities').html(twig({ref: 'cities'}).render({cities: cities}));
     }
 });
 ~~~
 
-El siguiente paso para hacer que nuestro código sea testeable es convertir la función anónima que se ejecuta al
-finalizar la solicuitud AJAX (`success`) en un [módulo][4]. Con esto comenzaremos a dar una interfaz pública a nuestro
-código para poder testearlo por separado.
+El siguiente paso es convertir la función anónima que se ejecuta al finalizar la solicuitud AJAX (`success`) en un
+[módulo][4]. Con esto comenzaremos a dar una interfaz pública a nuestro código para poder testearlo por separado.
 
 ~~~javascript
 var ShippingForm = function($city, view) {
     'use strict';
 
     this.refreshOptions = function(cities) {
-        $city.html(twig({ref: 'cities'}).render({cities: cities}));
+        $city.html(view({ref: 'cities'}).render({cities: cities}));
     };
 
     return this;
@@ -177,9 +177,9 @@ $('#states').on('change', form.getCities);
 ~~~
 
 Por útlimo podemos encapsular la asociación del evento `change` con el método `getCities` dentro de nuestro módulo, lo
-cuál nos dará oportunidad de testear todo el código que teniamos al inicio a través de una interfaz pública. Es
-importante mencionar que estamos [inyectando][8] todas nuestras dependencias con el DOM y con solictudes XHR a fin de
-poder reemplazarlas por [dobles][9] en nuestras pruebas.
+cuál nos dará oportunidad de testear todo el código que teniamos al inicio. Es importante mencionar que estamos
+[inyectando][8] todas nuestras dependencias (DOM y solictudes XHR) a fin de poder reemplazarlas por [dobles][9]
+en nuestras pruebas.
 
 ~~~javascript
 var ShippingForm = function($city, view, $state, $, refreshOptions) {
@@ -200,7 +200,8 @@ de entrada para nuestra aplicación, al cual generalmente se le nombra `main.js`
 ~~~
 
 El archivo `main.js` se usa para configurar las dependencias iniciales de nuestra aplicación, en nuestro caso
-jQuery, Twig y un módulo escrito por nosotros llamado `app`:
+jQuery y Twig. También es el encargado de iniciar nuestra aplicación a través de unn módulo escrito por nosotros llamado
+`app`:
 
 ~~~javascript
 require.config({
@@ -216,8 +217,7 @@ require(['./app'], function(app) {
 });
 ~~~
 
-El módulo `app` es el encargado de hacer la carga inicial de dependencias y de inicializar nuestros módulos, en nuestro
-ejemplo `ShippingForm`.
+El módulo `app` hace la carga inicial de dependencias, incluidos nuestros módulos (`ShippingForm`).
 
 ~~~javascript
 define(['twig', 'jquery', './src/ShippingForm'], function (view, $, ShippingForm) {
@@ -245,11 +245,10 @@ define(['twig', 'jquery', './src/ShippingForm'], function (view, $, ShippingForm
 ## Escribiendo los tests
 
 Para las pruebas usaré [Jasmine][11] que es un framework para testing del tipo [BDD][12] que se destaca por tener una
-sintaxis muy fácil de entender. Jasmine utiliza suites, que son un conjunto de casos de pruebas, y specs que son los
-tests en sí.
+sintaxis muy fácil de entender. Jasmine utiliza suites, que son un conjunto de casos de pruebas llamados specs.
 
-Para las pruebas unitarias usaremos [npm][13] para instalar las dependencias. `npm` utiliza el archivo `package.json`
-para determinar cuales son las dependencias a instalar.
+Usaremos [npm][13] para instalar las dependencias. `npm` utiliza el archivo `package.json` para determinar cuales son
+las dependencias a instalar.
 
 ~~~json
 {
@@ -265,17 +264,18 @@ para determinar cuales son las dependencias a instalar.
 }
 ~~~
 
-Una vez definidas nuestras dependencias, las instalamos
+Una vez definidas nuestras dependencias (Jasmine y RequireJS), las instalamos
 
 ~~~bash
 $ npm install
 ~~~
 
 Para poder ejecutar nuestras pruebas, necesitamos configurar Jasmine y RequireJS para que funcionen de manera similar a
-como funcionan en un navegador, para esto necesitamos un [runner][18], el cual está basado en la configuración de este
-repo de [Zaworski][14].
+como funcionan en un navegador, para esto necesitamos un [runner][18] especial, el cual está basado en la configuración
+de este repo de [Zaworski][14].
 
-Con este archivo podemos ya ejecutar nuestros tests desde la consola usando `npm`
+Con este archivo (el cuál se configura en la llave `scripts` del archivo `package.json`) podemos ya ejecutar nuestros
+tests desde la consola usando `npm`
 
 ~~~bash
 $ npm test
@@ -283,7 +283,7 @@ $ npm test
 
 Nuestra primera suite verificará los métodos de nuestro módulo `ShippingForm`. Para esto debemos crear el archivo
 `js/app/spec/ShippingForm.spec.js`. Nuestro primer spec verificará que se inicialice correctamente el evento change
-de nuestro select de estados. Para esto creamos un doble del tipo [spy][15] para nuestro elemento del DOM `$state` que
+de nuestro `select` de estados. Para esto creamos un doble del tipo [spy][15] para nuestro elemento del DOM `$state` que
 verifica que se llame al método `on` con los parámetros correctos.
 
 ~~~javascript
@@ -304,7 +304,7 @@ define(['src/ShippingForm'], function(ShippingForm) {
 ~~~
 
 Nuestro segundo spec verifica que si el valor del elemento seleccionado en nuestro `select` es vacío, la llamada AJAX
-se omita. En esta ocasión se crea un [stub][16] para `$state` que nos devuelva una cadena vacía, que nos permita
+no se ejecute. En esta ocasión se crea un [stub][16] para `$state` que nos devuelva una cadena vacía, que nos permita
  verificar en el spy para `$` que el método `ajax` no se llamó.
 
 ~~~javascript
@@ -325,9 +325,9 @@ it('should skip getting the cities if there is no current state selected', funct
 ~~~
 
 Nuestro siguiente spec verifica que si se selecciona un valor no vacío en el `select` de estado, se realice la llamada
-AJAX que devuelva las ciudades y se ejecute al callback de éxito. Para esto creamos un spy de la función `refreshOptions`
-para verificar que se llame al callback de éxito al terminar la solicitud AJAX, también necesitamos un stub de `$state`
-para que devuelva un valor no vacío y el spy de `$` ejecute el método `ajax`.
+AJAX que devuelva las ciudades. Para esto creamos un spy de la función `refreshOptions` para verificar que se llame al
+callback de éxito al terminar la solicitud AJAX, también necesitamos un stub de `$state` para que devuelva un valor no
+vacío y que el spy de `$` ejecute el método `ajax`.
 
 ~~~javascript
 it('should get the cities when a state is selected', function () {
@@ -377,7 +377,8 @@ it('should refresh the cities options', function () {
 });
 ~~~
 
-Puedes revisar el código completo en este repo en [Github][17].
+Espero que este post te sea de utilidad para realizar testing a código JavaScript. Si tienes algun comentario no dudes
+en comunicarte conmigo, lo agradeceré mucho. Puedes revisar el código completo en este repo en [Github][17].
 
 [1]: https://shanetomlinson.com/2013/testing-javascript-frontend-part-1-anti-patterns-and-fixes/
 [2]: http://es.wikipedia.org/wiki/Document_Object_Model
