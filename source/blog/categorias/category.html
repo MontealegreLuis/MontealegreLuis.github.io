@@ -1,13 +1,17 @@
 ---
 layout: default
-title: Posts Archive
-generator: pagination
+title: Category Archive
+generator: [posts_category_index, pagination]
+pagination:
+    provider: page.category_posts
 use:
-    - posts
     - posts_categories
+
 ---
+{% block title %}{{ page.title }} "{{ page.category }}"{% endblock %}
+{% block content %}
 {% set year = '0' %}
-<div class="page-header"><h2><span class="glyphicon glyphicon-folder-open"></span> Archivo</h2></div>
+<div class="page-header"><h2><span class="glyphicon glyphicon-bookmark"></span> {{ page.category }}</h2></div>
 {% for post in page.pagination.items %}
     {% set this_year %}{{ post.date | date("Y") }}{% endset %}
     {% if year != this_year %}
@@ -22,14 +26,6 @@ use:
     <article class="row">
         <div class="col-sm-6 posts-list">
             <div class="panel panel-primary">
-                <div class="panel-heading">
-                    <h2 class="panel-title">
-                        <span class="glyphicon glyphicon-bookmark"></span>
-                        <a href="{{ site.url }}/blog/categories/{{ post.meta.categories[0]|url_encode(true) }}">
-                            {{ post.categories[0] }}
-                        </a>
-                    </h2>
-                </div>
                 <div class="panel-body">
                     <h1><a href="{{ site.url }}{{ post.url }}">{{ post.title }}</a></h1>
                 </div>
@@ -42,7 +38,7 @@ use:
                         {% for tag in post.meta.tags %}
                         <a href="{{ site.url }}/blog/tags/{{ tag|url_encode(true) }}">
                             {{ tag }}
-                        </a>{% if not loop.last %}, {% endif %}
+                        </a>{% if not loop.last %}&nbsp;{% endif %}
                         {% endfor %}
                     </p>
                 </div>
@@ -63,3 +59,4 @@ use:
     </nav>
 {% endif %}
 </div>
+{% endblock content %}

@@ -1,4 +1,4 @@
-{% extends "default" %}
+{% extends "comments" %}
 {% block content_wrapper %}
     <article>
         <header>
@@ -6,7 +6,7 @@
             <p>
                 <span class="glyphicon glyphicon-time"></span> {{ page.date|date("j M Y") }}&nbsp;
                 <span class="glyphicon glyphicon-bookmark"></span>
-                <a href="{{ site.url }}/blog/categories/{{ page.categories[0]|url_encode(true) }}">
+                <a href="{{ site.url }}/blog/categorias/{{ page.categories[0]|url_encode(true) }}">
                     {{ page.categories[0] }}
                 </a>&nbsp;
                 <span class="glyphicon glyphicon-tags"></span>&nbsp;

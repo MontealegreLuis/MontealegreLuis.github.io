@@ -71,14 +71,14 @@ que encontramos es que el código JavaScript está dentro del HTML y resulta imp
 aunque estuviera en un archivo separado no cuenta con una interfaz pública que podamos validar a través de pruebas.
 Un punto más en contra es que tampoco es posible hacer pruebas a las funciones anónimas que utiliza. Además el uso de
 manejadores de eventos que actualizan el DOM es una muestra de la mezcla de responsabilidades dentro del código.
-Para terminar, el uso de solicitudes XHR sin un mecanismo que nos permita saber cuando terminaron, complica aún
-más las cosas.
+Para terminar, el uso de solicitudes XHR sin un mecanismo que nos permita saber cuando terminaron su ejecución,
+complica aún más las cosas.
 
 ## Separando responsabilidades
 
 Podemos comenzar reemplazando el código que genera HTML concatenando cadenas, por una librería de plantillas que genere
-los elementos `option` de nuestro select, lo cual nos ayudará a empezar a separar responsabilidades. Para nuestro
-ejemplo usaremos [Twig.js][5] que es una implementación en JavaScript de [Twig][6].
+los elementos `option` de nuestro select. Para nuestro ejemplo usaremos [Twig.js][5] que es una implementación en
+JavaScript de [Twig][6].
 
 Para generar los elementos `option` con Twig usamos una plantilla que itera sobre los resultados que nos devuelve
 nuestra llamada AJAX generando nuestros elementos `option`.
@@ -92,7 +92,7 @@ nuestra llamada AJAX generando nuestros elementos `option`.
 Para poder usar la plantilla debemos cargarla primero.
 
 ~~~javascript
-twig({href: '/js/app/templates/cities.html.twig', id: 'cities', async: false}); // load the template
+twig({href: '/js/app/templates/cities.html.twig', id: 'cities', async: false});
 twig({ref: 'cities'}).render({cities: cities});
 ~~~
 
@@ -139,7 +139,7 @@ $.ajax({
 ~~~
 
 La lógica relacionada con el evento `change` de nuestro `select` de estados también es una función anónima que podemos
-mover dentro de nuestro módulo
+mover dentro de nuestro módulo (`ShippingForm.getCities`).
 
 ~~~javascript
 var ShippingForm = function($city, view, $state, $, citiesUrl, refreshOptions) {
@@ -168,7 +168,7 @@ var ShippingForm = function($city, view, $state, $, citiesUrl, refreshOptions) {
 };
 ~~~
 
-De nuevo reemplazamos la función anónima con el método `getCities` de nuestro módulo
+De nuevo reemplazamos la función anónima con el método `getCities` de nuestro módulo.
 
 ~~~javascript
 var form = new ShippingForm($('#cities'), twig, $('#states'), $, '/app/cities.json');
@@ -177,7 +177,7 @@ $('#states').on('change', form.getCities);
 ~~~
 
 Por útlimo podemos encapsular la asociación del evento `change` con el método `getCities` dentro de nuestro módulo, lo
-cuál nos dará oportunidad de testear todo el código que teniamos al inicio. Es importante mencionar que estamos
+cuál nos dará oportunidad de testear todo el código que teníamos al inicio. Es importante mencionar que estamos
 [inyectando][8] todas nuestras dependencias (DOM y solictudes XHR) a fin de poder reemplazarlas por [dobles][9]
 en nuestras pruebas.
 
@@ -200,8 +200,8 @@ de entrada para nuestra aplicación, al cual generalmente se le nombra `main.js`
 ~~~
 
 El archivo `main.js` se usa para configurar las dependencias iniciales de nuestra aplicación, en nuestro caso
-jQuery y Twig. También es el encargado de iniciar nuestra aplicación a través de unn módulo escrito por nosotros llamado
-`app`:
+jQuery y Twig. También es el encargado de iniciar nuestra aplicación a través de un módulo escrito por nosotros llamado
+`app`.
 
 ~~~javascript
 require.config({
@@ -264,7 +264,7 @@ las dependencias a instalar.
 }
 ~~~
 
-Una vez definidas nuestras dependencias (Jasmine y RequireJS), las instalamos
+Una vez definidas nuestras dependencias (Jasmine y RequireJS), las instalamos.
 
 ~~~bash
 $ npm install
@@ -281,9 +281,9 @@ tests desde la consola usando `npm`
 $ npm test
 ~~~
 
-Nuestra primera suite verificará los métodos de nuestro módulo `ShippingForm`. Para esto debemos crear el archivo
-`js/app/spec/ShippingForm.spec.js`. Nuestro primer spec verificará que se inicialice correctamente el evento change
-de nuestro `select` de estados. Para esto creamos un doble del tipo [spy][15] para nuestro elemento del DOM `$state` que
+Nuestra suite verifica los métodos del módulo `ShippingForm`. Para esto debemos crear el archivo
+`js/app/spec/ShippingForm.spec.js`. Nuestro primer spec verifica que se inicialice correctamente el evento `change`
+de nuestro `select` de estados. Para esto creamos un doble del tipo [spy][15] para nuestro elemento `$state` que
 verifica que se llame al método `on` con los parámetros correctos.
 
 ~~~javascript
@@ -377,8 +377,10 @@ it('should refresh the cities options', function () {
 });
 ~~~
 
-Espero que este post te sea de utilidad para realizar testing a código JavaScript. Si tienes algun comentario no dudes
-en comunicarte conmigo, lo agradeceré mucho. Puedes revisar el código completo en este repo en [Github][17].
+Espero que este post te sea de utilidad para realizar testing a código JavaScript. Si tienes algun comentario lo
+agradeceré mucho. Puedes revisar el código completo en este repo en [Github][17]. Si al probar el código algo no
+funciona y necesitas ayuda por favor deja tu pregunta [aquí][19] así más gente puede ayudarte y más se beneficiarán
+con la respuesta.
 
 [1]: https://shanetomlinson.com/2013/testing-javascript-frontend-part-1-anti-patterns-and-fixes/
 [2]: http://es.wikipedia.org/wiki/Document_Object_Model
@@ -398,3 +400,4 @@ en comunicarte conmigo, lo agradeceré mucho. Puedes revisar el código completo
 [16]: http://xunitpatterns.com/Test%20Stub.html
 [17]: https://github.com/MontealegreLuis/jstesting
 [18]: https://github.com/MontealegreLuis/jstesting/blob/master/specs-runner.js
+[19]: http://preguntas.hfpuebla.org/
