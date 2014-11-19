@@ -16,7 +16,7 @@ use:
                     <span class="glyphicon glyphicon-bookmark"></span>
                     <a href="{{ site.url }}/blog/categorias/{{ post.meta.categories[0]|url_encode(true) }}">
                         {{ post.categories[0] }}
-                    </a>
+                    </a>&nbsp;
                 </h2>
             </div>
             <div class="panel-body">
@@ -26,13 +26,17 @@ use:
                 <p class="pull-right">
                     <span class="glyphicon glyphicon-time"></span> <small>{{ post.date|date("j M Y") }}</small>
                 </p>
+                <p>
+                    <span class="glyphicon glyphicon-comment"></span>
+                    <a href="{{ site.url }}{{ post.url }}#disqus_thread"></a>
+                </p>
                 <p class="tags">
-                <span class="glyphicon glyphicon-tags"></span>&nbsp;
-                {% for tag in post.meta.tags %}
-                    <a href="{{ site.url }}/blog/tags/{{ tag|url_encode(true) }}">
-                        {{ tag }}
-                    </a>{% if not loop.last %}&nbsp;{% endif %}
-                {% endfor %}
+                    <span class="glyphicon glyphicon-tags"></span>&nbsp;
+                    {% for tag in post.meta.tags %}
+                        <a href="{{ site.url }}/blog/tags/{{ tag|url_encode(true) }}">
+                            {{ tag }}
+                        </a>{% if not loop.last %}&nbsp;{% endif %}
+                    {% endfor %}
                 </p>
             </div>
         </div>
