@@ -4,7 +4,8 @@
         <header>
             <div class="page-header"><h1>{{ page.title }}</h1></div>
             <p>
-                <span class="glyphicon glyphicon-time"></span> {{ page.date|date("j M Y") }}&nbsp;
+                <span class="glyphicon glyphicon-time"></span>
+                {{ page.date|localizeddate('long', 'none', 'es', 'America/Mexico_City', 'MMMM dd yyyy') }}&nbsp;
                 <span class="glyphicon glyphicon-bookmark"></span>
                 <a href="{{ site.url }}/blog/categorias/{{ page.categories[0]|url_encode(true) }}">
                     {{ page.categories[0] }}

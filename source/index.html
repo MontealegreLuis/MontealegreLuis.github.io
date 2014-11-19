@@ -10,46 +10,17 @@ use:
 <div class="posts-list">
 {% for post in page.pagination.items %}
     <div class="col-sm-4 posts-list">
-        <div class="panel panel-primary">
-            <div class="panel-heading">
-                <h2 class="panel-title">
-                    <span class="glyphicon glyphicon-bookmark"></span>
-                    <a href="{{ site.url }}/blog/categorias/{{ post.meta.categories[0]|url_encode(true) }}">
-                        {{ post.categories[0] }}
-                    </a>&nbsp;
-                </h2>
-            </div>
-            <div class="panel-body">
-                <h1><a href="{{ site.url }}{{ post.url }}">{{ post.title }}</a></h1>
-            </div>
-            <div class="panel-footer">
-                <p class="pull-right">
-                    <span class="glyphicon glyphicon-time"></span> <small>{{ post.date|date("j M Y") }}</small>
-                </p>
-                <p>
-                    <span class="glyphicon glyphicon-comment"></span>
-                    <a href="{{ site.url }}{{ post.url }}#disqus_thread"></a>
-                </p>
-                <p class="tags">
-                    <span class="glyphicon glyphicon-tags"></span>&nbsp;
-                    {% for tag in post.meta.tags %}
-                        <a href="{{ site.url }}/blog/tags/{{ tag|url_encode(true) }}">
-                            {{ tag }}
-                        </a>{% if not loop.last %}&nbsp;{% endif %}
-                    {% endfor %}
-                </p>
-            </div>
-        </div>
+        {% include 'components/post.html.twig' %}
     </div>
 {% endfor %}
 </div>
 {% if page.pagination.previous_page or page.pagination.next_page %}
     <nav>
         {% if page.pagination.previous_page %}
-            <a href="{{ site.url }}{{ page.pagination.previous_page.url }}">Newer Posts</a>
+            <a href="{{ site.url }}{{ page.pagination.previous_page.url }}">Posts más recientes</a>
         {% endif %}<br />
         {% if page.pagination.next_page %}
-            <a href="{{ site.url }}{{ page.pagination.next_page.url }}">Older Posts</a>
+            <a href="{{ site.url }}{{ page.pagination.next_page.url }}">Posts anteriores</a>
         {% endif %}<br />
     </nav>
 {% endif %}

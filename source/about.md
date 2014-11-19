@@ -17,7 +17,7 @@ Soy originario de Puebla, estudié la Licenciatura y Maestría en Ciencias de la
 [Benemérita Universidad Autónoma de Puebla][2]. Durante la maestría hice un poco de investigación sobre
 [Sistemas Multi-Agentes Normativos][3] y desde hace 11 años imparto clases de programación en universidades (más de 10
 hasta la fecha: BUAP, [UVP][4], [ITP][5], por mencionar algunas). Desde 2004 empecé a desarrollar software en empresas
-como [CFE][6], [Ellucian][7], [Bic Consulting][8] y [Digizent International][9] y [por mi cuenta][12]. Durante estos 10 años
+como [CFE][6], [Ellucian][7], [Bic Consulting][8], [Digizent International][9] y [por mi cuenta][12]. Durante estos 10 años
 he trabajado con varios lenguajes de programación, entre los más importantes están Java, C#, y PHP. Actualmente estoy
 aprendiendo Scala con mis amigos de [Hackers & Founders][10] y [Scala MX][11].
 
