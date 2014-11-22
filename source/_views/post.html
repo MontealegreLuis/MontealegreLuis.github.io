@@ -7,12 +7,12 @@
                 <span class="glyphicon glyphicon-time"></span>
                 {{ page.date|localizeddate('long', 'none', 'es', 'America/Mexico_City', 'MMMM dd yyyy') }}&nbsp;
                 <span class="glyphicon glyphicon-bookmark"></span>
-                <a href="{{ site.url }}/blog/categorias/{{ page.categories[0]|url_encode(true) }}">
+                <a href="/blog/categorias/{{ page.categories[0]|url_encode(true) }}/">
                     {{ page.categories[0] }}
                 </a>&nbsp;
                 <span class="glyphicon glyphicon-tags"></span>&nbsp;
                 {% for tag in page.tags %}
-                    <a href="{{ site.url }}/blog/tags/{{ tag|url_encode(true) }}">
+                    <a href="/blog/tags/{{ tag|url_encode(true) }}/">
                         {{ tag }}
                     </a>{% if not loop.last %}, {% endif %}
                 {% endfor %}

@@ -12,7 +12,7 @@ permalink: sitemap.xml
   </url>
   {% for post in data.posts %}
   <url>
-    <loc>{{ site.url }}{{ post.url }}</loc>
+    <loc>{{ site.url }}{{ post.url }}/</loc>
     <lastmod>{{ post.date|date('c') }}</lastmod>
     <changefreq>monthly</changefreq>
     <priority>1.0</priority>

@@ -2,7 +2,7 @@
     <div class="panel-heading"><h3 class="panel-title">Categorías</h3></div>
     <div class="list-group">
         {% for category,posts in data.posts_categories %}
-            <a href="/blog/categorias/{{ category|url_encode(true) }}" class="list-group-item">
+            <a href="/blog/categorias/{{ category|url_encode(true) }}/" class="list-group-item">
                 {{ category }}
             </a>
         {% endfor %}
