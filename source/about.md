@@ -4,7 +4,7 @@ title: About
 use:
     - posts_categories
 ---
-# ¡Hola!
+<div class="page-header"><h1>¡Hola!</h1></div>
 
 Soy Luis y trabajo como desarrollador Web. Mezclo mi trabajo con la organización del
 [Grupo de usuarios de PHP en Puebla][1] y con clases de programación en algunas universidades.

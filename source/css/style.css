@@ -13,6 +13,11 @@ pre {
 
 .content {
     margin-bottom: 2.5em;
+    padding-top: 1em;
+}
+
+.sidebar {
+    padding-top: 1.5em;
 }
 
 .posts-list {
@@ -31,7 +36,7 @@ pre {
 }
 
 .avatar {
-    margin-top: 1.3em;
+    margin-top: 2.5em;
 }
 
 footer {
@@ -60,7 +65,7 @@ pre, code {
 
 @media (min-width: 980px) {
     .home {
-        padding-top: 50px; /* 60px to make the container go all the way to the bottom of the topbar */
+        padding-top: 50px; /* 50px to make the container go all the way to the bottom of the topbar */
         padding-bottom: 40px;
     }
 }
