@@ -149,20 +149,7 @@ Una ventaja de diseñar los módulos antes de los componentes Flight, es que pod
 de asociarlos a ninguna interfaz gráfica. Además de que si algún día decidimos dejar de usar Flight nuestra lógica no
 se encuentra contenida en el código del framework.
 
-### Ahora si, los componentes
-
-Primero identificaremos qué componentes de datos y qué componentes de interfaz serán necesarios. De inicio tenemos dos
-componentes de interfaz uno para el formulario (`UiOrderItem`) y otro para la tabla con los productos agregados
-(`UiShoppingCart`) y un componente de datos (`DataShoppingCart`).
-
-<img src="/images/content/flight-demo-components.png" class="img-responsive img-thumbnail" alt="Los componentes">
-
-El componente `UiOrderItem` tiene dos tareas, una es actualizar las opciones del elemento `select` del formulario,
-para la cual se suscribe al evento `data.whenProductsAreLoaded` y la otra es notificar cuando se agrega un elemento al
-carrito, para lo cual publica el evento `ui.whenProductIsAdded`, este evento se emite en el evento `submit` del
-formulario.
-
-<img src="/images/content/ui-order-item-events.png" class="img-responsive img-thumbnail" alt="Eventos de UiOrderItem">
+### Algunos detalles de Flight
 
 Flight utiliza [RequireJS][5] para la carga de módulos y [jQuery][6] para el manejo de eventos y manipulación del DOM.
 La definición de un componente en Flight es de la siguiente forma:
@@ -187,6 +174,21 @@ Component.attachTo('#component-id', {
     dependency: module,
 });
 ~~~
+
+### Ahora si, los componentes
+
+Primero identificaremos qué componentes de datos y qué componentes de interfaz serán necesarios. De inicio tenemos dos
+componentes de interfaz uno para el formulario (`UiOrderItem`) y otro para la tabla con los productos agregados
+(`UiShoppingCart`) y un componente de datos (`DataShoppingCart`).
+
+<img src="/images/content/flight-demo-components.png" class="img-responsive img-thumbnail" alt="Los componentes">
+
+El componente `UiOrderItem` tiene dos tareas, una es actualizar las opciones del elemento `select` del formulario,
+para la cual se suscribe al evento `data.whenProductsAreLoaded` y la otra es notificar cuando se agrega un elemento al
+carrito, para lo cual publica el evento `ui.whenProductIsAdded`, este evento se emite en el evento `submit` del
+formulario.
+
+<img src="/images/content/ui-order-item-events.png" class="img-responsive img-thumbnail" alt="Eventos de UiOrderItem">
 
 Si consideramos que nuestro formulario es el siguiente:
 
@@ -475,7 +477,7 @@ DataShoppingCart.attachTo(document, {
 ~~~
 
 Podemos resumir las relaciones entre componentes de nuestra aplicación de la siguiente forma. Las flechas indican qué
-componente publica un evento y qué componente se suscribe y a través de qué método (los métodos aparecen subrayados).
+componente publica un evento, qué componente se suscribe y a través de qué método (los métodos aparecen subrayados).
 
 <img src="/images/content/application-components-diagram.png" class="img-responsive img-thumbnail" alt="Aplicación">
 
