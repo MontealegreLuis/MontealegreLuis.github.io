@@ -3,13 +3,13 @@ layout: index
 title: Bienvenid@
 generator: pagination
 pagination:
-    max_per_page: 3
+    max_per_page: 6
 use:
     - posts
 ---
 <div class="posts-list">
 {% for post in page.pagination.items %}
-    <div class="col-sm-4 posts-list">
+    <div class="col-sm-6 posts-list">
         {% include 'components/post.html.twig' %}
     </div>
 {% endfor %}

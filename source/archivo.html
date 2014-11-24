@@ -8,6 +8,7 @@ use:
 ---
 {% set year = '0' %}
 <div class="page-header"><h2><span class="glyphicon glyphicon-folder-open"></span> Archivo</h2></div>
+
 {% for post in page.pagination.items %}
     {% set this_year %}{{ post.date | date("Y") }}{% endset %}
     {% if year != this_year %}
@@ -19,11 +20,10 @@ use:
       {% set month = this_month %}
       <h3>{{ month }} {{ year }}</h3>
     {% endif %}
-    <article class="row">
-        <div class="col-sm-6 posts-list">
-            {% include 'components/post.html.twig' %}
-        </div>
-    </article>
+
+    <div class="col-sm-6 posts-list">
+        {% include 'components/post.html.twig' %}
+    </div>
 {% endfor %}
 
 <div>
