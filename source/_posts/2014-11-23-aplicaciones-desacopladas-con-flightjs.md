@@ -11,17 +11,18 @@ use:
 ---
 [Flight][1] es un framework Javascript ligero, basado en componentes y dirigido por eventos desarrollado por Twitter.
 Flight mapea componentes a nodos del [DOM][3] y refuerza la [separación de responsabilidades][2] en nuestro código,
-ya que cuando creamos un componente no tenemos una referencia a él, por lo tanto, no es posible crear relaciones
-explícitas entre componentes. En su lugar los components de Flight emiten eventos, a los que se suscriben otros
-componentes.
+ya que no es posible crear relaciones explícitas entre componentes. En su lugar los components de Flight publican
+eventos, a los que se suscriben otros componentes.
 
-Flight usa los eventos del DOM como 'proxies' para los eventos de componentes, lo cual le da mayor flexibilidad, ya que
-un componente puede suscribirse a un evento a nivel de documento (`ḑocument`) o puede solo escuchar eventos
-pertenecientes a un nodo del DOM (`#price`). Los componentes que se suscriben a eventos no distinguen entre eventos de
-otros componentes (p. ej. `clientProceedToCheckout`) y eventos nativos (p. ej. `click`).
+Flight usa los eventos del DOM como 'proxies' para los eventos de componentes, lo cual le da mayor flexibilidad, ya que:
 
-Otra ventaja de Flight es que podemos distinguir dos tipos de componentes principales: componentes de interfaz y
-componentes de datos. De este modo las aplicaciones de Flight pueden entenderse como colecciones de componentes.
+1. Un componente puede suscribirse a un evento a nivel de documento (`ḑocument`) o puede solo escuchar eventos
+pertenecientes a un nodo del DOM (`#price`).
+2. Los componentes que se suscriben a eventos no distinguen entre eventos de otros componentes (p. ej.
+`clientProceedToCheckout`) y eventos nativos (p. ej. `click`).
+
+Otra ventaja de Flight es que podemos distinguir dos tipos de componentes principales: componentes de **interfaz** y
+componentes **de datos**. De este modo las aplicaciones de Flight pueden entenderse como colecciones de componentes.
 
 ## Show me the code
 
@@ -77,7 +78,7 @@ var ProductsCatalog = function() {
 ~~~
 
 Nuestro carro de compras manejará una única orden de compra, la cual estará compuesta por varios elementos (items) que
-contienen los datos del producto y la cantidad que se desea comprar.Cada item debe poder calcular el total a pagar por
+contienen los datos del producto y la cantidad que se desea comprar. Cada item debe poder calcular el total a pagar por
 la cantidad de productos seleccionados.
 
 ~~~javascript
@@ -145,7 +146,7 @@ var ShoppingCart = function() {
 };
 ~~~
 
-Una ventaja de diseñar los módulos antes de los componentes Flight, es que podemos hacer pruebas unitarias sin necesidad
+Una ventaja de diseñar los módulos antes que los componentes Flight, es que podemos hacer pruebas unitarias sin necesidad
 de asociarlos a ninguna interfaz gráfica. Además de que si algún día decidimos dejar de usar Flight nuestra lógica no
 se encuentra contenida en el código del framework.
 
@@ -169,7 +170,7 @@ un form, por ejemplo) u objetos que queremos inyectar como dependencia a nuestro
 `ProductsCatalog`.
 
 ~~~javascript
-Component.attachTo('#component-id', {
+Component.attachTo('#element-id', {
     selector: '#some-id',
     dependency: module,
 });
@@ -183,12 +184,14 @@ componentes de interfaz uno para el formulario (`UiOrderItem`) y otro para la ta
 
 <img src="/images/content/flight-demo-components.png" class="img-responsive img-thumbnail" alt="Los componentes">
 
+#### UiOrderItem
+
 El componente `UiOrderItem` tiene dos tareas, una es actualizar las opciones del elemento `select` del formulario,
 para la cual se suscribe al evento `data.whenProductsAreLoaded` y la otra es notificar cuando se agrega un elemento al
 carrito, para lo cual publica el evento `ui.whenProductIsAdded`, este evento se emite en el evento `submit` del
 formulario.
 
-<img src="/images/content/ui-order-item-events.png" class="img-responsive img-thumbnail" alt="Eventos de UiOrderItem">
+<img src="/images/content/ui-order-item-events.png" class="img-responsive img-thumbnail center-block" alt="Eventos de UiOrderItem">
 
 Si consideramos que nuestro formulario es el siguiente:
 
@@ -221,8 +224,9 @@ Para generar los elementos `option` usaremos un template de [Twig.js][7] con el 
 { % endfor %}
 ~~~
 
-Flight utiliza módulos a los que llama páginas, donde se cargan los módulos que usará la aplicación y se inicializan
-los objetos. Así nuestro código para asociar nuestro componente quedaría de la siguiente forma:
+Flight utiliza módulos a los que llama **páginas**, donde se cargan los componentes que usará la aplicación y se
+inicializan todos nuestros módulos y objetos. Así, el código para asociar nuestro componente quedaría de la siguiente
+forma:
 
 ~~~javascript
 // web/js/page/ShoppingCartPage.js
@@ -261,6 +265,7 @@ método `attachTo` (p. ej. `productsTemplate: null` indica que el atributo es ob
 var UiOrderItem = function() {
 
     this.attributes({
+        /* All attributes are mandatory */
         quantitySelector: null,
         productSelector: null,
         productsTemplate: null
@@ -270,11 +275,14 @@ var UiOrderItem = function() {
 };
 ~~~
 
-Los métodos de un componente que se suscriben a un evento reciben dos argumentos. El primero es el nombre del evento (para
-el caso de eventos de componentes) o un objeto `event` (para el caso de los eventos nativos del DOM). El segundo
-argumento es un objeto con los valores que el componente que publica el evento considera necesarios. Para nuestro
-ejemplo, el objeto que recibe el método `refreshProductsOptions` como segundo argumento contiene los productos que se
-mostrarán en el `select` (`data.products`).
+Los métodos de un componente que se suscriben a un evento reciben dos argumentos.
+
+1. El primero es el nombre del evento (para el caso de eventos de componentes) o un objeto `event` (para el caso de los
+eventos nativos del DOM).
+2. El segundo argumento es un objeto con los valores que el componente que publica el evento considera necesarios.
+
+Para nuestro ejemplo, el objeto que recibe el método `refreshProductsOptions` como segundo argumento contiene los
+productos que se mostrarán en el `select` (`data.products`).
 
 ~~~javascript
 // web/js/component/UiOrderITem.js
@@ -293,10 +301,14 @@ var UiOrderItem = function() {
 };
 ~~~
 
-El nodo asociado a un componente en Flight es accesible a través de dos variables; 1) La variable `node` que hace
-referencia al elemento del DOM y 2) la variable `$node` que es su equivalente en jQuery.¸El método `select` de un
-component es el equivalente de `$node.find(attributeName)`. En nuestro caso `this.select('productSelector')` es
-equivalente a `this.$node.find('#product')` ya que el valor de `this.attr.productSelector` es `#product`.
+El nodo asociado a un componente en Flight es accesible a través de dos variables.
+
+1. La variable `node` que hace referencia al elemento del DOM y
+2. la variable `$node` que es su equivalente en jQuery.
+
+El método `select` de un component es el equivalente de `$node.find(attributeName)`. En nuestro caso
+`this.select('productSelector')` es equivalente a `this.$node.find('#product')` ya que el valor de
+`this.attr.productSelector` es `#product`.
 
 El método `addItem` se suscribirá al evento `submit` de nuestro formulario y publicará el evento `ui.whenProductIsAdded`
 pasando como datos el ID del producto y la cantidad de productos que ingresó nuestro cliente.
@@ -341,13 +353,15 @@ var UiOrderItem = function() {
 };
 ~~~
 
+#### UiShoppingCart
+
 El componente `UiShoppingCart` no publica ningún evento, pero se suscribe a dos eventos. El primero es
 `data.whenItemIsAddedToCart` al cuál deberá responder agregando una fila a la tabla. El segundo es
 `data.whenCartTotalHasChanged` al cual deberá responder actualizando la celda de total.
 
-<img src="/images/content/ui-order-item-events.png" class="img-responsive img-thumbnail" alt="Eventos de UiShoppingCart">
+<img src="/images/content/ui-shopping-cart-events.png" class="img-responsive img-thumbnail center-block" alt="Eventos de UiShoppingCart">
 
-Si consideramos que nuestro formulario es el siguiente:
+Si consideramos que la tabla que contendrá los productos en nuestro carro de compras es el siguiente:
 
 ~~~html
 <!-- web/order.html -->
@@ -371,7 +385,8 @@ Si consideramos que nuestro formulario es el siguiente:
 </table>
 ~~~
 
-Nuestro componente quedaría registrado de la siguiente forma:
+Nuestro componente quedaría registrado de la siguiente forma (el código de los templates esta en [item.html.twig][10] y
+[cart-total.html.twig][11]):
 
 ~~~javascript
 // web/js/page/ShoppingCartPage.js
@@ -416,9 +431,11 @@ var UiShoppingCart = function() {
 };
 ~~~
 
+#### DataShoppingCart
+
 Por último nuestro componente de datos:
 
-<img src="/images/content/data-shopping-cart-events.png" class="img-responsive img-thumbnail" alt="Eventos de DataShoppingCart">
+<img src="/images/content/data-shopping-cart-events.png" class="img-responsive img-thumbnail center-block" alt="Eventos de DataShoppingCart">
 
 Nuestro componente de datos suscribe el método `addItemToCart` al evento `ui.whenProductIsAdded`. El método `addItemToCart`
 agrega al carro de compras un producto que recupera del catálogo a través de su ID, y después publica los eventos
@@ -477,7 +494,8 @@ DataShoppingCart.attachTo(document, {
 ~~~
 
 Podemos resumir las relaciones entre componentes de nuestra aplicación de la siguiente forma. Las flechas indican qué
-componente publica un evento, qué componente se suscribe y a través de qué método (los métodos aparecen subrayados).
+componente publica o se suscribe un evento y a través de qué método. Los componentes aparecen encerrados en círculos,
+los eventos aparecen dentro de rectángulos redondeados y los métodos aparecen subrayados.
 
 <img src="/images/content/application-components-diagram.png" class="img-responsive img-thumbnail" alt="Aplicación">
 
@@ -518,3 +536,5 @@ gente puede ayudarte y más personas se beneficiarán con la respuesta.
 [7]: https://github.com/justjohn/twig.js/
 [8]: https://github.com/MontealegreLuis/flight-demo
 [9]: http://preguntas.hfpuebla.org/
+[10]: https://github.com/MontealegreLuis/flight-demo/blob/master/web/js/templates/item.html.twig
+[11]: https://github.com/MontealegreLuis/flight-demo/blob/master/web/js/templates/cart-total.html.twig

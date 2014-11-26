@@ -1,3 +1,4 @@
+{% if site.disqus is defined %}
 <div id="disqus_thread"></div>
 <script type="text/javascript">
     var disqus_shortname = '{{ site.disqus }}';
@@ -12,3 +13,4 @@
     Please enable JavaScript to view the
     <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a>
 </noscript>
+{% endif %}
