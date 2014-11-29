@@ -7,7 +7,7 @@ categories:
 use:
     - posts_categories
 ---
-[Composer][1] es una herramienta para el manejo de dependencias en PHP. Composer nos permite declarar los paquetes que
+[Composer][1] es una herramienta para el manejo de dependencias en PHP que nos permite declarar los paquetes que
 utilizan nuestros proyectos y los instala en la carpeta `vendor`. Composer basa su funcionamiento en dos conceptos
 importantes **paquetes** y **repositorios**.
 
@@ -32,7 +32,8 @@ aprender a construir paquetes para PHP te recomiendo mucho este [libro de Matthi
 ## ¿Qué es Satis?
 
 Satis es un generador estático de repositorios del tipo `composer`, es de [código abierto][6] y básicamente te permite tener
-una versión privada minimalista de Packagist.
+una versión privada minimalista de Packagist. Es este post explicaré como instalar y configurar un repositorio de Satis
+con acceso SSH.
 
 ## Instalación
 
@@ -115,7 +116,7 @@ $ echo "extension=ssh2.so" >> /etc/php5/apache2/php.ini
 ~~~
 
 Como el acceso es a través de SSH debemos indicar la ubicación de las llaves y el nombre de usuario que usaremos para
-autenticarnos a través de la llave `options`.
+autenticarnos a través del valor de `options`.
 
 ~~~json
 {
@@ -152,11 +153,11 @@ Si quieres saber cuáles son tus configuraciones globales actuales puedes ejecut
 $ composer config -g -l
 ~~~
 
-Así lo único que tienes que hacer es copiar y pegar las configuraciones de tu repositorio en el archivo `composer.json`
+Así lo único que tienes que hacer es copiar y pegar las configuraciones de tu repositorio desde el archivo `composer.json`
 de tu proyecto al archivo `config.json`
 
 Para que funcione el ejemplo debes agregar tus llaves al servidor donde se encuentra el repositorio Satis. Si aún no
-tienes tus llaves ssh las puedes crear así:
+tienes tus llaves SSH las puedes crear así:
 
 ~~~bash
 $ ssh-keygen -t rsa -C "your_email@example.com"
