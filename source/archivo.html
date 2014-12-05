@@ -16,12 +16,11 @@ use:
       {% set year = this_year %}
     {% endif %}
     {% set this_month %}{{ post.date | date("F") }}{% endset %}
-    {% if month != this_month %}
-      {% set month = this_month %}
-      <h3>{{ month }} {{ year }}</h3>
-    {% endif %}
-
     <div class="col-sm-6 posts-list">
+        {% if month != this_month %}
+            {% set month = this_month %}
+            <h3>{{ month }} {{ year }}</h3>
+        {% endif %}
         {% include 'components/post.html.twig' %}
     </div>
 {% endfor %}
