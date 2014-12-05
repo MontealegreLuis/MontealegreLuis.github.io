@@ -96,7 +96,7 @@ requirejs.config({
 global.define = requirejs;
 ~~~
 
-Debemos también instalar y configurar [Jasmine para Node][14] en su versión beta 4, ya que es la usa [Jasmine][16] en su
+Debemos también instalar y configurar [Jasmine para Node][14] en su versión beta 4, ya que es la que usa [Jasmine][16] en su
 versión 2 y que necesitamos para poder usar [Jasmine para jQuery][15]. Debemos agregar algunas variables y funciones al
 espacio global para que funcionen igual que en el navegador.
 
