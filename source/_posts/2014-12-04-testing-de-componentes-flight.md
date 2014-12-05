@@ -32,7 +32,7 @@ El generador instala algunas dependencias usando [bower][4] y otras usando [npm]
 
 Con Bower instala:
 
-* Flight, RequireJS, Jasmine jQuery, y Jasmine Flight
+* Flight, RequireJS, Jasmine jQuery y Jasmine Flight
 
 Con npm instala:
 
@@ -277,7 +277,7 @@ describeComponent('component/UiShoppingCart', function () {
 <h2 id="data-providers">Proveedores de datos</h2>
 
 El objetivo de un proveedor de datos es alimentar un test con varios valores de prueba para evitar repetir el código de
-un spec varias veces. Inestrigando encontré este [post][23] que implementa una función `using` que provee de datos a un spec.
+un spec varias veces. Investigando encontré este [post][23] que implementa una función `using` que provee de datos a un spec.
 Encontré también este segundo [post][24] donde se mueve la función `using` fuera del spec y permite el uso de funciones
 para alimentar el test con datos. Me gustó más el estilo del primer post, aunque es un poco antiguo (Jasmine 1.2), así
 que terminé con una combinación de ambos ejemplos:
@@ -321,7 +321,7 @@ if ( it && typeof it == 'function') {
 }
 ~~~
 
-Una vez configurado agregamos este archivo en `specs-runner.js` y podemos utilizarlo en nuestros tests. Usaremos como
+Debemos incluir este archivo en `specs-runner.js` para usarlo en nuestros specs. Tomemos como
 ejemplo el método `total` del módulo `OrderItem`. El segundo argumento que pasamos a `using` es un arreglo donde el
 primer elemento representan valores para el precio unitario y la cantidad de productos que se agregan al carro y el
 segundo argumento es el total que esperamos que calcule nuestro módulo.
