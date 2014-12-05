@@ -522,8 +522,8 @@ require([
 );
 ~~~
 
-Espero que este post te de una idea del uso y ventajas de Flight. En el siguiente post haremos el testing de nuestros
-componentes y módulos. Si tienes algun comentario lo agradeceré mucho. Puedes revisar el código completo en este repo en
+Espero que este post te de una idea del uso y ventajas de Flight. En el siguiente post haremos el [testing de nuestros
+componentes y módulos][12]. Si tienes algun comentario lo agradeceré mucho. Puedes revisar el código completo en este repo en
 [Github][8]. Si al probar el código algo no funciona y necesitas ayuda por favor deja tu pregunta [aquí][9] así más
 gente puede ayudarte y más personas se beneficiarán con la respuesta.
 
@@ -538,3 +538,4 @@ gente puede ayudarte y más personas se beneficiarán con la respuesta.
 [9]: http://preguntas.hfpuebla.org/
 [10]: https://github.com/MontealegreLuis/flight-demo/blob/master/web/js/templates/item.html.twig
 [11]: https://github.com/MontealegreLuis/flight-demo/blob/master/web/js/templates/cart-total.html.twig
+[12]: http://www.montealegreluis.com/blog/2014/12/04/testing-de-componentes-flight/
