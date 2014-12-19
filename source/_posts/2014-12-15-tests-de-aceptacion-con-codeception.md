@@ -9,7 +9,7 @@ categories:
 use:
     - posts_categories
 ---
-Este post es una continuación al post de [Testing de componentes Flight][1], que trataba de una aplicación fictica para
+Este post es una continuación al post de [Testing de componentes Flight][1], que trataba de una aplicación ficticia para
 la compra de productos, donde desarrollamos los specs para los componentes de Flight usando Jasmine. La configuración
 para los tests era un poco más complicada que la que se genera normalmente con [Yeoman][2]. El objetivo era evitar el
 uso del navegador para ejecutar nuestros specs, porque las pruebas con un navegador van incluidas en las pruebas de
@@ -185,8 +185,8 @@ junto con PhantomJS y un par de tareas que nos servirán para ejecutar nuestros 
 }
 ~~~
 
-En nuestro archivo `Gruntfile.js` registramos una nueva tarea que ejecute PhantomJS, luego corra nuestros tests de
-aceptación y por último detenga PhantomJS.
+En nuestro archivo `Gruntfile.js` registramos una nueva tarea que inicie PhantomJS, ejecute los tests y por último
+detenga PhantomJS.
 
 ~~~javascript
 module.exports = function(grunt) {
@@ -335,6 +335,8 @@ Para cargar los datos de nuestros fixtures crearemos una clase que utilice la mi
 aplicación de Slim.
 
 ~~~php
+# tests/support/FixturesLoader.php
+
 use Slim\Slim;
 
 class FixturesLoader
@@ -399,6 +401,8 @@ class FixturesLoader
 Ahora que tenemos nuestra clase para cargar fixtures, la podemos usar en el método `_before` de nuestro `Cest`
 
 ~~~php
+# tests/acceptance/ShoppingCartCest.php
+
 class ShoppingCartCest
 {
     /** @type FixturesLoader */
@@ -426,6 +430,8 @@ de la clase, cada entrada después del nombre de la clase representa un objeto d
 para poder identificarlos después, en caso que se usen como referencias en otros objetos.
 
 ~~~yaml
+# tests/_data/fixtures/products.yml
+
 Store\Product:
     product0:
         __construct: false # Do not use the constructor
@@ -464,6 +470,8 @@ Un proveedor no requiere de nada particular, los método publicos del proveedor 
 disponibles desde nuestro archivo de fixtures.
 
 ~~~php
+# tests/support/ProductsProvider.php
+
 class ProductsProvider
 {
     protected $products = [
@@ -608,8 +616,9 @@ virtual generada con [PuPHPet][19], razón por la que describí como ejecutar la
 un pequeño detalle que encontré. PhantomJS no tiene soporte para la función `bind` de JavaScript, debido a la versión
 de QtWebKit en la que está basado, y al parecer no tendrá solución hasta la versión 2 como se explica en este
 [issue][20]. Podemos usar algunos polyfills para solucionar el problema, en el [repo de este ejemplo][21] puedes ver
-como se incluye de manera condicional un snippet de código que tomé de las respuestas en el issue cuando estamos en el
-ambiente de testing.
+como se incluye de manera condicional un [snippet][22] de código que tomé de las respuestas en el issue cuando estamos
+en el ambiente de testing. Es importante señalar que este snippet en nuestro template sólo tiene sentido si usamos
+PhantomJS, no lo necesitamos con ningún otro navegador.
 
 Espero que este post te haya servido para darte una mejor idea de como funciona el testing de aceptación con Codeception
 y como complementa los otros tipos de testing que revisamos en posts anteriores. Agradeceré mucho tus sugerencias,
@@ -636,3 +645,4 @@ críticas y quejas en los comentarios.
 [19]: https://puphpet.com/
 [20]: https://github.com/ariya/phantomjs/issues/10522
 [21]: https://github.com/MontealegreLuis/flight-demo
+[22]: https://github.com/MontealegreLuis/flight-demo/blob/master/app/templates/order.html.twig#L56
