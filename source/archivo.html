@@ -6,24 +6,9 @@ use:
     - posts
     - posts_categories
 ---
-{% set year = '0' %}
 <div class="page-header"><h2><span class="glyphicon glyphicon-folder-open"></span> Archivo</h2></div>
 
-{% for post in page.pagination.items %}
-    {% set this_year %}{{ post.date | date("Y") }}{% endset %}
-    {% if year != this_year %}
-      {% set month = '0' %}
-      {% set year = this_year %}
-    {% endif %}
-    {% set this_month %}{{ post.date | date("F") }}{% endset %}
-    <div class="col-sm-6 posts-list">
-        {% if month != this_month %}
-            {% set month = this_month %}
-            <h3>{{ month }} {{ year }}</h3>
-        {% endif %}
-        {% include 'components/post.html.twig' %}
-    </div>
-{% endfor %}
+{% include 'components/posts-list.html.twig' %}
 
 <div>
 {% if page.pagination.previous_page or page.pagination.next_page %}

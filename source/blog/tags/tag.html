@@ -10,23 +10,9 @@ use:
 ---
 {% block title %}{{ page.title }} "{{ page.tag }}"{% endblock %}
 {% block content %}
-{% set year = '0' %}
 <div class="page-header"><h2><span class="glyphicon glyphicon-tag"></span> {{ page.tag }}</h2></div>
-{% for post in page.pagination.items %}
-    {% set this_year %}{{ post.date | date("Y") }}{% endset %}
-    {% if year != this_year %}
-      {% set month = '0' %}
-      {% set year = this_year %}
-    {% endif %}
-    {% set this_month %}{{ post.date | date("F") }}{% endset %}
-    <div class="col-sm-6 posts-list">
-        {% if month != this_month %}
-            {% set month = this_month %}
-            <h2>{{ month|localizeddate('long', 'none', 'es', 'America/Mexico_City', 'MMMM') }} {{ year }}</h2>
-        {% endif %}
-        {% include 'components/post.html.twig' %}
-    </div>
-{% endfor %}
+
+{% include 'components/posts-list.html.twig' %}
 
 <div>
 {% if page.pagination.previous_page or page.pagination.next_page %}

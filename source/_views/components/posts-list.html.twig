@@ -1,0 +1,28 @@
+{% set year = '0' %}
+{% set posts_in_row = 0 %}
+{% for post in page.pagination.items %}
+    {% set this_year %}{{ post.date | date("Y") }}{% endset %}
+    {% if year != this_year %}
+        {% set month = '0' %}
+        {% set year = this_year %}
+    {% endif %}
+    {% set this_month %}{{ post.date | date("F") }}{% endset %}
+    {% if month != this_month %}
+        {% set month = this_month %}
+        {% if posts_in_row % 2 == 1 %}</div>{% endif %}
+        <div class="row">
+            <div class="col-sm-12">
+                <h2>
+                    {{ month|localizeddate('long', 'none', 'es', 'America/Mexico_City', 'MMMM')|capitalize }} {{ year }}
+                </h2>
+            </div>
+        </div>
+        {% if posts_in_row % 2 == 1 %}{% set posts_in_row = 0 %}{% endif %}
+    {% endif %}
+    {% if posts_in_row % 2 == 0 %}<div class="row">{% endif %}
+    <div class="col-sm-6 posts-list">
+        {% include 'components/post.html.twig' %}
+    </div>
+    {% if (posts_in_row % 2 == 1 or loop.last) %}</div>{% endif %}
+    {% set posts_in_row = posts_in_row + 1 %}
+{% endfor %}
