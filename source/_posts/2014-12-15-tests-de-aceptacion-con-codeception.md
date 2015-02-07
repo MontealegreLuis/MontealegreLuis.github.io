@@ -21,7 +21,7 @@ En este post desarrollaremos las siguientes tareas:
 * Generar fixtures de datos para nuestras pruebas usando [Alice][4] y [Faker][5]
 * Escribir una prueba de aceptación para nuestra aplicación de muestra
 
-## Configuración de Codecception
+## Configuración de Codeception
 
 Codeception es un framework de pruebas para PHP cuyo objetivo es crear tests legibles que describan acciones desde la
 perspectiva del usuario.

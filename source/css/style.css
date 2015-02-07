@@ -5,6 +5,14 @@ body {
 
 pre {
     font-family: Monaco, Consolas, monospace !important;
+    overflow: auto !important;
+    word-wrap: normal !important;
+    white-space: pre !important;
+}
+
+code {
+    word-wrap: normal !important;
+    white-space: pre !important;
 }
 
 .link-icon:hover {
