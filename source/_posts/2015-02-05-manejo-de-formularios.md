@@ -1,5 +1,5 @@
 ---
-title: Formularios, la forma fácil
+title: Un formulario no tiene porque hacer todo
 tags:
     - PHP
     - Forms
@@ -52,10 +52,11 @@ extensiones que permiten la integración con otros paquetes, por ejemplo: valida
 HTTP Foundation, Twig, etc. Aunque como puedes observar, tienes que instalar componentes
 que tal vez no uses como el manejador de eventos o el componente de internacionalización.
 
-En este post explicaré a través de ejemplos como creo que podríamos desacoplar de una mejor
+En este post explicaré a través de ejemplos como creo que podríamos *desacoplar* de una mejor
 forma el manejo de formularios y evitar instalar paquetes que tal vez no necesitemos,
-además de simplificar las tareas rutinarias con formularios. Para esto revisaré la
-siguiente funcionalidad:
+además de simplificar las tareas rutinarias con formularios, *separando claramente las
+diferentes responsabilidades relacionadas con formularios*, evitando así que el formulario
+sepa hacer todo. Para esto revisaré la siguiente funcionalidad:
 
 * Procesamiento
 * Validación
@@ -540,10 +541,10 @@ plantillas al tema, ya que este elemento es un `hidden` común en nuestro formul
 
 Al trabajar con formularios es común que llenemos sus valores con información de nuestra base
 de datos, o que agreguemos opciones a los `select` con los datos de una tabla, y que eso se
-tenga que ver reflejado en los validadores de ese elemento. Creo que hacer estas tareas
-responsabilidad del formulario es demasiado. En su lugar, creo que podemos generar objetos que
-configuren el formulario. Regresemos al ejemplo de agregar productos al catálogo de una
-aplicación de e-commerce.
+tenga que ver reflejado en los validadores de ese elemento. Creo que estas tareas no son
+responsabilidad del formulario, en su lugar podemos generar objetos que configuren el
+formulario. Regresemos al ejemplo de agregar productos al catálogo de una aplicación de 
+e-commerce.
 
 ```php
 use EasyForms\Elements\Text;
