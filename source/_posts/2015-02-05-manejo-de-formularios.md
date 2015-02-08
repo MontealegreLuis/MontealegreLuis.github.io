@@ -67,7 +67,7 @@ sepa hacer todo. Para esto revisaré la siguiente funcionalidad:
 Para los ejemplos usare el paquete [comphppuebla/easy-forms][3] que puedes instalar con Composer
 
 ```bash
-$ composer require comphppuebla/easy-forms
+$ composer require comphppuebla/easy-forms:~1.0@dev
 ```
 
 ## Procesamiento
