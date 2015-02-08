@@ -315,8 +315,6 @@ usar captchas de imagen y [reCaptcha][11] (la versión anterior al No Captcha ca
 tenemos un formulario para comentarios:
 
 ```php
-namespace ExampleForms;
-
 use EasyForms\Elements\Captcha;
 use EasyForms\Elements\Captcha\CaptchaAdapter;
 use EasyForms\Elements\TextArea;
