@@ -216,12 +216,12 @@ selector del `input` de cantidad para indicar al carro de compras cuántos produ
 Para generar los elementos `option` usaremos un template de [Twig.js][7] con el siguiente contenido:
 
 ~~~twig
-{ # web/js/templates/products.html.twig #}
+{% verbatim %}{# web/js/templates/products.html.twig #}
 
 <option value="">Choose a product</option>
-{ % for product in products %}
-    <option value="{ { product.productId }}">{ { product.name }}</option>
-{ % endfor %}
+{% for product in products %}
+    <option value="{{ product.productId }}">{{ product.name }}</option>
+{% endfor %}{% endverbatim %}
 ~~~
 
 Flight utiliza módulos a los que llama **páginas**, donde se cargan los componentes que usará la aplicación y se

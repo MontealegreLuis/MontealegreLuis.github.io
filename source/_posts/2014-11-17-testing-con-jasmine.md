@@ -84,9 +84,9 @@ Para generar los elementos `option` con Twig usamos una plantilla que itera sobr
 nuestra llamada AJAX generando nuestros elementos `option`.
 
 ~~~twig
-{ % for city in cities % }
-    <option value="{ { city.value } }">{ { city.label } }</option>
-{ % endfor % }
+{% verbatim %}{% for city in cities %}
+    <option value="{{ city.value }}">{{ city.label }}</option>
+{% endfor %}{% endverbatim %}
 ~~~
 
 Para poder usar la plantilla debemos cargarla primero.

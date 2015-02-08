@@ -248,13 +248,13 @@ $environment->render('login.html.twig', [
 El código que usaríamos en nuestra plantilla de Twig para mostrar el formulario sería:
 
 ```twig
-{ { form_start(login) } }
-{ { element_row(login.username, {'label': 'Username', 'attr': {'id': 'username'}}) } }
-{ { element_row(login.password, {'label': 'Password', 'attr': {'id': 'password'}}) } }
+{% verbatim %}{{ form_start(login) }}
+{{ element_row(login.username, {'label': 'Username', 'attr': {'id': 'username'}}) }}
+{{ element_row(login.password, {'label': 'Password', 'attr': {'id': 'password'}}) }}
 <button type="submit" class="btn btn-default">
     <span class="glyphicon glyphicon-home"></span> Login
 </button>
-{ { form_end() } }
+{{ form_end() }}{% endverbatim %}
 ```
 
 Como podemos observar, `element_row` recibe dos argumentos, el primero es el elemento del formulario
@@ -273,24 +273,24 @@ productos a un catálogo en una aplicación de e-commerce y queremos dar formato
 donde capturamos el precio unitario del elemento.
 
 ```twig
-{ # Use this template as part of the theme # }
-{ % form_theme [_self] % }
-{ # Custom block # }
-{ %- block money -% }
+{% verbatim %}{# Use this template as part of the theme #}
+{% form_theme [_self] %}
+{# Custom block #}
+{%- block money -%}
     <div class="input-group"><div class="input-group-addon">$</div>
-        { %- set options = options|merge({'block': 'input'}) -% }
-        { {- element(element, attr, options) -} }
+        {%- set options = options|merge({'block': 'input'}) -%}
+        {{- element(element, attr, options) -}}
     <div class="input-group-addon">.00</div></div>
-{ %- endblock money -% }
-{ { form_start(product) } }
-{ { element_row(product.name, {'label': 'Name'}) } }
-{ { element_row(product.description, {'label': 'Description'}) } }
-{ # Override the element's default rendering block # }
-{ { element_row(product.unitPrice, {'label': 'Unit price', 'options': {'block': 'money'}}) } }
+{%- endblock money -%}
+{{ form_start(product) }}
+{{ element_row(product.name, {'label': 'Name'}) }}
+{{ element_row(product.description, {'label': 'Description'}) }}
+{# Override the element's default rendering block #}
+{{ element_row(product.unitPrice, {'label': 'Unit price', 'options': {'block': 'money'}}) }}
 <button type="submit" class="btn btn-default">
     <span class="glyphicon glyphicon-th-list"></span> Add to catalog
 </button>
-{ { form_end() } }
+{{ form_end() }}{% endverbatim %}
 ```
 
 En el ejemplo definimos un bloque personalizado llamado `money` y sobrescribimos el bloque por defecto
@@ -363,14 +363,14 @@ tema, como la funcionalidad de captchas es opcional, no está incluida en los te
 Así, nuestra plantilla con el captcha quedaría como:
 
 ```twig
-{ % form_theme ['layouts/captcha-bootstrap3.html.twig'] % }
-{ { form_start(comment) } }
-{ { element_row(comment.message, {'label': 'Share your opinion'}) } }
-{ { element_row(comment.captcha, {'label': 'Type the words in the image below'}) } }
+{% verbatim %}{% form_theme ['layouts/captcha-bootstrap3.html.twig'] %}
+{{ form_start(comment) }}
+{{ element_row(comment.message, {'label': 'Share your opinion'}) }}
+{{ element_row(comment.captcha, {'label': 'Type the words in the image below'}) }}
 <button type="submit" class="btn btn-default">
     <span class="glyphicon glyphicon-comment"></span> Comment
 </button>
-{ { form_end() } }
+{{ form_end() }}{% endverbatim %}
 ```
 
 Para validar el captcha podemos usar el siguiente filtro:
@@ -530,11 +530,11 @@ Para mostrar este elemento solo debemos agregarlo a la plantilla, no hay necesid
 plantillas al tema, ya que este elemento es un `hidden` común en nuestro formulario.
 
 ```twig
-{ { form_start(login) } }
-{ # ... # }
-{ { element_row(login.csrf_token) } }
-{ # ... # }
-{ { form_end() } }
+{% verbatim %}{{ form_start(login) }}
+{# ... #}
+{{ element_row(login.csrf_token) }}
+{# ... #}
+{{ form_end() }}{% endverbatim %}
 ```
 
 ## Modificación dinámica de un formulario
