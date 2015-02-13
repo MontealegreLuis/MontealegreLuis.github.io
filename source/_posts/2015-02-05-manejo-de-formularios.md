@@ -70,6 +70,8 @@ Para los ejemplos usare el paquete [comphppuebla/easy-forms][3] que puedes insta
 $ composer require comphppuebla/easy-forms:~1.0@dev
 ```
 
+Si encuentras la librería interesante, por favor revisa la [documentación][15]
+
 ## Procesamiento
 
 Cuando procesamos un formulario solo necesitamos saber el nombre de los elementos en el formulario,
@@ -756,3 +758,4 @@ Agradecere mucho tus comentarios, dudas, quejas, sugerencias o reclamaciones.
 [12]: https://github.com/symfony/security-csrf
 [13]: http://en.wikipedia.org/wiki/Data_transfer_object
 [14]: https://github.com/MontealegreLuis/easy-forms-examples
+[15]: http://comphppuebla.github.io/easy-forms/
