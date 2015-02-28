@@ -742,7 +742,7 @@ siguiente post explicaré como la separación de responsabilidades *facilita* re
 traducción y la integración de elementos que usan JavaScript (barras de progreso o vistas de árbol,
 por ejemplo).
 
-Agradecere mucho tus comentarios, dudas, quejas, sugerencias o reclamaciones.
+Agradeceré mucho tus comentarios, dudas, quejas, sugerencias o reclamaciones.
 
 [1]: http://symfony.com/doc/current/components/form/introduction.html
 [2]: http://framework.zend.com/manual/current/en/modules/zend.form.intro.html
