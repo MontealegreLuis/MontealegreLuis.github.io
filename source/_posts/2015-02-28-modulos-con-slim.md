@@ -55,8 +55,11 @@ Slim.
 Primero instalamos el paquete con Composer.
 
 ```bash
-$ composer require comphppuebla/slim-modules:~1.0@dev
+$ composer require comphppuebla/slim-modules
 ```
+
+Puedes revisar la [documentación][7] y esta [aplicación][8] que ya usa el módulo, para más
+detalles.
 
 ## Registrando los servicios
 
@@ -386,7 +389,7 @@ En los ejemplos anteriores hemos registrado nuestros servicios por separado,
 sin embargo, podemos incluir todas nuestras definiciones en una sola clase si
 extendemos de `ComPHPPuebla\Slim\Services`.
 
-Podemos registrar **todos** nuestros proveedores en el constructor usando el
+Podemos registrar **todos** nuestros proveedores en el método `init` usando el
 método `add`.
 
 ```php
@@ -400,7 +403,7 @@ class ApplicationServices extends Services
     /**
      * Add the providers for your modules here
      */
-    public function __construct()
+    protected function init()
     {
         $this
             ->add(new ProductCatalogServices())
@@ -415,10 +418,9 @@ class ApplicationServices extends Services
 ## Organizando todas tus rutas
 
 También podemos agrupar el registro de las rutas en una sola clase
-si extendemos de `ComPHPPuebla\Slim\Controllers`, la única diferencia con
-respecto a los servicios es que no agregamos nuestros controladores en
-el constructor sino en el método `init` el cual se llama automáticamente
-al registrar nuestras rutas.
+si extendemos de `ComPHPPuebla\Slim\Controllers`, también agregamos nuestros
+controladores en el método `init` el cual se llama automáticamente al
+registrar nuestras rutas.
 
 ```php
 namespace Application;
@@ -462,3 +464,5 @@ Agradeceré mucho tus comentarios, dudas, quejas, sugerencias o reclamaciones.
 [4]: http://silex.sensiolabs.org/doc/providers.html
 [5]: http://php.net/manual/es/language.types.callable.php
 [6]: http://es.wikipedia.org/wiki/Query_string
+[7]: http://comphppuebla.github.io/slim-modules/
+[8]: https://github.com/MontealegreLuis/easy-forms-examples
