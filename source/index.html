@@ -19,10 +19,14 @@ use:
 {% if page.pagination.previous_page or page.pagination.next_page %}
     <nav>
         {% if page.pagination.previous_page %}
-            <a href="{{ site.url }}{{ page.pagination.previous_page.url }}">Posts más recientes</a>
+            <a href="{{ page.pagination.previous_page.url }}" class="btn btn-primary btn-lg btn-block">
+                <span class="glyphicon glyphicon-calendar"></span> Posts más recientes
+            </a>
         {% endif %}<br />
         {% if page.pagination.next_page %}
-            <a href="{{ site.url }}{{ page.pagination.next_page.url }}">Posts anteriores</a>
+            <a href="{{ page.pagination.next_page.url }}" class="btn btn-primary btn-lg btn-block">
+                <span class="glyphicon glyphicon-calendar"></span> Posts anteriores
+            </a>
         {% endif %}<br />
     </nav>
 {% endif %}

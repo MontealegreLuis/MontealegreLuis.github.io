@@ -73,22 +73,15 @@ use ComPHPPuebla\Slim\ServiceProvider;
 
 class TwigProvider implements ServiceProvider
 {
-    protected $parameters;
-
-    public function __construct(array $parameters)
-    {
-        $this->parameters = $parameters;
-    }
-
-    public function configure(Slim $app)
+    public function configure(Slim $app, array $parameters = [])
     {
         $app->container->singleton('twig.loader', function() {
-            return new Twig_Loader_Filesystem($this->parameters['twig.paths']);
+            return new Twig_Loader_Filesystem($parameters['twig.paths']);
         });
         $app->container->singleton('twig.environment', function() use ($app) {
             return new Twig_Environment(
                 $app->container->get('twig.loader'),
-                $this->parameters['twig.options']
+                $parameters['twig.options']
             );
         });
     }
@@ -132,7 +125,7 @@ use ProductCatalog\Catalog;
 
 class ProductCatalogServices implements ServiceProvider
 {
-    public function configure(Slim $app)
+    public function configure(Slim $app, array $parameters = [])
     {
         $app->container->singleton(
             'product_catalog.search_products_controller',
@@ -245,8 +238,8 @@ class ProductController
 }
 ```
 
-Si no usamos un convertidor de argumentos, generariamos un error porque el
-argumento que pasariamos en segundo lugar sería de tipo `Request` y no de tipo
+Si no usamos un convertidor de argumentos, generaríamos un error porque el
+argumento que pasaríamos en segundo lugar sería de tipo `Request` y no de tipo
 `Slim`, ya que ese es el comportamiento default.
 
 Para evitar este error registramos un convertidor que elimine el `Request`
@@ -351,7 +344,7 @@ public function register(Slim $app, ControllerResolver $resolver)
         $app,
         'product_catalog.product_search_controller:searchProducts',
         function (array $arguments) {
-            // $arguments[0] is the request. Because our route does not have parameters
+            // $arguments[0] is the request, our route does not have parameters
 
             return [new ProductSearchCriteria(
                 $arguments[0]->get('category'), $arguments[0]->get('keywords')
@@ -363,7 +356,7 @@ public function register(Slim $app, ControllerResolver $resolver)
 }
 ```
 
-Con este simple cambio, podemos modificar la firma del controlador de la siguiente forma:
+Con este simple cambio, podemos modificar la firma del controlador.
 
 ```php
 namespace ProductCatalogModule\Controllers;
