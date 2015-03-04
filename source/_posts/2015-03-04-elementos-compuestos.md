@@ -2,7 +2,7 @@
 title: Elementos compuestos en formularios
 tags:
     - PHP
-    - Formularios
+    - Forms
 categories:
     - PHP
 use:
@@ -566,8 +566,9 @@ tipo `Money`.
 
 ## Fin
 
-Puedes revisar un ejemplo similar en este [repositorio][5], espero que te sea útil.
-Agradeceré mucho tus comentarios, dudas, quejas, sugerencias o reclamaciones.
+Puedes revisar un ejemplo similar en este [repositorio][5], en el código relacionado
+con la ruta `/composite-element`, espero que te sea útil. Agradeceré mucho tus
+comentarios, dudas, quejas, sugerencias o reclamaciones.
 
 [1]: http://www.montealegreluis.com/blog/2015/02/05/un-formulario-no-tiene-porque-hacer-todo/
 [2]: http://comphppuebla.github.io/easy-forms/

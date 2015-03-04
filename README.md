@@ -1,7 +1,6 @@
 # Blog personal
 
-Para instalar el blog primero debes clonarlo, una vez que lo tienes, hay que descargar el archivo `.phar` de 
-[Sculpin][1]
+Primero debes descargar el archivo `.phar` de [Sculpin][1]
 
 ```bash
 $ curl -O https://download.sculpin.io/sculpin.phar
@@ -20,11 +19,14 @@ Una vez que tienes el ejecutable listo, lo que sigue es instalar el blog
 $ php bin/sculpin install
 ```
 
-Una vez instalado el blog puedes verlo en `http://localhost:8000/` usando el siguiente comando:
+Una vez instalado el blog puedes verlo en [http://localhost:8000/][2] usando el siguiente comando:
 
 ```bash
 $ php bin/sculpin generate --watch --server
 ```
 
-[1]: https://sculpin.io
+Puedes visitar el blog [aquí][3].
 
+[1]: https://sculpin.io
+[2]: http://localhost:8000/
+[3]: http://www.montealegreluis.com
