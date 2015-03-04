@@ -194,8 +194,10 @@ class MoneyFilter extends InputFilter
 ```
 
 En el *snippet* anterior guardamos el valor original porque debemos mostrarlo
-en el formulario en el caso de que la validación falle. Además de guardar el
-valor original, debemos modificar los métodos `getValues` y `getMessages`.
+en el formulario en el caso de que la validación falle.
+
+Además de guardar el valor original, debemos modificar los métodos `getValues`
+y `getMessages`.
 
 * `getValues` debe recuperar el valor original proporcionado por el usuario,
 el cual se almacena en `$this->data['original_amount']`
@@ -343,7 +345,7 @@ class ProductPricingForm extends Form
 
 ## El controlador
 
-En nuestro controlador tenemos que hacer dos cosas
+En nuestro controlador tenemos que hacer dos cosas:
 
 1. Si la solicitud fue hecha a través del método `GET` recuperamos la información
 del producto desde nuestra base de datos y llenamos el formulario con esos datos.
@@ -434,9 +436,9 @@ class ChangeProductPrices
         ]);
     }
 
-    public function updateProductPrices(FormRequest $request)
+    public function updateProductPrices(Request $request)
     {
-        $this->form->submit($this->request->post());
+        $this->form->submit($request->post());
 
         if ($this->validator->validate($this->form)) {
             $pricing = $this->form->values()
@@ -524,7 +526,7 @@ tipo `Money`.
 ```twig
 {% verbatim %}{% extends 'layouts/base.html.twig' %}
 
-{% block title %}/ Composite element{% endblock %}
+{% block title %}/ Update product prices{% endblock %}
 
 {# Use this template to add an inline block #}
 {% form_theme [_self] %}
@@ -554,8 +556,6 @@ tipo `Money`.
             <div class="panel panel-default">
                 <div class="panel-heading">Update product pricing</div>
                 <div class="panel-body">
-                    {# Use the block for money elements #}
-                    {% set options = {'block': 'money'} %}
                     {# The form goes here... #}
                 </div>
             </div>
