@@ -1,28 +1,51 @@
 ---
 layout: about
-title: About
+title: ¿Quién soy?
 use:
     - posts_categories
 ---
 <div class="page-header"><h1>¡Hola!</h1></div>
 
-Soy Luis y trabajo como desarrollador Web. Mezclo mi trabajo con la organización del
-[Grupo de usuarios de PHP en Puebla][1] y con clases de programación en algunas universidades.
+Soy Luis Montealegre y trabajo como **desarrollador Web**.
 
-Paso la mayor parte de mi tiempo aprendiendo sobre diseño orientado a objetos, metodologías ágiles, TDD, BDD, DDD y
-educación. Creo que es muy importante buscar siempre la mejora de la comunicación y trabajo colaborativo de los equipos
-de desarrollo de software.
+Soy originario de Puebla, estudié la Licenciatura y Maestría en Ciencias
+de la Computación en la [Benemérita Universidad Autónoma de Puebla][2].
+Durante la maestría hice un poco de investigación sobre
+[Sistemas Multi-Agentes Normativos][3] y desde hace 11 años imparto clases
+de programación en universidades (más de 10 hasta la fecha: BUAP, [UVP][4],
+[ITP][5], por mencionar algunas). Desde 2004 empecé a desarrollar software
+en empresas como [CFE][6], [Ellucian][7], [Bic Consulting][8],
+[Digizent International][9] y [por mi cuenta][12]. Durante estos 10 años
+he trabajado con varios lenguajes de programación, entre los más importantes
+están Java, C#, y PHP. Actualmente estoy aprendiendo Scala con mis amigos de
+[Hackers & Founders][10] y [Scala MX][11].
 
-Soy originario de Puebla, estudié la Licenciatura y Maestría en Ciencias de la Computación en la
-[Benemérita Universidad Autónoma de Puebla][2]. Durante la maestría hice un poco de investigación sobre
-[Sistemas Multi-Agentes Normativos][3] y desde hace 11 años imparto clases de programación en universidades (más de 10
-hasta la fecha: BUAP, [UVP][4], [ITP][5], por mencionar algunas). Desde 2004 empecé a desarrollar software en empresas
-como [CFE][6], [Ellucian][7], [Bic Consulting][8], [Digizent International][9] y [por mi cuenta][12]. Durante estos 10 años
-he trabajado con varios lenguajes de programación, entre los más importantes están Java, C#, y PHP. Actualmente estoy
-aprendiendo Scala con mis amigos de [Hackers & Founders][10] y [Scala MX][11].
+Me encanta mezclar mi trabajo con la organización del
+[Grupo de usuarios de PHP en Puebla][1].
 
-Fuera de mi trabajo me gusta pasar tiempo con mi esposa (Meri) y mis dos hijos (Mario de 3 años y Alejandro de 1). Soy
-fan del café cargado y sin azucar, de la pizza, el sushi, la cerveza oscura y de las películas de ciencia ficción.
+## ¿De qué trata este blog?
+
+Si te animas a conocerme un poco sabrás que me encanta pasar el tiempo
+**aprendiendo**, últimamente me la paso leyendo sobre diseño orientado a
+objetos, metodologías ágiles, [TDD][13], [BDD][14], [DDD][15] y educación.
+Este blog tiene como objetivo compartir las cosas que voy aprendiendo
+al tratar de poner en práctica las cosas que me gusta leer. Los posts que
+encontrarás aquí son sobre estos temas aplicados al desarrollo Web.
+
+### Algo más personal :)
+
+Fuera de mi trabajo me gusta pasar tiempo con mi esposa (Meri) y mis dos
+hijos (Mario de 3 años y Alejandro de 1). Soy fan del café cargado y sin
+azucar, de la pizza, el sushi, la cerveza oscura y de las películas de
+ciencia ficción.
+
+### ¿Puedo hacer algo por ti?
+
+Puedes ponerte en contacto conmigo a través de cualquiera de las redes
+sociales que ves en el menú del sitio o por correo, ya sea para trabajar
+en algo juntos o para que me platiques de lo que quieras.
+
+Muchas gracias por leer hasta aquí y **vuelve las veces que quieras**.
 
 [1]: http://www.comunidadphppuebla.com
 [2]: http://www.cs.buap.mx/
@@ -36,3 +59,6 @@ fan del café cargado y sin azucar, de la pizza, el sushi, la cerveza oscura y d
 [10]: http://www.hfpuebla.org/
 [11]: http://scala.org.mx/
 [12]: http://www.mandragora-web-systems.com/
+[13]: http://es.wikipedia.org/wiki/Desarrollo_guiado_por_pruebas
+[14]: http://en.wikipedia.org/wiki/Behavior-driven_development
+[15]: http://es.wikipedia.org/wiki/Dise%C3%B1o_guiado_por_el_dominio
