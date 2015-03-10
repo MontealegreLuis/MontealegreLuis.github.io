@@ -10,12 +10,15 @@
 
     <div class="content container">
         <div class="row">
-            <div class="col-sm-2">
-                <p class="avatar">
-                    <img src="/images/luis.jpg" class="img-responsive img-circle" alt="Luis">
-                </p>
-            </div>
-            <div class="col-sm-6">
+            <div class="media col-sm-8 avatar">
+                <div class="media-left media-middle">
+                    <img src="/images/luis.jpg" class="media-object img-circle" alt="Luis">
+                </div>
+                <div class="media-body">
+                    <div class="media-heading"><h1>¡Hola!</h1></div>
+
+                    Mi nombre es Luis Montealegre Vázquez y trabajo como <strong>desarrollador Web</strong>.
+                </div>
                 {% block content_wrapper %}{% block content %}{% endblock %}{% endblock %}
             </div>
             <div class="col-sm-4 sidebar">
