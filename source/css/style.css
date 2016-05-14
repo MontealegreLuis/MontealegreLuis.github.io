@@ -97,11 +97,13 @@ pre, code {
 
 .image-bg-fluid-height {
     background: url('/images/background.jpg') no-repeat center center scroll;
+    background-size: cover;
     padding: 100px 0;
 }
 
 .image-bg-fixed-height {
     background: url('/images/background.jpg') no-repeat center center scroll;
+    background-size: cover;
     height: 450px;
 }
 
