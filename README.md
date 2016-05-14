@@ -9,6 +9,7 @@ $ curl -O https://download.sculpin.io/sculpin.phar
 Después lo más simple es mover el archivo a la carpeta `/bin` del proyecto y darle permisos de ejecución:
 
 ```bash
+$ mkdir bin
 $ mv sculpin.phar bin/sculpin
 $ chmod u+x bin/sculpin
 ```
