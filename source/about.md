@@ -13,9 +13,9 @@ Durante la maestría hice un poco de investigación sobre
 de programación en universidades (más de 10 hasta la fecha: BUAP, [UVP][4],
 [ITP][5], por mencionar algunas).
 
-Desde 2004 empecé a desarrollar software en empresas como [CFE][6],
+Desde 2005 empecé a desarrollar software en empresas como [CFE][6],
 [Ellucian][7], [Bic Consulting][8], [Digizent International][9] y
-[por mi cuenta][12]. Durante estos 10 años he trabajado con varios lenguajes
+por mi cuenta. Durante estos 11 años he trabajado con varios lenguajes
 de programación, entre los más importantes están Java, C#, y PHP. Actualmente
 estoy aprendiendo Scala con mis amigos de [Hackers & Founders][10] y
 [Scala MX][11].
@@ -24,7 +24,7 @@ En enero de 2016 me mudé a **San Antonio Texas** a empezar una nueva aventura
 con mi familia, como instructor en **Codeup**. Debido a esto he descuidado un
 poco la organización del [Grupo de usuarios de PHP en Puebla][1].
 
-<img src="/images/comunidad.jpg" class="img-responsive img-rounded" alt="Amigos comunidad">
+<img src="/images/comunidad.jpg" class="img-responsive img-rounded center-block" alt="Amigos comunidad">
 
 ## ¿De qué trata este blog?
 
@@ -48,10 +48,12 @@ Puedes ponerte en contacto conmigo a través de cualquiera de las redes
 sociales que ves en el menú del sitio o por correo, ya sea para trabajar
 en algo juntos o para que me platiques de lo que quieras.
 
-<p class="lead">
-    Muchas gracias por leer hasta aquí y <strong>vuelve las veces que
-    quieras</strong>.
-</p>
+<blockquote class="thanks">
+    <p class="lead">
+        Muchas gracias por leer hasta aquí y <strong>vuelve las veces que
+        quieras</strong>.
+    </p>
+</blockquote>
 
 [1]: http://www.comunidadphppuebla.com
 [2]: http://www.cs.buap.mx/
@@ -64,7 +66,6 @@ en algo juntos o para que me platiques de lo que quieras.
 [9]: http://www.digizent.com/
 [10]: http://www.hfpuebla.org/
 [11]: http://scala.org.mx/
-[12]: http://www.mandragora-web-systems.com/
 [13]: http://es.wikipedia.org/wiki/Desarrollo_guiado_por_pruebas
 [14]: http://en.wikipedia.org/wiki/Behavior-driven_development
 [15]: http://es.wikipedia.org/wiki/Dise%C3%B1o_guiado_por_el_dominio

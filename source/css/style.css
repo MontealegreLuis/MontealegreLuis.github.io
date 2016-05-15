@@ -111,6 +111,10 @@ pre, code {
     margin: 0 auto;
 }
 
+.thanks {
+    margin-top: 2em;
+}
+
 /* Google styles, Not Found page */
 
 .search-again {
