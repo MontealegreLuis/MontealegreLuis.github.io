@@ -6,10 +6,10 @@ use:
 ---
 ## Mi historia
 
-Soy originario de Puebla, estudié la Licenciatura y la Maestría en **Ciencias
+Soy originario de Puebla, estudié la Licenciatura y la **Maestría en Ciencias
 de la Computación** en la [Benemérita Universidad Autónoma de Puebla][2].
 Durante la maestría hice un poco de investigación sobre
-[Sistemas Multi-Agentes Normativos][3] y desde hace 11 años imparto clases
+[Sistemas Multi-Agentes Normativos][3] y desde hace 12 años imparto clases
 de programación en universidades (más de 10 hasta la fecha: BUAP, [UVP][4],
 [ITP][5], por mencionar algunas).
 
@@ -20,8 +20,9 @@ de programación, entre los más importantes están Java, C#, y PHP. Actualmente
 estoy aprendiendo Scala con mis amigos de [Hackers & Founders][10] y
 [Scala MX][11].
 
-Me encanta mezclar mi trabajo con la organización del
-[Grupo de usuarios de PHP en Puebla][1].
+En enero de 2016 me mudé a **San Antonio Texas** a empezar una nueva aventura
+con mi familia, como instructor en **Codeup**. Debido a esto he descuidado un
+poco la organización del [Grupo de usuarios de PHP en Puebla][1].
 
 <img src="/images/comunidad.jpg" class="img-responsive img-rounded" alt="Amigos comunidad">
 
@@ -37,7 +38,7 @@ encontrarás aquí son sobre estos temas aplicados al **desarrollo Web**.
 ## Algo más personal :)
 
 Fuera de mi trabajo me gusta pasar tiempo con mi esposa (Meri) y mis dos
-hijos (Mario de 3 años y Alejandro de 1). Soy fan del café cargado y sin
+hijos (Mario de 4 años y Alejandro de 2). Soy fan del café cargado y sin
 azucar, de la pizza, el sushi, la cerveza oscura y de las películas de
 ciencia ficción.
 
