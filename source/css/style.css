@@ -111,6 +111,30 @@ pre, code {
     margin: 0 auto;
 }
 
+/* Google styles, Not Found page */
+
+.search-again {
+    margin-top: 2em;
+    margin-bottom: -1em;
+}
+
+#goog-fixurl ul {
+    padding: 0;
+}
+
+.other-things {
+    display: none;
+}
+
+.search-goog {
+    list-style-type: none;
+    color: #fff;
+}
+
+.search-goog form {
+    color: #0e0e0e;
+}
+
 #goog-wm-qt {
     display: inline-block;
     height: 34px;
