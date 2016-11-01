@@ -1,12 +1,15 @@
 ---
-layout: about
+layout: default
 title: ¿Quién soy?
 use:
     - posts_categories
 ---
-## Mi historia
+## ¡Hola!
 
-Soy originario de Puebla, estudié la Licenciatura y la **Maestría en Ciencias
+Mi nombre es Luis Montealegre Vázquez, soy **Desarrollador Web** e 
+**Instructor** en
+<a href="http://codeup.com/about/" target="_blank">Codeup</a>.
+Soy originario de Puebla y estudié la Licenciatura y la **Maestría en Ciencias
 de la Computación** en la [Benemérita Universidad Autónoma de Puebla][2].
 Durante la maestría hice un poco de investigación sobre
 [Sistemas Multi-Agentes Normativos][3] y desde hace 12 años imparto clases
@@ -15,7 +18,7 @@ de programación en universidades (más de 10 hasta la fecha: BUAP, [UVP][4],
 
 Desde 2005 empecé a desarrollar software en empresas como [CFE][6],
 [Ellucian][7], [Bic Consulting][8], [Digizent International][9] y
-por mi cuenta. Durante estos 11 años he trabajado con varios lenguajes
+por mi cuenta. Durante estos **11 años** he trabajado con varios lenguajes
 de programación, entre los más importantes están Java, C#, y PHP. Actualmente
 estoy aprendiendo Scala con mis amigos de [Hackers & Founders][10] y
 [Scala MX][11].
