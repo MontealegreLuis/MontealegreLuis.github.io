@@ -4,7 +4,9 @@ title: ¿Quién soy?
 use:
     - posts_categories
 ---
-## ¡Hola!
+<header>
+    <div class="page-header"><h1>¡Hola!</h1></div>
+</header>
 
 Mi nombre es Luis Montealegre Vázquez, soy **Desarrollador Web** e 
 **Instructor** en
