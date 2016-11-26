@@ -8,28 +8,79 @@ use:
     <div class="page-header"><h1>¡Hola!</h1></div>
 </header>
 
-Mi nombre es Luis Montealegre Vázquez, soy **Desarrollador Web** e 
-**Instructor** en
-<a href="http://codeup.com/about/" target="_blank">Codeup</a>.
-Soy originario de Puebla y estudié la Licenciatura y la **Maestría en Ciencias
-de la Computación** en la [Benemérita Universidad Autónoma de Puebla][2].
-Durante la maestría hice un poco de investigación sobre
-[Sistemas Multi-Agentes Normativos][3] y desde hace 12 años imparto clases
-de programación en universidades (más de 10 hasta la fecha: BUAP, [UVP][4],
-[ITP][5], por mencionar algunas).
-
-Desde 2005 empecé a desarrollar software en empresas como [CFE][6],
-[Ellucian][7], [Bic Consulting][8], [Digizent International][9] y
-por mi cuenta. Durante estos **11 años** he trabajado con varios lenguajes
-de programación, entre los más importantes están Java, C#, y PHP. Actualmente
-estoy aprendiendo Scala con mis amigos de [Hackers & Founders][10] y
-[Scala MX][11].
-
-En enero de 2016 me mudé a **San Antonio Texas** a empezar una nueva aventura
-con mi familia, como instructor en **Codeup**. Debido a esto he descuidado un
-poco la organización del [Grupo de usuarios de PHP en Puebla][1].
-
-<img src="/images/comunidad.jpg" class="img-responsive img-rounded center-block" alt="Amigos comunidad">
+<div class="row">
+    <div class="col-sm-6">
+        <p>
+            Mi nombre es Luis Montealegre Vázquez y soy un <strong>Desarrollador
+            Web</strong>, egresado de la <strong>Maestría en Ciencias de la 
+            Computación</strong> en la <a href="http://www.cs.buap.mx/">BUAP</a>
+            donde hice un poco de 
+            <a href="http://link.springer.com/chapter/10.1007%2F978-3-540-74459-7_13#page-1">
+                investigación
+            </a>. 
+        </p>
+        <p>
+            Desde el 2005 empecé a desarrollar aplicaciones Web en empresas como
+            <a href="http://www.cfe.gob.mx/paginas/home.aspx">CFE</a>, 
+            <a href="http://www.ellucian.com/">Ellucian</a>, 
+            <a href="http://www.biconsulting.mx/">Bic Consulting</a>, 
+            <a href="http://www.digizent.com/">Digizent International</a> y como 
+            <strong>consultor independiente</strong>.
+        </p>
+        <p>
+            Durante estos <strong>11 años</strong> he trabajado con varios 
+            lenguajes de programación, principalmente:
+        </p>
+        <ul>
+            <li>PHP</li> 
+            <li>Java</li> 
+            <li>C#</li> 
+        </ul>
+        <p>
+            Durante casi el mismo periodo he trabajado para más de 10 
+            universidades (BUAP, <a href="http://www.uvp.mx/">UVP</a>, e 
+            <a href="http://www.itpuebla.net/">ITP</a>, entre otras), como 
+            profesor por asignatura, en varias materias de programación.
+        </p>
+        <p>
+            En julio de 2012, con el apoyo de muchos amig@s, comienzo a 
+            organizar el primer
+            <a href="http://www.comunidadphppuebla.com">
+                Grupo de usuarios PHP en Puebla
+            </a>. 
+        </p>
+        <p>
+            En enero de 2016 me mudé a <strong>San Antonio Texas</strong> a 
+            empezar una nueva aventura con mi familia, como instructor, por 
+            primera vez de tiempo completo, en 
+            <a href="http://codeup.com/about/" target="_blank">Codeup</a>.
+        </p>
+    </div>
+    <div class="col-sm-6">
+        <p>
+            <figure class="text-center">
+                <img 
+                    src="/images/uncle-bob.jpg" 
+                    class="img-responsive img-rounded center-block" 
+                    alt="Con Uncle Bob"
+                    title="Con Uncle Bob"
+                >
+                <figcaption>Uncle Bob</figcaption>
+            </figure>
+        </p>
+        <p>
+            <figure class="text-center">
+                <img 
+                    src="/images/eric-evans.jpg" 
+                    class="img-responsive img-rounded center-block" 
+                    alt="Con Eric Evans"
+                    title="Con Eric Evans"
+                >
+                <figcaption>Eric Evans</figcaption>
+            </figure>
+        </p>
+    </div>
+</div>
 
 ## ¿De qué trata este blog?
 
@@ -40,10 +91,12 @@ Este blog tiene como objetivo compartir las cosas que voy aprendiendo
 al poner en práctica las cosas que me gusta leer. Los posts que
 encontrarás aquí son sobre estos temas aplicados al **desarrollo Web**.
 
+<img src="/images/comunidad.jpg" class="img-responsive img-rounded center-block" alt="Amigos comunidad">
+
 ## Algo más personal :)
 
 Fuera de mi trabajo me gusta pasar tiempo con mi esposa (Meri) y mis dos
-hijos (Mario de 4 años y Alejandro de 2). Soy fan del café cargado y sin
+hijos (Mario de 4 años y Alejandro de 3). Soy fan del café cargado y sin
 azucar, de la pizza, el sushi, la cerveza oscura y de las películas de
 ciencia ficción.
 
@@ -60,17 +113,6 @@ en algo juntos o para que me platiques de lo que quieras.
     </p>
 </blockquote>
 
-[1]: http://www.comunidadphppuebla.com
-[2]: http://www.cs.buap.mx/
-[3]: http://link.springer.com/chapter/10.1007%2F978-3-540-74459-7_13#page-1
-[4]: http://www.uvp.mx/
-[5]: http://www.itpuebla.net/
-[6]: http://www.cfe.gob.mx/paginas/home.aspx
-[7]: http://www.ellucian.com/
-[8]: http://www.biconsulting.mx/
-[9]: http://www.digizent.com/
-[10]: http://www.hfpuebla.org/
-[11]: http://scala.org.mx/
 [13]: http://es.wikipedia.org/wiki/Desarrollo_guiado_por_pruebas
 [14]: http://en.wikipedia.org/wiki/Behavior-driven_development
 [15]: http://es.wikipedia.org/wiki/Dise%C3%B1o_guiado_por_el_dominio
