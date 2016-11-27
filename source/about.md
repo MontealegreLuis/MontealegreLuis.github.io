@@ -13,19 +13,38 @@ use:
         <p>
             Mi nombre es Luis Montealegre Vázquez y soy un <strong>Desarrollador
             Web</strong>, egresado de la <strong>Maestría en Ciencias de la 
-            Computación</strong> en la <a href="http://www.cs.buap.mx/">BUAP</a>
+            Computación</strong> en la 
+            <a href="http://www.cs.buap.mx/" target="_blank" rel="noopener">
+                BUAP
+            </a>
             donde hice un poco de 
-            <a href="http://link.springer.com/chapter/10.1007%2F978-3-540-74459-7_13#page-1">
+            <a 
+                href="http://link.springer.com/chapter/10.1007%2F978-3-540-74459-7_13#page-1"
+                target="_blank" 
+                rel="noopener"
+            >
                 investigación
             </a>. 
         </p>
         <p>
             Desde el 2005 empecé a desarrollar aplicaciones Web en empresas como
-            <a href="http://www.cfe.gob.mx/paginas/home.aspx">CFE</a>, 
-            <a href="http://www.ellucian.com/">Ellucian</a>, 
-            <a href="http://www.biconsulting.mx/">Bic Consulting</a>, 
-            <a href="http://www.digizent.com/">Digizent International</a> y como 
-            <strong>consultor independiente</strong>.
+            <a 
+                href="http://www.cfe.gob.mx/paginas/home.aspx" 
+                target="_blank" 
+                rel="noopener"
+            >
+                CFE
+            </a>, 
+            <a href="http://www.ellucian.com/" target="_blank" rel="noopener">
+                Ellucian
+            </a>, 
+            <a href="http://www.biconsulting.mx/" target="_blank" rel="noopener">
+                Bic Consulting
+            </a>, 
+            <a href="http://www.digizent.com/" target="_blank" rel="noopener">
+                Digizent International
+            </a> 
+            y como <strong>consultor independiente</strong>.
         </p>
         <p>
             Durante estos <strong>11 años</strong> he trabajado con varios 
@@ -38,14 +57,20 @@ use:
         </ul>
         <p>
             Durante casi el mismo periodo he trabajado para más de 10 
-            universidades (BUAP, <a href="http://www.uvp.mx/">UVP</a>, e 
-            <a href="http://www.itpuebla.net/">ITP</a>, entre otras), como 
-            profesor por asignatura, en varias materias de programación.
+            universidades (BUAP, 
+            <a href="http://www.uvp.mx/" target="_blank" rel="noopener">
+                UVP
+            </a>, e ITP, entre otras), como profesor por asignatura, en varias 
+            materias de programación.
         </p>
         <p>
             En julio de 2012, con el apoyo de muchos amig@s, comienzo a 
-            organizar el primer
-            <a href="http://www.comunidadphppuebla.com">
+            organizar el
+            <a 
+                href="http://www.comunidadphppuebla.com" 
+                target="_blank" 
+                rel="noopener"
+            >
                 Grupo de usuarios PHP en Puebla
             </a>. 
         </p>
@@ -53,7 +78,9 @@ use:
             En enero de 2016 me mudé a <strong>San Antonio Texas</strong> a 
             empezar una nueva aventura con mi familia, como instructor, por 
             primera vez de tiempo completo, en 
-            <a href="http://codeup.com/about/" target="_blank">Codeup</a>.
+            <a href="http://codeup.com/about/" target="_blank" rel="noopener">
+                Codeup
+            </a>.
         </p>
     </div>
     <div class="col-sm-6">
@@ -91,7 +118,11 @@ Este blog tiene como objetivo compartir las cosas que voy aprendiendo
 al poner en práctica las cosas que me gusta leer. Los posts que
 encontrarás aquí son sobre estos temas aplicados al **desarrollo Web**.
 
-<img src="/images/comunidad.jpg" class="img-responsive img-rounded center-block" alt="Amigos comunidad">
+<img 
+    src="/images/comunidad.jpg" 
+    class="img-responsive img-rounded center-block" 
+    alt="Amigos comunidad"
+>
 
 ## Algo más personal :)
 
