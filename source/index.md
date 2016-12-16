@@ -1,15 +1,10 @@
 ---
-layout: default
+layout: index
 title: ¿Quién soy?
-use:
-    - posts_categories
 ---
-<header>
-    <div class="page-header"><h1>¡Hola!</h1></div>
-</header>
-
 <div class="row">
     <div class="col-sm-6">
+        <h1>¡Hola!</h1>
         <p>
             Mi nombre es Luis Montealegre Vázquez y soy un <strong>Desarrollador
             Web</strong>, egresado de la <strong>Maestría en Ciencias de la 
@@ -82,6 +77,37 @@ use:
                 Codeup
             </a>.
         </p>
+        <h2>¿De qué trata este blog?</h2>
+        
+        <p>
+            Si te animas a conocerme un poco sabrás que me encanta pasar el 
+            tiempo <strong>aprendiendo</strong>, últimamente me la paso leyendo 
+            sobre diseño orientado a objetos, metodologías ágiles, 
+            <a 
+                href="http://es.wikipedia.org/wiki/Desarrollo_guiado_por_pruebas"
+                target="_blank"
+                rel="noopener"
+            >
+                TDD
+            </a>, 
+            <a 
+                href="http://en.wikipedia.org/wiki/Behavior-driven_development"
+                target="_blank"
+                rel="noopener"
+            >
+                BDD
+            </a>, 
+            <a 
+                href="http://es.wikipedia.org/wiki/Dise%C3%B1o_guiado_por_el_dominio"
+                target="_blank"
+                rel="noopener"
+            >
+                DDD
+            </a> y educación. Este blog tiene como objetivo compartir las cosas 
+            que voy aprendiendo al poner en práctica las cosas que me gusta leer. 
+            Los posts que encontrarás aquí son sobre estos temas aplicados al 
+            <strong>desarrollo Web</strong>.
+        </p>
     </div>
     <div class="col-sm-6">
         <p>
@@ -109,41 +135,36 @@ use:
     </div>
 </div>
 
-## ¿De qué trata este blog?
-
-Si te animas a conocerme un poco sabrás que me encanta pasar el tiempo
-**aprendiendo**, últimamente me la paso leyendo sobre diseño orientado a
-objetos, metodologías ágiles, [TDD][13], [BDD][14], [DDD][15] y educación.
-Este blog tiene como objetivo compartir las cosas que voy aprendiendo
-al poner en práctica las cosas que me gusta leer. Los posts que
-encontrarás aquí son sobre estos temas aplicados al **desarrollo Web**.
-
-<img 
-    src="/images/comunidad.jpg" 
-    class="img-responsive img-rounded center-block" 
-    alt="Amigos comunidad"
->
-
-## Algo más personal :)
-
-Fuera de mi trabajo me gusta pasar tiempo con mi esposa (Meri) y mis dos
-hijos (Mario de 4 años y Alejandro de 3). Soy fan del café cargado y sin
-azucar, de la pizza, el sushi, la cerveza oscura y de las películas de
-ciencia ficción.
-
-## ¿Puedo hacer algo por ti?
-
-Puedes ponerte en contacto conmigo a través de cualquiera de las redes
-sociales que ves en el menú del sitio o por correo, ya sea para trabajar
-en algo juntos o para que me platiques de lo que quieras.
-
-<blockquote class="thanks">
-    <p class="lead">
-        Muchas gracias por leer hasta aquí y <strong>vuelve las veces que
-        quieras</strong>.
-    </p>
-</blockquote>
-
-[13]: http://es.wikipedia.org/wiki/Desarrollo_guiado_por_pruebas
-[14]: http://en.wikipedia.org/wiki/Behavior-driven_development
-[15]: http://es.wikipedia.org/wiki/Dise%C3%B1o_guiado_por_el_dominio
+<div class="row">
+    <div class="col-sm-12">
+        <h2>Algo más personal :)</h2>
+        
+        <p>
+            Fuera de mi trabajo me gusta pasar tiempo con mi esposa (Meri) y mis dos
+            hijos (Mario de 5 años y Alejandro de 3). Soy fan del café cargado y sin
+            azucar, de la pizza, el sushi, la cerveza oscura y de las películas de
+            ciencia ficción.
+        </p>
+        
+        <img 
+            src="/images/comunidad.jpg" 
+            class="img-responsive img-rounded center-block" 
+            alt="Amigos comunidad"
+        >
+        
+        <h2>¿Puedo hacer algo por ti?</h2>
+        
+        <p>
+            Puedes ponerte en contacto conmigo a través de cualquiera de las redes
+            sociales que ves en el menú del sitio o por correo, ya sea para trabajar
+            en algo juntos o para que me platiques de lo que quieras.
+        </p>
+        
+        <blockquote class="thanks">
+            <p class="lead">
+                Muchas gracias por leer hasta aquí y <strong>vuelve las veces que
+                quieras</strong>.
+            </p>
+        </blockquote>
+    </div>
+</div>

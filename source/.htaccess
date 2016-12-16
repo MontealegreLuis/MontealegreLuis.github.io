@@ -22,3 +22,5 @@ ExpiresByType text/css A2592000
 Header unset ETag
 </ifmodule>
 FileETag None
+
+Redirect 301 /about/ /
