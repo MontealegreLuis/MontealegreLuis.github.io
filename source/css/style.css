@@ -5,7 +5,7 @@
 
 @font-face {
     font-family: valera;
-    src: url('/fonts/valera-round.otf');
+    src: url('/fonts/varela-round.otf');
 }
 
 body {
@@ -89,8 +89,13 @@ footer {
     color: #fff;
 }
 
-pre, code {
-    background: #fdf6e3;
+pre {
+    background: #F0F0F0;
+}
+
+code {
+    background-color: #e6e7e8;
+    color: #901212;
 }
 
 @media (min-width: 980px) {
