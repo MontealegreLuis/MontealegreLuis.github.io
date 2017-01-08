@@ -68,10 +68,19 @@ a, a:hover {
 }
 
 .welcome {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+}
+
+.welcome h1,
+.welcome h2 {
     color: #fff;
-    font-size: 3em;
     text-align: center;
-    line-height: 8em;
+    position: relative;
+    top: 40%;
 }
 
 .avatar {
@@ -120,25 +129,10 @@ code {
     line-height: 1.5em;
 }
 
-.image-bg-fluid-height,
-.image-bg-fixed-height {
-    text-align: center;
-    -webkit-background-size: cover;
-    -moz-background-size: cover;
-    background-size: cover;
-    -o-background-size: cover;
-}
-
-.image-bg-fluid-height {
-    background: url('/images/background.jpg') no-repeat center center scroll;
-    background-size: cover;
-    padding: 100px 0;
-}
-
 .image-bg-fixed-height {
     background: url('/images/background.jpg') no-repeat center center scroll;
     background-size: cover;
-    height: 450px;
+    height: 520px;
 }
 
 .img-center {
