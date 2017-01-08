@@ -39,6 +39,15 @@ a, a:hover {
     border-color: #00a79d;
 }
 
+.panel-heading {
+    line-height: 1.5em;
+    vertical-align: middle;
+}
+
+.panel-heading i {
+    font-size: 1.5em;
+}
+
 .panel-primary > .panel-heading,
 .btn-primary,
 .btn-primary:hover {
