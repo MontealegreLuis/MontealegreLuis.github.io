@@ -85,11 +85,22 @@ a, a:hover {
 }
 
 .welcome h1,
-.welcome h2 {
+.welcome h2,
+.welcome ul {
     color: #fff;
     text-align: center;
     position: relative;
-    top: 40%;
+    top: 35%;
+}
+
+.welcome ul {
+    padding-left: 0;
+    margin-left: 0;
+}
+
+.welcome ul li {
+    display: inline-block;
+    list-style: none;
 }
 
 .avatar {
