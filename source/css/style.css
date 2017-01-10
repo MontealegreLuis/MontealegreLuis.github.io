@@ -55,6 +55,29 @@ a, a:hover {
     border-color: #00a79d;
 }
 
+.panel-php > .panel-heading {
+    background-color: #8892BF;
+    border-color: #8892BF;
+    color: #fff;
+}
+
+.panel-docker > .panel-heading {
+    background-color: #039BC6;
+    border-color: #039BC6;
+    color: #fff;
+}
+
+.panel-java > .panel-heading {
+    background-color: #0070BB;
+    border-color: #0070BB;
+    color: #fff;
+}
+
+.panel-js > .panel-heading {
+    background-color: #F8DC3D;
+    border-color: #F8DC3D;
+}
+
 .link-icon:hover {
     text-decoration: none;
 }
