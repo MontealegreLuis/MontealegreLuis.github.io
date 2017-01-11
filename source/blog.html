@@ -7,6 +7,38 @@ pagination:
 use:
     - posts_categories
 ---
+<h1>¿De qué trata este blog?</h1>
+
+<p>
+    Las personas que me conocen sabrán que me encanta pasar el
+    tiempo <strong>aprendiendo</strong>, últimamente me la paso leyendo
+    sobre diseño orientado a objetos, metodologías ágiles,
+    <a
+        href="http://es.wikipedia.org/wiki/Desarrollo_guiado_por_pruebas"
+        target="_blank"
+        rel="noopener"
+    >
+        TDD
+    </a>,
+    <a
+        href="http://en.wikipedia.org/wiki/Behavior-driven_development"
+        target="_blank"
+        rel="noopener"
+    >
+        BDD
+    </a>,
+    <a
+        href="http://es.wikipedia.org/wiki/Dise%C3%B1o_guiado_por_el_dominio"
+        target="_blank"
+        rel="noopener"
+    >
+        DDD
+    </a> y educación. Este blog tiene como objetivo compartir las cosas
+    que voy aprendiendo al poner en práctica las cosas que me gusta leer.
+    Los posts que encontrarás aquí son sobre estos temas aplicados al
+    <strong>desarrollo Web</strong>.
+</p>
+
 <div class="posts-list">
 {% for post in page.pagination.items %}
     {% if loop.index0 % 2 == 0 %}<div class="row">{% endif %}
