@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html>
+<head lang="es-mx">
+    <title>Tests de aceptación con Codeception &mdash; Your argument is invalid &mdash; Luis Montealegre</title>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link
+    href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+    rel="stylesheet"
+    integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN"
+    crossorigin="anonymous"
+>
+<link
+    rel="stylesheet"
+    href="http://netdna.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+>
+<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+<!--[if lt IE 9]>
+<script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+<![endif]-->
+<link rel="stylesheet" href="/css/style.css" />
+<link href="/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+<link href="/favicon.ico" rel="icon" type="image/x-icon" />
+<link rel="alternate" type="application/atom+xml" href="/atom.xml" title="Your argument is invalid activity feed" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/styles/default.min.css" />
+</head>
+<body>
+    <header class="navigation">
+        <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="/" title="Your argument is invalid">
+                    <span class="glyphicon glyphicon-home"></span>
+                </a>
+            </div>
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                    <li><a href="/cv/">Curriculum</a></li>
+                    <li><a href="/portfolio/">Portfolio</a></li>
+                    <li><a href="/blog/">Blog</a></li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/atom.xml" class="link-icon">
+                            <img src="/images/rss.png" alt="RSS">
+                        </a>
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+    </header>
+
+    <div class="content container">
+        <div class="row">
+            <div class="col-sm-9">
+                    <article>
+        <header>
+            <div class="page-header"><h1>Tests de aceptación con Codeception</h1></div>
+            <p>
+                <span class="glyphicon glyphicon-time"></span>
+                diciembre 14 2014&nbsp;
+                <span class="glyphicon glyphicon-bookmark"></span>
+                <a href="/blog/categorias/PHP/">
+                    PHP
+                </a>&nbsp;
+                <span class="glyphicon glyphicon-tags"></span>&nbsp;
+                                    <a href="/blog/tags/Codeception/">
+                        Codeception
+                    </a>,                                     <a href="/blog/tags/Testing/">
+                        Testing
+                    </a>,                                     <a href="/blog/tags/Alice/">
+                        Alice
+                    </a>                            </p>
+        </header>
+        <div>
+            <p>Este post es una continuación al post de <a href="http://www.montealegreluis.com/blog/2014/11/23/testing-de-componentes-flight/">Testing de componentes Flight</a>, que trataba de una aplicación ficticia para
+la compra de productos, donde desarrollamos los specs para los componentes de Flight usando Jasmine. La configuración
+para los tests era un poco más complicada que la que se genera normalmente con <a href="https://github.com/flightjs/generator-flight">Yeoman</a>. El objetivo era evitar el
+uso del navegador para ejecutar nuestros specs, porque las pruebas con un navegador van incluidas en las pruebas de
+aceptación que podemos escribir con un framework de pruebas como <a href="http://codeception.com">Codeception</a>.</p>
+
+<p>En este post desarrollaremos las siguientes tareas:</p>
+
+<ul>
+<li>Configurar Codeception para ejecutar tests headless usando <a href="http://phantomjs.org/">PhantomJS</a></li>
+<li>Generar fixtures de datos para nuestras pruebas usando <a href="https://github.com/nelmio/alice">Alice</a> y <a href="https://github.com/fzaninotto/Faker">Faker</a></li>
+<li>Escribir una prueba de aceptación para nuestra aplicación de muestra</li>
+</ul>
+
+<h2 id="configuraci%C3%B3n-de-codeception">Configuración de Codeception</h2>
+
+<p>Codeception es un framework de pruebas para PHP cuyo objetivo es crear tests legibles que describan acciones desde la
+perspectiva del usuario.</p>
+
+<p>Instalaremos Codeception usando Composer. Codeception proporciona una interfaz de línea de comando que por default se
+instala en  <code>vendor/bin/codecept</code>. Nosotros modificaremos nuestro archivo <code>composer.json</code> para que quede instalado en
+<code>bin/codecept</code>.</p>
+
+<pre><code class="json">"config": {
+    "bin-dir": "bin/"
+}
+</code></pre>
+
+<p>Una vez configurado agregamos el paquete de Codeception como una dependencia de desarrollo.</p>
+
+<pre><code class="bash">$ composer require --dev codeception/codeception
+</code></pre>
+
+<p>Después de instalar podemos inicializar nuestro ambiente de pruebas con el siguiente comando:</p>
+
+<pre><code class="php">$ php bin/codecept bootstrap
+</code></pre>
+
+<p>Como Codeception nos permite hacer pruebas de aceptación, funcionales y unitarias, este comando crea la siguiente
+estructura de directorios. Cada tipo de prueba esta separada en suites. En lo personal uso Codeception únicamente para
+pruebas de aceptación. Así que lo siguiente que hago, por lo general, es eliminar todos los archivos que no están
+relacionados con ese tipo de pruebas.</p>
+
+<pre><code>tests/
+├── acceptance
+│   ├── AcceptanceTester.php
+│   └── _bootstrap.php
+├── acceptance.suite.yml
+├── _bootstrap.php
+├── _data
+│   └── dump.sql
+├── functional
+│   ├── _bootstrap.php
+│   └── FunctionalTester.php
+├── functional.suite.yml
+├── _output
+├── _support
+│   ├── AcceptanceHelper.php
+│   ├── FunctionalHelper.php
+│   └── UnitHelper.php
+├── unit
+│   ├── _bootstrap.php
+│   └── UnitTester.php
+└── unit.suite.yml
+</code></pre>
+
+<h3 id="algunos-conceptos-b%C3%A1sicos">Algunos conceptos básicos</h3>
+
+<h4 id="actores">Actores</h4>
+
+<p>Ya que las pruebas se representan como acciones realizadas por un usuario, un <strong>actor</strong> es un objeto que representa a
+una persona realizando pruebas a nuestra aplicación. En nuestro caso trabajaremos con el actor <code>AcceptanceTester</code>. Las
+clases que representan a los actores se generan a partir de la configuración de cada suite.</p>
+
+<p>Si modificamos la configuración de alguna suite podemos actualizar la definición de nuestros actores con el comando:</p>
+
+<pre><code class="bash">$ php bin/codecept build
+</code></pre>
+
+<h4 id="escenarios">Escenarios</h4>
+
+<p>Por defecto las pruebas en codeception se escriben como escenarios narrativos. Para crear un escenario debemos crear un
+archivo con el sufijo <code>Cept</code>. Podemos crear una prueba usando el comando:</p>
+
+<pre><code class="bash">$ php bin/codecept generate:cept acceptance ShoppingCart
+</code></pre>
+
+<p>La prueba más simple consiste en pasar a nuestro actor un escenario.</p>
+
+<pre><code class="php">&lt;?php
+# tests/acceptance/ShoppingCartCept.php
+
+$I = new AcceptanceTester($scenario);
+?&gt;
+</code></pre>
+
+<p>Existe otro tipo de formato para las pruebas llamado <code>Cest</code>, el cual es mi preferido. Un test del tipo <code>Cest</code> agrupa
+nuestras pruebas en clases. Podemos crear un <code>Cest</code> con el comando:</p>
+
+<pre><code class="bash">$ php bin/codecept generate:cest acceptance ShoppingCart
+</code></pre>
+
+<p>Este comando genera una clase como la siguiente:</p>
+
+<pre><code class="php">&lt;?php
+# tests/acceptance/ShoppingCartCest.php
+
+class ShoppingCartCest
+{
+    public function _before(AcceptanceTester $I)
+    {
+    }
+
+    public function _after(AcceptanceTester $I)
+    {
+    }
+
+    // tests
+    public function tryToTest(AcceptanceTester $I)
+    {
+    }
+}
+</code></pre>
+
+<p>Cada método públic en un Cest (excepto por los que inician con <code>_</code>) se ejecutarán como una prueba y recibirán como
+argumento un objeto actor y un escenario como segundo argumento.</p>
+
+<p>Los métoodos <code>_before</code> y <code>_after</code> son los equivalentes del <code>setUp</code> y <code>tearDown</code> en PHPUnit y se ejecutan antes y después
+de cada test respectivamente.</p>
+
+<h3 id="configuraci%C3%B3n-de-la-suite">Configuración de la suite</h3>
+
+<p>Para nuestras pruebas usaremos el navegador headless de PhantomJS en el modo ghostdriver, para lo cual debemos modificar
+el archivo de configuración.</p>
+
+<pre><code class="yaml"># tests/acceptance.suite.yml
+class_name: AcceptanceTester
+modules:
+    enabled:
+        - WebDriver
+        - AcceptanceHelper
+    config:
+        WebDriver:
+            url: 'http://shoppingcart.dev/'
+            browser: phantomjs
+</code></pre>
+
+<p>Por último, usaremos <a href="http://gruntjs.com/">Grunt</a> para ejecutar las pruebas. Debes instalar de forma global Grunt con npm.</p>
+
+<pre><code class="bash">$ npm install -g grunt-cli
+</code></pre>
+
+<p>Una vez que tenemos la instalación global de Grunt es necesario agregarlo también a nuestro archivo <code>packages.json</code>
+junto con PhantomJS y un par de tareas que nos servirán para ejecutar nuestros tests.</p>
+
+<pre><code class="json">{
+  "devDependencies": {
+    "grunt": "~0.4",
+    "grunt-run": "~0.3",
+    "grunt-exec": "~0.4",
+    "phantomjs": "~1.9"
+  }
+}
+</code></pre>
+
+<p>En nuestro archivo <code>Gruntfile.js</code> registramos una nueva tarea que inicie PhantomJS, ejecute los tests y por último
+detenga PhantomJS.</p>
+
+<pre><code class="javascript">module.exports = function(grunt) {
+    var phantomjs = require('phantomjs');
+    var phantombin = phantomjs.path;
+
+    grunt.initConfig({
+        exec: {
+            codecept: {
+                stdout: true,
+                command: [
+                    'php bin/codecept clean',
+                    'php bin/codecept run web --steps'
+                ].join('&amp;&amp;')
+            }
+        },
+        run: {
+            phantomjs: {
+                options: {
+                    wait: false,
+                    quiet: true,
+                    ready: /running on port/
+                },
+                cmd: phantombin,
+                args: [
+                    '--webdriver=4444'
+                ],
+            }
+        }
+    });
+
+    grunt.loadNpmTasks('grunt-exec');
+    grunt.loadNpmTasks('grunt-run');
+
+    grunt.registerTask('default', []);
+
+    grunt.registerTask('test', ['run:phantomjs', 'exec:codecept', 'stop:phantomjs']);
+};
+</code></pre>
+
+<p>Una vez configurado todo podemos correr nuestro <code>Cest</code> con el comando:</p>
+
+<pre><code class="bash">$ grunt test
+</code></pre>
+
+<p>Como nuestro test está vacío debemos ver un resultado similar al siguiente:</p>
+
+<pre><code class="bash">Acceptance Tests (1) -------------------------------------------------------------------------
+Trying to try to test (ShoppingCartCest::tryToTest)
+Scenario:
+ PASSED
+</code></pre>
+
+<h2 id="primero-los-fixtures">Primero los fixtures</h2>
+
+<p>Para nuestros test de aceptación necesitamos crear unos <a href="http://en.wikipedia.org/wiki/Test_fixture">fixtures</a> de datos con Alice. Alice nos permite generar
+fixtures con datos ficticios para nuestras pruebas, usando archivos YAML. Podemos instalar Alice con Composer.</p>
+
+<pre><code class="bash">$ composer require --dev nelmio/alice
+</code></pre>
+
+<p>Alice cuenta con una integración con <a href="http://www.doctrine-project.org/projects/orm.html">Doctrine ORM</a>, sin embargo, para mantener nuestro ejemplo simple, nuestro
+proyecto solo usa <a href="http://php.net/manual/es/book.pdo.php">PDO</a>. Nuestra clase producto es la siguiente:</p>
+
+<pre><code class="php">class Product
+{
+    protected $productId;
+    protected $name;
+    protected $unitPrice;
+
+    public function __construct($productId, $name, $unitPrice)
+    {
+        $this-&gt;prductId = $productId;
+        $this-&gt;name = $name;
+        $this-&gt;unitPrice = $unitPrice;
+    }
+
+    public function productId()
+    {
+        return $this-&gt;productId;
+    }
+
+    public function name()
+    {
+        return $this-&gt;name;
+    }
+
+    public function unitPrice()
+    {
+        return $this-&gt;unitPrice;
+    }
+}
+</code></pre>
+
+<p>Nuestra clase <code>ProductCatalog</code> es la encargada de persistir nuestra información. Para mantener el ejemplo simple, usamos
+<a href="http://www.sqlite.org/">SQLite</a>.</p>
+
+<pre><code class="php">class ProductCatalog
+{
+    protected $connection;
+
+    public function __construct(PDO $connection)
+    {
+        $this-&gt;connection = $connection;
+    }
+
+    public function add(Product $product)
+    {
+        $sql = 'INSERT INTO products(product_id, name, unit_price) VALUES (?, ?, ?)';
+        $statement = $this-&gt;connection-&gt;prepare($sql);
+        $statement-&gt;execute([
+            $product-&gt;productId(),
+            $product-&gt;name(),
+            $product-&gt;unitPrice(),
+        ]);
+    }
+}
+</code></pre>
+
+<p>Para mantener el código de nuestras rutas de Slim limpio, registramos la conexión a la base de datos y nuestro catálogo
+como servicios en el componente de <a href="http://docs.slimframework.com/#DI-Overview">inyección de dependencias de Slim</a>.</p>
+
+<pre><code class="php"># app/resources.php
+
+$app-&gt;container-&gt;singleton('connection', function() {
+    $connection = new PDO('sqlite:var/store.sqlite');
+    $connection-&gt;setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    $connection-&gt;setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
+
+    return $connection;
+});
+
+$app-&gt;container-&gt;singleton('catalog', function() use ($app) {
+
+    return new ProductCatalog($app-&gt;connection);
+});
+</code></pre>
+
+<p>Para cargar los datos de nuestros fixtures crearemos una clase que utilice la misma conexión que definimos en nuestra
+aplicación de Slim.</p>
+
+<pre><code class="php"># tests/support/FixturesLoader.php
+
+use Slim\Slim;
+
+class FixturesLoader
+{
+    protected $connection;
+
+    public function __construct()
+    {
+        $app = new Slim();
+        require __DIR__ . '/../../app/resources.php';
+
+        $this-&gt;connection = $app-&gt;connection;
+    }
+
+    public function connection()
+    {
+        return $this-&gt;connection;
+    }
+}
+</code></pre>
+
+<p>La clase <code>Loader\Yaml</code> de Alice creará nuestras entidades usando <a href="http://php.net/manual/es/intro.reflection.php">Reflection</a>, así que para nuestro ejemplo, la
+variable <code>$entities</code> será un arreglo de objetos <code>Product</code>. El segundo argumento de el método <code>loadFixture</code> es un objeto
+que nos permitirá guardar los datos de las entidades en la base de datos, en nuestro caso, un objeto de la clase
+<code>ProductCatalog</code>.</p>
+
+<pre><code class="php">use Nelmio\Alice\Loader\Yaml;
+
+class FixturesLoader
+{
+    // ...
+
+    public function loadFixture($fixture, $persister)
+    {
+        $loader = new Yaml();
+        $entities = $loader-&gt;load($fixture);
+
+        array_map(function($entity) use ($persister) {
+            $persister-&gt;add($entity);
+        }, $entities);
+    }
+}
+</code></pre>
+
+<p>Cómo nuestros tests se ejecutarán muchas veces, necesitamos de un método que nos permita eliminar los datos que se
+generaron en pruebas anteriores.</p>
+
+<pre><code class="php">class FixturesLoader
+{
+    // ...
+
+    public function purge($table)
+    {
+        $statement = $this-&gt;connection-&gt;prepare(sprintf('DELETE FROM %s', $table));
+        $statement-&gt;execute();
+    }
+}
+</code></pre>
+
+<p>Ahora que tenemos nuestra clase para cargar fixtures, la podemos usar en el método <code>_before</code> de nuestro <code>Cest</code></p>
+
+<pre><code class="php"># tests/acceptance/ShoppingCartCest.php
+
+class ShoppingCartCest
+{
+    /** @type FixturesLoader */
+    protected $loader;
+
+    public function _before()
+    {
+        $this-&gt;loader = new FixturesLoader();
+
+        $this-&gt;loader-&gt;purge('products');
+        $this-&gt;loader-&gt;loadFixture(
+            __DIR__ . '/../_data/fixtures/products.yml',
+            new ProductCatalog($this-&gt;loader-&gt;connection())
+        );
+    }
+
+    // ...
+}
+</code></pre>
+
+<h3 id="%C2%BFy-los-fixtures%3F">¿Y los fixtures?</h3>
+
+<p>Por último debemos generar el archivo <code>.yml</code> con los datos de prueba. Lo primero que necesita nuestro archivo es el nombre
+de la clase, cada entrada después del nombre de la clase representa un objeto de esa clase. Debemos colocarles un nombre
+para poder identificarlos después, en caso que se usen como referencias en otros objetos.</p>
+
+<pre><code class="yaml"># tests/_data/fixtures/products.yml
+
+Store\Product:
+    product0:
+        __construct: false # Do not use the constructor
+        productId: 1
+        name: Tetris
+        unitPrice: 100.20
+    product1:
+        __construct: false
+        productId: 2
+        name: Minecraft
+        unitPrice: 200.80
+</code></pre>
+
+<p>Aunque resulta relativamente simple generar datos manualmente, una mejor opción es la generación automática. Para este
+fin, Alice usa los proveedores de datos de Faker. Para usar un <a href="https://github.com/fzaninotto/Faker#formatters">proveedor de Faker</a> solo es necesario usar el nombre
+del método y sus argumentos, cuando sea necesario, después de la priopiedad del objeto en nuestro archivo YAML. En el
+ejemplo estamos usando también rangos <code>product{2..12}</code> para generar de forma automática los identificadores de los
+objetos, en este caso serán desde <code>product2</code> hasta <code>product12</code>.</p>
+
+<pre><code class="yaml">Store\Product:
+    product{2..12}:
+        __construct: false
+        productId (unique): &lt;numberBetween(1, 20)&gt;
+        name: &lt;sentence(2)&gt;
+        unitPrice: &lt;randomFloat(2, 5, 100)&gt;
+</code></pre>
+
+<p>Si ejecutamos nuevamente nuestro test y hacemos una consulta a nuestra tabla de productos, veremos una salida similar a
+la siguiente:</p>
+
+<p><img src="/images/content/alice-faker-data.png" class="img-responsive img-thumbnail center-block" alt="Datos de prueba de Alice y Faker"></p>
+
+<p>Podemos generar nuestro propio proveedor de datos aleatorios para hacer que todos nuestros productos sean videojuegos.
+Un proveedor no requiere de nada particular, los método publicos del proveedor que registremos con Alice estarán
+disponibles desde nuestro archivo de fixtures.</p>
+
+<pre><code class="php"># tests/support/ProductsProvider.php
+
+class ProductsProvider
+{
+    protected $products = [
+        'Super Mario Bros',
+        'Grand Theft Auto',
+        'Call of Duty',
+        'Mario Kart',
+        'Pokémon Diamond and Pearl',
+        'Sonic the Hedgehog',
+        'Diablo III',
+        'Battlefield 3',
+        'Mortal Kombat II',
+        'Street Fighter II: Special Champion Edition',
+    ];
+
+    public function product()
+    {
+        return $this-&gt;products[array_rand($this-&gt;products)];
+    }
+}
+</code></pre>
+
+<p>Para que funcione debemos pasar el proveedor a nuestro loader.</p>
+
+<pre><code class="php"># ShoppingCartCest::_before
+$this-&gt;loader-&gt;loadFixture(
+    __DIR__ . '/../_data/fixtures/products.yml',
+    new ProductCatalog($this-&gt;loader-&gt;connection()),
+    [new ProductsProvider()] // Our provider
+);
+
+# FixturesLoader::loadFixtures
+public function loadFixture($fixture, $persister, $providers = [])
+{
+    $loader = new Yaml('en_US', $providers);
+    // ...
+}
+</code></pre>
+
+<p>Y utilizarlo en nuestro archivo de fixtures.</p>
+
+<pre><code class="yaml">product{2..12}:
+    __construct: false
+    productId (unique): &lt;numberBetween(3, 20)&gt;
+    name: &lt;product()&gt;
+    unitPrice: &lt;randomFloat(2, 5, 100)&gt;
+</code></pre>
+
+<p>Los datos generados ahora, serían similares a los siguientes:</p>
+
+<p><img src="/images/content/datos-con-proveedor-de-faker.png" class="img-responsive img-thumbnail center-block" alt="Datos de proveedor de Faker"></p>
+
+<h2 id="las-pruebas-de-aceptaci%C3%B3n-por-fin...">Las pruebas de aceptación (por fin...)</h2>
+
+<p>El objetivo de las pruebas es que describan las acciones como si fueran realizadas por un usuario de la aplicación. Para
+ese fin codeception nos proporciona algunos métodos para describir el objetivo de cada prueba similar al formato
+<a href="http://blog.firsthand.ca/2010/08/user-story-format.html">Connextra</a>.</p>
+
+<pre><code class="php">$I-&gt;am('videogames buyer');
+$I-&gt;wantTo('buy my favorite videogames');
+$I-&gt;lookForwardTo('add videogames to my shopping cart');
+</code></pre>
+
+<p>Estos pasos mostraran una salida más descriptiva que nos permite saber cuál es el propósito de nuestro test.</p>
+
+<pre><code class="bash">Trying to buy my favorite videogames (ShoppingCartCest::toAddProductsToMyShoppingCart)
+Scenario:
+* As a videogames buyer
+* So that I add videogames to my shopping cart
+</code></pre>
+
+<p>A fin de evitar colocar código CSS o XPath directamente en nuestros tests, Codeception cuenta con una implementación del
+patrón de diseño <a href="https://code.google.com/p/selenium/wiki/PageObjects">PageObject</a> que representa una página Web como una clase y los elementos del DOM como sus
+propiedades.</p>
+
+<pre><code class="bash">$ php bin/codecept generate:pageobject ShoppingCartPage
+</code></pre>
+
+<p>En nuestra página de carrito los elementos DOM que nos interesan son: el <code>select</code> con los productos, el <code>text</code> con la
+cantidad de productos a comprar, el botón para agregar el producto. También es importante verificar que se actualicen
+los valores del precio total del producto seleccionado (precio unitario multpilicado por la cantidad) y la celda con el
+total a pagar por los productos seleccionados.</p>
+
+<pre><code class="php">class ShoppingCartPage
+{
+    public static $URL = '/order';
+    public static $product = 'Product';
+    public static $quantity = 'Quantity';
+    public static $addToCart = 'Add to cart';
+    public static $firstItemPrice = '//tbody//tr[1]//td[last()]';
+    public static $secondItemPrice = '//tbody//tr[2]//td[last()]';
+    public static $total = '#cart-total';
+}
+</code></pre>
+
+<p>Nuestra prueba agregaría 5 copias de Tetris que nos da un total de $501.50 ($100.21 cada uno) y dos copias de Minecraft
+$401.66 ($200.83 cada uno). El total que debe tener nuestro carro de compra es de $902.71.</p>
+
+<pre><code class="php">public function tryToAddProductsToMyShoppingCart(AcceptanceTester $I)
+{
+    $I-&gt;am('videogames buyer');
+    $I-&gt;wantTo('buy my favorite videogames');
+    $I-&gt;lookForwardTo('add videogames to my shopping cart');
+
+    $I-&gt;amOnPage(ShoppingCartPage::$URL);
+    $I-&gt;selectOption(ShoppingCartPage::$product, 'Tetris');
+    $I-&gt;fillField(ShoppingCartPage::$quantity, 5);
+    $I-&gt;click(ShoppingCartPage::$addToCart);
+
+    $I-&gt;see(501.05, ShoppingCartPage::$firstItemPrice);
+
+    $I-&gt;selectOption(ShoppingCartPage::$product, 'Minecraft');
+    $I-&gt;fillField(ShoppingCartPage::$quantity, 2);
+    $I-&gt;click(ShoppingCartPage::$addToCart);
+
+    $I-&gt;see(401.66, ShoppingCartPage::$secondItemPrice);
+
+    $I-&gt;see(902.71, ShoppingCartPage::$total);
+}
+</code></pre>
+
+<p>De las cosas más interesantes que nos ofrece Codeception es su simpleza, ya que podemos leer cada línea de nuestro test
+casi como una oración en ingles. Por ejemplo:</p>
+
+<p><code>$I-&gt;amOnPage(ShoppingCartPage::$URL);</code> estoy en la página del carrito de compras (<code>/order</code>),
+<code>$I-&gt;selectOption(ShoppingCartPage::$product, 'Tetris');</code> selecciono la opción Tetris de los
+productos, <code>$I-&gt;fillField(ShoppingCartPage::$quantity, 5);</code> y lleno el campo cantidad con un 5,
+<code>$I-&gt;click(ShoppingCartPage::$addToCart);</code> cuando doy clic en el botón agregar al carrito,
+<code>$I-&gt;see(501.05, ShoppingCartPage::$firstItemPrice);</code> debería ver el valor 501.05 en el precio total del producto
+(última celda de la primera fila de la tabla).</p>
+
+<p>Con esta prueba estamos validando también el correcto funcionamiento de nuestro componentes de Flight, razón por la cuál
+en el post anterior, no escribimos las pruebas usando Karma. El código de este ejemplo lo desarrollé en una máquina
+virtual generada con <a href="https://puphpet.com/">PuPHPet</a>, razón por la que describí como ejecutar las pruebas usando PhantomJS. Sólo que hay
+un pequeño detalle que encontré. PhantomJS no tiene soporte para la función <code>bind</code> de JavaScript, debido a la versión
+de QtWebKit en la que está basado, y al parecer no tendrá solución hasta la versión 2 como se explica en este
+<a href="https://github.com/ariya/phantomjs/issues/10522">issue</a>. Podemos usar algunos polyfills para solucionar el problema, en el <a href="https://github.com/MontealegreLuis/flight-demo">repo de este ejemplo</a> puedes ver
+como se incluye de manera condicional un <a href="https://github.com/MontealegreLuis/flight-demo/blob/master/app/templates/order.html.twig#L56">snippet</a> de código que tomé de las respuestas en el issue cuando estamos
+en el ambiente de testing. Es importante señalar que este snippet en nuestro template sólo tiene sentido si usamos
+PhantomJS, no lo necesitamos con ningún otro navegador.</p>
+
+<p>Espero que este post te haya servido para darte una mejor idea de como funciona el testing de aceptación con Codeception
+y como complementa los otros tipos de testing que revisamos en posts anteriores. Agradeceré mucho tus sugerencias,
+críticas y quejas en los comentarios.</p>
+
+        </div>
+
+                    <nav>
+                <ul class="pagination">
+                                            <li>
+                            <a href="/blog/2014/12/04/testing-de-componentes-flight/" title="Testing de componentes Flight">
+                                <span class="glyphicon glyphicon-arrow-left"></span>&nbsp;
+                                Testing de componentes Flight
+                            </a>
+                        </li>
+                                                            <li>
+                        <a href="/blog/2015/02/05/un-formulario-no-tiene-porque-hacer-todo/" title="Un formulario no tiene porque hacer todo">
+                            <span class="glyphicon glyphicon-arrow-right"></span>&nbsp;
+                            Un formulario no tiene porque hacer todo
+                        </a>
+                    </li>
+                                    </ul>
+            </nav>
+            </article>
+                <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'montealegreluis';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>
+    Please enable JavaScript to view the
+    <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+</noscript>
+            </div>
+            <div class="col-sm-3 sidebar">
+                <div class="panel panel-default">
+    <div class="panel-heading"><h3 class="panel-title">Categorías</h3></div>
+    <div class="list-group">
+                    <a href="/blog/categorias/PHP/" class="list-group-item">
+                PHP
+            </a>
+                    <a href="/blog/categorias/JavaScript/" class="list-group-item">
+                JavaScript
+            </a>
+            </div>
+</div>
+<div class="panel panel-default">
+    <div class="panel-heading"><h4 class="panel-title">Sitios de interés</h4></div>
+    <div class="list-group">
+        <a href="http://www.comunidadphppuebla.com/" target="_blank" class="list-group-item">
+            Comunidad PHP Puebla
+        </a>
+        <a href="http://www.hfpuebla.org/" target="_blank" class="list-group-item">
+            Hackers & Founders
+        </a>
+        <a href="http://www.montealegreluis.com/logica-programacion/" target="_blank" class="list-group-item">
+            Notas de Programación
+        </a>
+        <a href="http://scala.org.mx/" target="_blank" class="list-group-item">
+            Scala MX
+        </a>
+        <ul class="list-group-item list-unstyled">
+            <li>
+                <a href="http://scala.org.mx/news/2015/01/29/funciones-scala/" target="_blank">
+                    Funciones en Scala
+                </a>
+            </li>
+        </ul>
+        <a href="http://www.drupodcast.com/" class="list-group-item" target="_blank">
+            Drupodcast
+        </a>
+        <ul class="list-group-item list-unstyled">
+            <li>
+                <a href="http://www.drupodcast.com/podcast/drupodcast-s03-e09-con-luis-montealegre" target="_blank">
+                    Temporada 3, Episodio 9
+                </a>
+            </li>
+        </ul>
+        <a href="http://html5facil.com/" class="list-group-item" target="_blank">
+            HTML5 Fácil
+        </a>
+    </div>
+</div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+    2014 - 2017 Luis Montealegre
+    <p  class="pull-right">
+        <a href="http://creativecommons.org/licenses/by-nc/2.5/">
+            <img src="/images/cc.primary.srr.gif" alt="Algunos derechos reservados">
+        </a>
+    </p>
+</div>
+    </footer>
+
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+<script src="http://netdna.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js">
+</script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+    <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-56875620-1', 'auto');
+    ga('send', 'pageview');
+</script>
+</body>
+</html>

@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html>
+<head lang="es-mx">
+    <title>Módulos con Slim &mdash; Your argument is invalid &mdash; Luis Montealegre</title>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link
+    href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+    rel="stylesheet"
+    integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN"
+    crossorigin="anonymous"
+>
+<link
+    rel="stylesheet"
+    href="http://netdna.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+>
+<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+<!--[if lt IE 9]>
+<script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+<![endif]-->
+<link rel="stylesheet" href="/css/style.css" />
+<link href="/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+<link href="/favicon.ico" rel="icon" type="image/x-icon" />
+<link rel="alternate" type="application/atom+xml" href="/atom.xml" title="Your argument is invalid activity feed" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/styles/default.min.css" />
+</head>
+<body>
+    <header class="navigation">
+        <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="/" title="Your argument is invalid">
+                    <span class="glyphicon glyphicon-home"></span>
+                </a>
+            </div>
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                    <li><a href="/cv/">Curriculum</a></li>
+                    <li><a href="/portfolio/">Portfolio</a></li>
+                    <li><a href="/blog/">Blog</a></li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/atom.xml" class="link-icon">
+                            <img src="/images/rss.png" alt="RSS">
+                        </a>
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+    </header>
+
+    <div class="content container">
+        <div class="row">
+            <div class="col-sm-9">
+                    <article>
+        <header>
+            <div class="page-header"><h1>Módulos con Slim</h1></div>
+            <p>
+                <span class="glyphicon glyphicon-time"></span>
+                febrero 27 2015&nbsp;
+                <span class="glyphicon glyphicon-bookmark"></span>
+                <a href="/blog/categorias/PHP/">
+                    PHP
+                </a>&nbsp;
+                <span class="glyphicon glyphicon-tags"></span>&nbsp;
+                                    <a href="/blog/tags/PHP/">
+                        PHP
+                    </a>,                                     <a href="/blog/tags/Slim/">
+                        Slim
+                    </a>,                                     <a href="/blog/tags/M%C3%B3dulos/">
+                        Módulos
+                    </a>                            </p>
+        </header>
+        <div>
+            <p>Uno de los conceptos más importantes que nos permite reusar código entre aplicaciones
+es el de <strong>módulo</strong>. Cada framework popular en PHP tiene su propia forma de estructurar
+módulos, e incluso distintas formas de nombrarlos. Por ejemplo en Zend Framework 2
+son <a href="http://framework.zend.com/manual/current/en/modules/zend.module-manager.intro.html">módulos</a>, en Symfony 2 son <a href="http://symfony.com/doc/bundles/">bundles</a> y en Laravel 4 son <a href="http://laravel.com/docs/4.2/packages">packages</a>.</p>
+
+<p>Slim al ser un microframework no cuenta con un concepto de módulo como tal, ya que su
+escencia es que puedes usar funciones anónimas como controladores y desarrollar
+aplicaciones de la forma más simple posible.</p>
+
+<p>Aún así, si te interesa organizar el código de una aplicación mediana de forma similar
+a como lo harías en un framework regular, este post será de tu interés.</p>
+
+<p>Te explicaré cómo puedes usar el paquete <code>comphppuebla/slim-modules</code> para estructurar
+tus aplicaciones Slim de forma similar a como lo harías con módulos. Para esto usaré
+el ejemplo que he venido usando en post anteriores sobre una aplicación de catálago
+de productos.</p>
+
+<h2 id="estructurando-el-m%C3%B3dulo">Estructurando el Módulo</h2>
+
+<p>Supongamos que tienes una estructura de directorios similar a la siguiente para tu
+proyecto.</p>
+
+<pre><code>src
+├── ProductCatalogModule
+│   ├── Controllers
+│   │   ├── SearchProductsController.php
+│   │   └── ProductRequest.php
+│   ├── Resources
+│   │   └── templates
+│   │       └── search-products.html.twig
+│   ├──Forms
+│   │  └── ProductForm.php
+├── ProductCatalog
+│   ├── Catalog.php
+│   └──  Product.php
+</code></pre>
+
+<p>Y que queremos integrar de la forma más simple posible ese código con nuestra aplicación
+Slim.</p>
+
+<h2 id="instalaci%C3%B3n">Instalación</h2>
+
+<p>Primero instalamos el paquete con Composer.</p>
+
+<pre><code class="bash">$ composer require comphppuebla/slim-modules
+</code></pre>
+
+<p>Puedes revisar la <a href="http://comphppuebla.github.io/slim-modules/">documentación</a> y esta <a href="https://github.com/MontealegreLuis/easy-forms-examples">aplicación</a> que ya usa el módulo, para más
+detalles.</p>
+
+<h2 id="registrando-los-servicios">Registrando los servicios</h2>
+
+<p>El paquete está pensado para integrar módulos, pero también puedes integrar librerías
+de terceros, similar a los <a href="http://silex.sensiolabs.org/doc/providers.html">services providers</a> de Silex. Supongamos que queremos
+integrar Twig, podemos usar la interfaz <code>ComPHPPuebla\Slim\ServiceProvider</code> de la
+siguiente forma:</p>
+
+<pre><code class="php">use ComPHPPuebla\Slim\ServiceProvider;
+
+class TwigProvider implements ServiceProvider
+{
+    public function configure(Slim $app, array $parameters = [])
+    {
+        $app-&gt;container-&gt;singleton('twig.loader', function() {
+            return new Twig_Loader_Filesystem($parameters['twig.paths']);
+        });
+        $app-&gt;container-&gt;singleton('twig.environment', function() use ($app) {
+            return new Twig_Environment(
+                $app-&gt;container-&gt;get('twig.loader'),
+                $parameters['twig.options']
+            );
+        });
+    }
+}
+</code></pre>
+
+<p>Una vez definido, puedes registrar tu proveedor en <code>index.php</code></p>
+
+<pre><code class="php">$app = new Slim\Slim();
+
+$twigProvider = new TwigProvider([
+    'twig.paths' =&gt; [
+        'app/templates'
+        'src/ProductCatalogModule/Resources/templates',
+    ],
+    'twig.options' =&gt; [
+        'cache' =&gt; 'var/cache/twig',
+        'strict_variables' =&gt; true,
+    ],
+]);
+
+$twigProvider-&gt;register($app);
+
+$app-&gt;run();
+</code></pre>
+
+<h2 id="registrando-m%C3%B3dulos">Registrando módulos</h2>
+
+<p>La implementación para los servicios de un módulo es similar, solo que registraríamos
+controladores, repositorios, servicios de aplicación, formularios, etc. Por ejemplo:</p>
+
+<pre><code class="php">namespace ProductCatalogModule;
+
+use ComPHPPuebla\Slim\ServiceProvider;
+use ProductCatalogModule\Controllers;
+use ProductCatalogModule\Forms;
+use ProductCatalog\Catalog;
+
+class ProductCatalogServices implements ServiceProvider
+{
+    public function configure(Slim $app, array $parameters = [])
+    {
+        $app-&gt;container-&gt;singleton(
+            'product_catalog.search_products_controller',
+            function() use ($app) {
+                return new SearchProductsController(
+                    $app-&gt;container-&gt;get('twig.environment'),
+                    new SearchProductsForm(),
+                    $app-&gt;container-&gt;get('product_catalog.product_repository'),
+                );
+            }
+        );
+        $app-&gt;container-&gt;singleton(
+            'product_catalog.product_repository',
+            function() use ($app) {
+                return new new Catalog($app-&gt;container-&gt;get('dbal.connection'));
+            }
+        );
+        /* more services here... */
+    }
+}
+</code></pre>
+
+<p>Registramos los servicios del módulo igual que hicimos con el ejemplo de Twig.</p>
+
+<pre><code class="php">$app = new Slim\Slim();
+
+/* More providers here... */
+
+$productCatalog = new ProductCatalogServices();
+$productCatalog-&gt;register($app);
+
+$app-&gt;run();
+</code></pre>
+
+<h2 id="registrando-las-rutas">Registrando las rutas</h2>
+
+<p>Para registrar las rutas, debemos crear una clase que implemente la interfaz
+<code>ComPHPPuebla\Slim\ControllerProvider</code></p>
+
+<pre><code class="php">namespace ProductCatalogModule;
+
+use ComPHPPuebla\Slim\ControllerProvider;
+use ComPHPPuebla\Slim\ControllerResolver;
+use Slim\Slim;
+
+class ProductCatalogControllers implements ControllerProvider
+{
+    public function register(Slim $app, ControllerResolver $resolver)
+    {
+        $app-&gt;map('/catalog/search', $resolver-&gt;resolve(
+            $app, 'product_catalog.search_products_controller:searchProducts'
+        ))-&gt;via('POST', 'GET');
+        /* More routes here... */
+    }
+}
+</code></pre>
+
+<p>En el ejemplo, cada que la aplicación haga match con <code>/catalog/search</code> se ejecutará
+el método <code>searchProducts</code> del servicio registrado con el nombre
+<code>product_catalog.search_products_controller</code>. El objeto <code>ControllerResolver</code> usa el
+patrón <code>id_controlador:metodo</code> para resolver qué método se ejecutará en cada ruta.
+El controlador no se crea hasta que Slim hace match con esa ruta, el resolvedor
+simplemente crea una función (similar a lo que sucede cuando ejecutas
+<code>$app-&gt;container-&gt;protect</code>) que realiza las siguientes tareas:</p>
+
+<ul>
+<li>Genera un <a href="http://php.net/manual/es/language.types.callable.php">callable</a> con el controlador y método que encontró a partir
+de la cadena <code>id_controlador:metodo</code>.</li>
+<li>Recupera los argumentos que Slim genera a partir de la ruta, por ejemplo si la
+ruta es <code>/products/:id</code>, recupera el valor de <code>$id</code> y lo pasa al método del controlador.</li>
+<li>Agrega el objeto <code>Request</code> como penúltimo argumento y a tu aplicación Slim como
+último argumento. De modo que <strong>todas</strong> las llamadas a métodos de controladores tienen
+por default <strong>la misma estructura</strong>:</li>
+</ul>
+
+<pre><code class="php">Controller::method(/* $route_param_1, ... $route_param_n */ $request, $app)
+</code></pre>
+
+<ul>
+<li>Una vez que se resuelven los argumentos, se ejecuta el método del controlador</li>
+</ul>
+
+<h3 id="modificando-argumentos">Modificando argumentos</h3>
+
+<p>El resolvedor puede recibir como tercer argumento una función que altere los
+parámetros que se le pasan a un controlador. Supongamos que tenemos un controlador
+que edita los datos de un producto. El método en el controlador sólo necesita el
+ID del producto y la instancia de la aplicación de Slim para llamar al método
+<code>notFound</code> en caso de que no encontremos el producto asociado al ID proporcionado.
+No nos hace falta en este caso el objeto <code>Request</code>.</p>
+
+<pre><code class="php">namespace ProductCatalogModule\Controllers;
+
+/* ... */
+
+class ProductController
+{
+    /* ... */
+
+    public function editProduct($productId, Slim $app)
+    {
+        if (!$product = $this-&gt;catalog-&gt;productOf($productId)) {
+            $app-&gt;notFound();
+        }
+
+        // Populate your form and pass it to the view
+    }
+
+    /* ... */
+}
+</code></pre>
+
+<p>Si no usamos un convertidor de argumentos, generaríamos un error porque el
+argumento que pasaríamos en segundo lugar sería de tipo <code>Request</code> y no de tipo
+<code>Slim</code>, ya que ese es el comportamiento default.</p>
+
+<p>Para evitar este error registramos un convertidor que elimine el <code>Request</code>
+de nuestro arreglo de argumentos.</p>
+
+<pre><code class="php"># ProductCatalogModule\ProductCatalogControllers
+
+public function register(Slim $app, ControllerResolver $resolver)
+{
+    $app-&gt;get('/catalog/product/edit/:id', $resolver-&gt;resolve(
+        $app,
+        'product_catalog.product_controller:editProduct',
+        function (array $arguments) {
+            // $arguments[0] is the product ID
+            unset($arguments[1]); // Remove the request
+            // $arguments[2] is our Slim application
+
+            return $arguments;
+        }
+    ));
+
+    /* ... */
+}
+</code></pre>
+
+<h3 id="reemplazando-argumentos">Reemplazando argumentos</h3>
+
+<p>Con los convertidores no solo podemos modificar los argumentos, los podemos
+reemplazar completamente. Supongamos que tenemos un controlador para realizar
+búsquedas de productos por categoría y palabras clave. Estos valores se pasan
+usando el <a href="http://es.wikipedia.org/wiki/Query_string">query string</a> y en la aplicación son manejados usando el siguiente
+objeto:</p>
+
+<pre><code class="php">namespace ProductCatalog;
+
+class ProductSearchCriteria
+{
+    protected $category;
+    protected $keywords;
+
+    public function __construct($category = null, $keywords = null)
+    {
+        $this-&gt;category = $category;
+        $this-&gt;keywords = $keywords;
+    }
+
+    public function hasCategory()
+    {
+        return !is_null($this-&gt;category);
+    }
+
+    public function category()
+    {
+        return $this-&gt;category;
+    }
+
+    public function hasKeywords()
+    {
+        return !is_null($this-&gt;keywords);
+    }
+
+    public function keywords()
+    {
+        return $this-&gt;keyword;
+    }
+}
+</code></pre>
+
+<p>Sin un convertidor de argumentos, nuestro controlador tendría código como este:</p>
+
+<pre><code class="php">namespace ProductCatalogModule\Controllers;
+
+/* .. */
+
+class SearchController
+{
+    /* ... */
+
+    public function searchProducts(Request $request)
+    {
+        $results = $this-&gt;catalog-&gt;productsMatching(new ProductSearchCriteria(
+            $request-&gt;get('category'), $request-&gt;get('keywords')
+        ));
+
+        // Pass your results to the view
+    }
+}
+</code></pre>
+
+<p>Con un convertidor podríamos pasar directamente el objeto <code>ProductSearchCriteria</code>
+al método del controlador en lugar de pasar el objeto <code>Request</code></p>
+
+<pre><code class="php"># ProductCatalogModule\ProductCatalogControllers
+
+public function register(Slim $app, ControllerResolver $resolver)
+{
+    $app-&gt;get('/catalog/product/search', $resolver-&gt;resolve(
+        $app,
+        'product_catalog.product_search_controller:searchProducts',
+        function (array $arguments) {
+            // $arguments[0] is the request, our route does not have parameters
+
+            return [new ProductSearchCriteria(
+                $arguments[0]-&gt;get('category'), $arguments[0]-&gt;get('keywords')
+            )];
+        }
+    ));
+
+    /* ... */
+}
+</code></pre>
+
+<p>Con este simple cambio, podemos modificar la firma del controlador.</p>
+
+<pre><code class="php">namespace ProductCatalogModule\Controllers;
+
+/* .. */
+
+class SearchController
+{
+    /* ... */
+
+    public function searchProducts(ProductSearchCriteria $criteria)
+    {
+        $results = $this-&gt;catalog-&gt;productsMatching($criteria);
+
+        // Pass your results to the view
+    }
+}
+</code></pre>
+
+<h2 id="organizando-todos-tus-servicios">Organizando todos tus servicios</h2>
+
+<p>En los ejemplos anteriores hemos registrado nuestros servicios por separado,
+sin embargo, podemos incluir todas nuestras definiciones en una sola clase si
+extendemos de <code>ComPHPPuebla\Slim\Services</code>.</p>
+
+<p>Podemos registrar <strong>todos</strong> nuestros proveedores en el método <code>init</code> usando el
+método <code>add</code>.</p>
+
+<pre><code class="php">namespace Application;
+
+use ComPHPPuebla\Slim\Services;
+use ProductCatalogModule\ProductCatalogServices;
+
+class ApplicationServices extends Services
+{
+    /**
+     * Add the providers for your modules here
+     */
+    protected function init()
+    {
+        $this
+            -&gt;add(new ProductCatalogServices())
+            // Register more modules here...
+            -&gt;add(new TwigProvider())
+            // Register more providers here...
+        ;
+    }
+}
+</code></pre>
+
+<h2 id="organizando-todas-tus-rutas">Organizando todas tus rutas</h2>
+
+<p>También podemos agrupar el registro de las rutas en una sola clase
+si extendemos de <code>ComPHPPuebla\Slim\Controllers</code>, también agregamos nuestros
+controladores en el método <code>init</code> el cual se llama automáticamente al
+registrar nuestras rutas.</p>
+
+<pre><code class="php">namespace Application;
+
+use ComPHPPuebla\Slim\Controllers;
+use ProductCatalogModule\ProductCatalogControllers;
+
+class ApplicationControllers extends Controllers
+{
+    protected function init()
+    {
+        $this
+            -&gt;add(new ProductCatalogControllers())
+            // Register more controllers modules here...
+        ;
+    }
+}
+</code></pre>
+
+<p>Una vez agrupadas las definiciones de todos tus servicios y todas tus rutas,
+la configuración en tu archivo <code>index.php</code> se reduce a algo similar a las
+siguientes líneas.</p>
+
+<pre><code class="php">$app = new Slim\Slim();
+
+$services = new Application\ApplicationServices();
+$services-&gt;configure($app);
+
+$controllers = new Application\ApplicationControllers();
+$controllers-&gt;register($app);
+
+$app-&gt;run();
+</code></pre>
+
+<p>Agradeceré mucho tus comentarios, dudas, quejas, sugerencias o reclamaciones.</p>
+
+        </div>
+
+                    <nav>
+                <ul class="pagination">
+                                            <li>
+                            <a href="/blog/2015/02/05/un-formulario-no-tiene-porque-hacer-todo/" title="Un formulario no tiene porque hacer todo">
+                                <span class="glyphicon glyphicon-arrow-left"></span>&nbsp;
+                                Un formulario no tiene porque hacer todo
+                            </a>
+                        </li>
+                                                            <li>
+                        <a href="/blog/2015/03/04/elementos-compuestos-en-formularios/" title="Elementos compuestos en formularios">
+                            <span class="glyphicon glyphicon-arrow-right"></span>&nbsp;
+                            Elementos compuestos en formularios
+                        </a>
+                    </li>
+                                    </ul>
+            </nav>
+            </article>
+                <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'montealegreluis';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>
+    Please enable JavaScript to view the
+    <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+</noscript>
+            </div>
+            <div class="col-sm-3 sidebar">
+                <div class="panel panel-default">
+    <div class="panel-heading"><h3 class="panel-title">Categorías</h3></div>
+    <div class="list-group">
+                    <a href="/blog/categorias/PHP/" class="list-group-item">
+                PHP
+            </a>
+                    <a href="/blog/categorias/JavaScript/" class="list-group-item">
+                JavaScript
+            </a>
+            </div>
+</div>
+<div class="panel panel-default">
+    <div class="panel-heading"><h4 class="panel-title">Sitios de interés</h4></div>
+    <div class="list-group">
+        <a href="http://www.comunidadphppuebla.com/" target="_blank" class="list-group-item">
+            Comunidad PHP Puebla
+        </a>
+        <a href="http://www.hfpuebla.org/" target="_blank" class="list-group-item">
+            Hackers & Founders
+        </a>
+        <a href="http://www.montealegreluis.com/logica-programacion/" target="_blank" class="list-group-item">
+            Notas de Programación
+        </a>
+        <a href="http://scala.org.mx/" target="_blank" class="list-group-item">
+            Scala MX
+        </a>
+        <ul class="list-group-item list-unstyled">
+            <li>
+                <a href="http://scala.org.mx/news/2015/01/29/funciones-scala/" target="_blank">
+                    Funciones en Scala
+                </a>
+            </li>
+        </ul>
+        <a href="http://www.drupodcast.com/" class="list-group-item" target="_blank">
+            Drupodcast
+        </a>
+        <ul class="list-group-item list-unstyled">
+            <li>
+                <a href="http://www.drupodcast.com/podcast/drupodcast-s03-e09-con-luis-montealegre" target="_blank">
+                    Temporada 3, Episodio 9
+                </a>
+            </li>
+        </ul>
+        <a href="http://html5facil.com/" class="list-group-item" target="_blank">
+            HTML5 Fácil
+        </a>
+    </div>
+</div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+    2014 - 2017 Luis Montealegre
+    <p  class="pull-right">
+        <a href="http://creativecommons.org/licenses/by-nc/2.5/">
+            <img src="/images/cc.primary.srr.gif" alt="Algunos derechos reservados">
+        </a>
+    </p>
+</div>
+    </footer>
+
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+<script src="http://netdna.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js">
+</script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+    <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-56875620-1', 'auto');
+    ga('send', 'pageview');
+</script>
+</body>
+</html>

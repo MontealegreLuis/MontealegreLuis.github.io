@@ -1,0 +1,3783 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+    <title><![CDATA[Your argument is invalid]]></title>
+    <link href="http://www.montealegreluis.com/atom.xml" rel="self"/>
+    <link href="http://www.montealegreluis.com/"/>
+    <updated>2017-04-10T02:06:03+00:00</updated>
+    <id>http://www.montealegreluis.com/</id>
+            <author>
+            <name><![CDATA[Luis Montealegre]]></name>            <email><![CDATA[montealegreluis@gmail.com]]></email>        </author>
+        <generator uri="http://sculpin.io/">Sculpin</generator>
+            <entry>
+            <title type="html"><![CDATA[Elementos compuestos en formularios]]></title>
+            <link href="http://www.montealegreluis.com/blog/2015/03/04/elementos-compuestos-en-formularios"/>
+            <updated>2015-03-04T00:00:00+00:00</updated>
+            <id>http://www.montealegreluis.com/blog/2015/03/04/elementos-compuestos-en-formularios</id>
+            <content type="html"><![CDATA[<p>En nuestro <a href="http://www.montealegreluis.com/blog/2015/02/05/un-formulario-no-tiene-porque-hacer-todo/">post anterior sobre formularios</a> revisamos como usar el paquete
+<a href="http://comphppuebla.github.io/easy-forms/">comphppuebla/easyforms</a> En este post desarrollaremos un ejemplo para ilustrar
+como podemos combinar un elemento del tipo <code>text</code> y uno de tipo <code>select</code> para
+crear un nuevo elemento de tipo <strong>moneda</strong>. Para esto realizaremos 3 tareas:</p>
+
+<ul>
+<li>Creación de un elemento moneda</li>
+<li>Creación de un filtro para validar elementos del tipo moneda</li>
+<li>Plantilla para mostrar nuestro elemento moneda</li>
+</ul>
+
+<h2 id="creaci%C3%B3n-de-elemento-moneda">Creación de elemento moneda</h2>
+
+<blockquote>
+  <p>"If I had a dime for every time I've seen someone use FLOAT to store currency, I'd have $999.997634" -- <a href="https://twitter.com/billkarwin/status/347561901460447232">Bill Karwin</a></p>
+</blockquote>
+
+<p>Supongamos que tenemos nuevamente nuestra aplicación de catálogo de productos y que
+estamos usando el <a href="http://martinfowler.com/eaaCatalog/money.html">patrón de diseño de moneda</a> para los precios de los productos
+en lugar de usar valores de tipo <code>float</code>, porque ahora tenemos productos que podemos
+comprar y vender en dólares y en pesos.</p>
+
+<p>Nuestro objetivo es crear un formulario que nos permita editar la información
+de los precios de compra y venta de nuestros productos como se muestra en la
+siguiente imagen:</p>
+
+<p><img src="/images/content/form-money.png" class="img-responsive img-rounded center-block" alt="Formulario con elementos de moneda"></p>
+
+<p>Nuestro primer paso es crear un elemento que extienda de <code>EasyForms\Elements\Element</code>
+compuesto a su vez por otros dos elementos <code>amount</code> y <code>currency</code> del tipo
+<code>EasyForms\Elements\Text</code> y <code>EasyForms\Elements\Select</code> respectivamente.</p>
+
+<pre><code class="php">use EasyForms\Elements\Element;
+use EasyForms\Elements\Select;
+use EasyForms\Elements\Text;
+
+class Money extends Element
+{
+    protected $amount;
+    protected $currency;
+
+    public function __construct($name)
+    {
+        parent::__construct($name);
+        $this-&gt;amount = new Text("{$name}[amount]");
+        $this-&gt;currency = new Select("{$name}[currency]");
+    }
+}
+</code></pre>
+
+<p>Los valores de nuestro elemento serán recuperados en forma de un arreglo con las
+llaves <code>amount</code> y <code>currency</code>.</p>
+
+<p>Al ser un elemento compuesto, debemos modificar la forma en que se manipula su
+valor, por lo que tenemos que sobrecargar los métodos <code>setValue</code> y
+<code>value</code>.</p>
+
+<ul>
+<li><code>setValue</code> debe tomar el arreglo que viene de alguna de las superglobales
+<code>$_GET</code> o <code>$_POST</code> y pasar el valor correspondiente llamando al método <code>setValue</code>
+de los elementos <code>amount</code> y <code>currency</code> respectivamente.</li>
+<li><code>value</code>, por el contrario, debe recuperar el valor de los elementos <code>amount</code> y
+<code>currency</code> llamando al método <code>value</code> en cada objeto, a fin de devolver el arreglo
+original que recibió de alguna de las variables superglobales.</li>
+</ul>
+
+<pre><code class="php">// ...
+class Money extends Element
+{
+    // ...
+
+    public function setValue($value)
+    {
+        $this-&gt;amount-&gt;setValue($value['amount']);
+        $this-&gt;currency-&gt;setValue($value['currency']);
+    }
+
+    public function value()
+    {
+        return [
+            'amount' =&gt; $this-&gt;amount-&gt;value(),
+            'currency' =&gt; $this-&gt;currency-&gt;value(),
+        ];
+    }
+}
+</code></pre>
+
+<p>Es necesario pasar al elemento <code>select</code> los tipos de moneda válidos que el
+usuario puede elegir. Supongamos que estos valores los recuperamos del catálogo de
+productos.</p>
+
+<pre><code class="php">// ...
+
+class Catalog
+{
+    // ...
+
+    public function validCurrencies()
+    {
+        return ['MXN', 'USD'];
+    }
+}
+</code></pre>
+
+<h2 id="filtro-para-validar-un-elemento-moneda">Filtro para validar un elemento moneda</h2>
+
+<p>Vamos a escribir ahora un filtro para validar cualquier elemento de tipo moneda.
+Creamos entonces una clase <code>MoneyFilter</code> que herede de <code>Zend\InputFilter\InputFilter</code>.</p>
+
+<p>Para el elemento <code>amount</code> validaremos que se trate de un número entero.</p>
+
+<pre><code class="php">use Zend\InputFilter\Input;
+use Zend\InputFilter\InputFilter;
+use Zend\Validator\Digits;
+use Zend\Validator\NotEmpty;
+// ...
+
+class MoneyFilter extends InputFilter
+{
+    // ...
+    protected function buildAmountInput()
+    {
+        $amount = new Input('amount');
+
+        $amount
+            -&gt;getValidatorChain()
+            -&gt;attach(new NotEmpty(['type' =&gt; NotEmpty::INTEGER]))
+            -&gt;attach(new Digits())
+        ;
+
+        return $amount;
+    }
+}
+</code></pre>
+
+<p>Para el elemento <code>currency</code> debemos agregar un validador <code>InArray</code> que verifique
+que el valor proporcionado es uno de los valores permitidos por el catálogo de
+productos.</p>
+
+<pre><code class="php">use Zend\Validator\InArray;
+// ...
+class MoneyFilter extends InputFilter
+{
+    // ...
+    public function buildCurrencyInput(array $validCurrencies)
+    {
+        $currency = new Input('currency');
+        $currency-&gt;setContinueIfEmpty(true);
+
+        $currency
+            -&gt;getValidatorChain()
+            -&gt;attach(new InArray([
+                'haystack' =&gt; $validCurrencies,
+            ]))
+        ;
+
+        $this-&gt;add($currency);
+    }
+}
+</code></pre>
+
+<p>El objetivo del patrón de moneda es no guardar valores flotantes para evitar
+problemas de redondeo, es por eso que para validar <code>amount</code> hemos agregado un
+validador del tipo <code>Digits</code>.</p>
+
+<p>Para que la validación funcione debemos multiplicar
+el valor introducido por el usuario por 100, si el resultado es un valor entero
+(contiene solo dígitos), significa que es un valor de moneda válido, ya que contiene
+solo dos dígitos después del punto decimal, además de que ese valor entero es el
+que debemos guardar en la base de datos.</p>
+
+<pre><code class="php">// ...
+class MoneyFilter extends InputFilter
+{
+    // ...
+    public function setData($data)
+    {
+        $data['original_amount'] = $data['amount'];
+        $data['amount'] = $data['amount'] * 100;
+
+        parent::setData($data);
+    }
+}
+</code></pre>
+
+<p>En el <em>snippet</em> anterior guardamos el valor original porque debemos mostrarlo
+en el formulario en el caso de que la validación falle.</p>
+
+<p>Además de guardar el valor original, debemos modificar los métodos <code>getValues</code>
+y <code>getMessages</code>.</p>
+
+<ul>
+<li><code>getValues</code> debe recuperar el valor original proporcionado por el usuario,
+el cual se almacena en <code>$this-&gt;data['original_amount']</code></li>
+<li><code>getMessages</code> debe agrupar los mensajes de los dos elementos que se están
+validando, ya que para el usuario final se trata de un único elemento y sus
+mensajes de error deben mostrarse juntos.</li>
+</ul>
+
+<pre><code class="php">// ...
+class MoneyFilter extends InputFilter
+{
+    // ...
+    public function getValues()
+    {
+        $values = parent::getValues();
+        $values['amount'] = $this-&gt;data['original_amount'];
+
+        return $values;
+    }
+
+    public function getMessages()
+    {
+        $messages = parent::getMessages();
+
+        $moneyMessages = [];
+        if (isset($messages['amount'])) {
+            $moneyMessages = $messages['amount'];
+            unset($messages['amount']);
+        }
+        if (isset($messages['currency'])) {
+            $moneyMessages = array_merge($moneyMessages, $messages['currency']);
+            unset($messages['currency']);
+        }
+
+        $messages[$this-&gt;name] = $moneyMessages;
+
+        return $messages;
+    }
+}
+</code></pre>
+
+<h3 id="filtro-para-el-formulario">Filtro para el formulario</h3>
+
+<p>Ya que tenemos el nuevo elemento y el filtro que valida elementos de ese tipo
+podemos crear nuestro formulario y filtro para cambiar los precios de un producto.</p>
+
+<p>Empecemos con el formulario:</p>
+
+<pre><code class="php">use EasyForms\Form;
+
+class ProductPricingForm extends Form
+{
+    public function __construct()
+    {
+        $this
+            -&gt;add(new Money('cost_price'))
+            -&gt;add(new Money('sale_price'))
+        ;
+    }
+}
+</code></pre>
+
+<p>El filtro sería el siguiente:</p>
+
+<pre><code class="php">use Zend\InputFilter\InputFilter;
+
+class ProductPricingFilter extends InputFilter
+{
+    public function __construct()
+    {
+        $this
+            -&gt;add(new MoneyFilter('cost_price'), 'cost_price')
+            -&gt;add(new MoneyFilter('sale_price'), 'sale_price')
+        ;
+    }
+}
+</code></pre>
+
+<p>Tanto al filtro como al formulario necesitamos pasarles los valores válidos
+para <code>currency</code>. Usaremos un objeto de configuración como en nuestro ejemplo
+del post anterior.</p>
+
+<pre><code class="php">class ProductPricingConfiguration
+{
+    protected $catalog;
+
+    public function __construct(Catalog $catalog)
+    {
+        $this-&gt;catalog = $catalog;
+    }
+
+    public function getCurrencyChoices()
+    {
+        return array_combine(
+            $this-&gt;catalog-&gt;validCurrencies(),
+            $this-&gt;catalog-&gt;validCurrencies()
+        );
+    }
+
+    public function getCurrenciesHaystack()
+    {
+        return $this-&gt;catalog-&gt;validCurrencies();
+    }
+}
+</code></pre>
+
+<p>Agregamos un método <code>configure</code> tanto al filtro como al formulario.</p>
+
+<pre><code class="php">class ProductPricingFilter extends InputFilter
+{
+    // ...
+    public function configure(ProductPricingConfiguration $configuration)
+    {
+        $this
+            -&gt;get('cost_price')
+            -&gt;buildCurrencyInput($configuration-&gt;getCurrenciesHaystack())
+        ;
+        $this
+            -&gt;get('sale_price')
+            -&gt;buildCurrencyInput($configuration-&gt;getCurrenciesHaystack())
+        ;
+    }
+}
+
+class ProductPricingForm extends Form
+{
+    // ...
+    public function configure(ProductPricingConfiguration $configuration)
+    {
+        $this
+            -&gt;get('cost_price')
+            -&gt;setCurrencyChoices($configuration-&gt;getCurrencyChoices())
+        ;
+        $this
+            -&gt;get('sale_price')
+            -&gt;setCurrencyChoices($configuration-&gt;getCurrencyChoices())
+        ;
+    }
+}
+</code></pre>
+
+<h2 id="el-controlador">El controlador</h2>
+
+<p>En nuestro controlador tenemos que hacer dos cosas:</p>
+
+<ol>
+<li>Si la solicitud fue hecha a través del método <code>GET</code> recuperamos la información
+del producto desde nuestra base de datos y llenamos el formulario con esos datos.</li>
+<li>Si la solicitud llega a través de <code>POST</code> debemos validar la información que nos
+mandó el usuario si la validación pasa, guardamos los cambios, en caso contrario
+mostramos los errores en el formulario.</li>
+</ol>
+
+<p>Supongamos que tenemos una entidad producto como la siguiente:</p>
+
+<pre><code class="php">use Money\Money;
+
+class Product
+{
+    protected $productId;
+    protected $name;
+    protected $description;
+    protected $costPrice;
+    protected $salePrice;
+
+    public function __construct(
+        $productId,
+        $name,
+        Money $costPrice,
+        Money$salePrice,
+        $description = null
+    )
+    {
+        $this-&gt;productId = $productId;
+        $this-&gt;costPrice = $costPrice;
+        $this-&gt;salePrice = $salePrice;
+        $this-&gt;name = $name;
+        $this-&gt;description = $description;
+    }
+
+    public function changePrices(Money $costPrice, Money $salePrice)
+    {
+        $this-&gt;costPrice = $costPrice;
+        $this-&gt;salePrice = $salePrice;
+    }
+
+    public function information()
+    {
+        $information = new ProductInformation();
+        $information-&gt;productId = $this-&gt;productId;
+        $information-&gt;name = $this-&gt;name;
+        $information-&gt;description = $this-&gt;description;
+        $information-&gt;costPrice = $this-&gt;costPrice;
+        $information-&gt;salePrice = $this-&gt;salePrice;
+
+        return $information;
+    }
+}
+</code></pre>
+
+<p>Nuestro controlador sería algo similar al siguiente, el método <code>editProductPrices</code>
+corresponde a una solicitud <code>GET</code> mientras que <code>updateProductPrices</code> corresponde
+a <code>POST</code>:</p>
+
+<pre><code class="php">class ChangeProductPrices
+{
+    protected $view
+    protected $form;
+    protected $validator;
+    protected $catalog;
+
+    public function __construct(
+        Twig_Environment $view,
+        ProductPricingForm $form,
+        InputFilterValidator $validator,
+        Catalog $catalog
+    )
+    {
+        $this-&gt;view = $view;
+        $this-&gt;form = $form;
+        $this-&gt;validator = $validator;
+        $this-&gt;catalog = $catalog;
+    }
+
+    public function editProductPrices($productId)
+    {
+        $product = $this-&gt;catalog-&gt;productOf($productId);
+        $this-&gt;form-&gt;populateFrom($product-&gt;information());
+
+        return $this-&gt;view-&gt;render('product/edit-product.html.twig', [
+            'form' =&gt; $this-&gt;form-&gt;buildView(),
+        ]);
+    }
+
+    public function updateProductPrices(Request $request)
+    {
+        $this-&gt;form-&gt;submit($request-&gt;post());
+
+        if ($this-&gt;validator-&gt;validate($this-&gt;form)) {
+            $pricing = $this-&gt;form-&gt;values()
+            $costPrice = new Money(
+                (int) round($pricing['cost_price']['amount'] * 100),
+                new Currency($pricing['cost_price']['currency'])
+            );
+            $salePrice = new Money(
+                (int) round($pricing['sale_price']['amount'] * 100),
+                new Currency($pricing['sale_price']['currency'])
+            );
+
+            $product = $this-&gt;catalog-&gt;productOf($pricing['productId']);
+            $product-&gt;changePrices($costPrice, $salePrice);
+
+            $this-&gt;catalog-&gt;update($product);
+            $this-&gt;redirect('products_list');
+        }
+
+        return $this-&gt;view-&gt;render('product/edit-product.html.twig', [
+            'form' =&gt; $request-&gt;form(),
+        ]);
+    }
+}
+</code></pre>
+
+<h1 id="plantilla-para-el-formulario">Plantilla para el formulario</h1>
+
+<p>Lo último que nos falta por resolver es como mostraremos nuestro elemento
+moneda con Twig. El objetivo es que para la plantilla sea lo más transparente posible.</p>
+
+<pre><code class="twig">{{ form_start(form) }}
+
+{{ element_row(form.cost_price, {'label': 'Cost price', 'attr': {'id': 'cost_price'}}) }}
+{{ element_row(form.sale_price, {'label': 'Sale price', 'attr': {'id': 'sale_price'}}) }}
+
+{{ form_rest(form) }}
+
+&lt;button type="submit" class="btn btn-default"&gt;
+    &lt;span class="glyphicon glyphicon-usd"&gt;&lt;/span&gt; Update pricing
+&lt;/button&gt;
+
+{{ form_end() }}
+</code></pre>
+
+<p>Para lograrlo debemos sobrecargar el método <code>buildView</code> de nuestro elemento <code>Money</code>.
+Necesitamos también un <code>MoneyView</code> que extienda de <code>ElementView</code> que a su vez contenga
+los objetos <code>View</code> tanto del elemento <code>text</code> como del elemento <code>select</code>.</p>
+
+<pre><code class="php">use EasyForms\View\ElementView;
+
+class MoneyView extends ElementView
+{
+    /** @var ElementView */
+    public $amount;
+
+    /** @var SelectView */
+    public $currency;
+}
+
+class Money extends Element
+{
+    // ...
+    public function buildView(ElementView $view = null)
+    {
+        $view = new MoneyView();
+
+        $view = parent::buildView($view);
+
+        $view-&gt;amount = $this-&gt;amount-&gt;buildView();
+        $view-&gt;currency = $this-&gt;currency-&gt;buildView();
+        $view-&gt;block = 'money';
+
+        return $view;
+    }
+}
+</code></pre>
+
+<p>Aprovecharemos que podemos definir bloques directamente en la plantilla
+del formulario para definir un bloque especial para los elementos del
+tipo <code>Money</code>.</p>
+
+<pre><code class="twig">{% extends 'layouts/base.html.twig' %}
+
+{% block title %}/ Update product prices{% endblock %}
+
+{# Use this template to add an inline block #}
+{% form_theme [_self] %}
+
+{# Money block #}
+{%- block money -%}
+    &lt;div class="form-inline"&gt;
+        &lt;div class="form-group"&gt;
+            &lt;div class="input-group"&gt;
+                &lt;div class="input-group-addon"&gt;$&lt;/div&gt;
+                {# Render the money amount as a text element #}
+                {%- set options = options|merge({'block': 'input'}) -%}
+                {%- set attr = attr|merge(element.amount.attributes) -%}
+                {{- element(element.amount, attr, options) -}}
+            &lt;/div&gt;
+            {# Render the money currency as a select element #}
+            {%- set options = options|merge({'block': 'select'}) -%}
+            {%- set attr = attr|merge(element.currency.attributes) -%}
+            {{- element(element.currency, attr, options) -}}
+        &lt;/div&gt;
+    &lt;/div&gt;
+{%- endblock money -%}
+
+{% block content %}
+    &lt;div class="row"&gt;
+        &lt;div class="col-md-12"&gt;
+            &lt;div class="panel panel-default"&gt;
+                &lt;div class="panel-heading"&gt;Update product pricing&lt;/div&gt;
+                &lt;div class="panel-body"&gt;
+                    {# The form goes here... #}
+                &lt;/div&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+{% endblock %}
+</code></pre>
+
+<h2 id="fin">Fin</h2>
+
+<p>Puedes revisar un ejemplo similar en este <a href="https://github.com/MontealegreLuis/easy-forms-examples">repositorio</a>, en el código relacionado
+con la ruta <code>/composite-element</code>, espero que te sea útil. Agradeceré mucho tus
+comentarios, dudas, quejas, sugerencias o reclamaciones.</p>
+]]></content>
+        </entry>
+            <entry>
+            <title type="html"><![CDATA[Módulos con Slim]]></title>
+            <link href="http://www.montealegreluis.com/blog/2015/02/28/modulos-con-slim"/>
+            <updated>2015-02-28T00:00:00+00:00</updated>
+            <id>http://www.montealegreluis.com/blog/2015/02/28/modulos-con-slim</id>
+            <content type="html"><![CDATA[<p>Uno de los conceptos más importantes que nos permite reusar código entre aplicaciones
+es el de <strong>módulo</strong>. Cada framework popular en PHP tiene su propia forma de estructurar
+módulos, e incluso distintas formas de nombrarlos. Por ejemplo en Zend Framework 2
+son <a href="http://framework.zend.com/manual/current/en/modules/zend.module-manager.intro.html">módulos</a>, en Symfony 2 son <a href="http://symfony.com/doc/bundles/">bundles</a> y en Laravel 4 son <a href="http://laravel.com/docs/4.2/packages">packages</a>.</p>
+
+<p>Slim al ser un microframework no cuenta con un concepto de módulo como tal, ya que su
+escencia es que puedes usar funciones anónimas como controladores y desarrollar
+aplicaciones de la forma más simple posible.</p>
+
+<p>Aún así, si te interesa organizar el código de una aplicación mediana de forma similar
+a como lo harías en un framework regular, este post será de tu interés.</p>
+
+<p>Te explicaré cómo puedes usar el paquete <code>comphppuebla/slim-modules</code> para estructurar
+tus aplicaciones Slim de forma similar a como lo harías con módulos. Para esto usaré
+el ejemplo que he venido usando en post anteriores sobre una aplicación de catálago
+de productos.</p>
+
+<h2 id="estructurando-el-m%C3%B3dulo">Estructurando el Módulo</h2>
+
+<p>Supongamos que tienes una estructura de directorios similar a la siguiente para tu
+proyecto.</p>
+
+<pre><code>src
+├── ProductCatalogModule
+│   ├── Controllers
+│   │   ├── SearchProductsController.php
+│   │   └── ProductRequest.php
+│   ├── Resources
+│   │   └── templates
+│   │       └── search-products.html.twig
+│   ├──Forms
+│   │  └── ProductForm.php
+├── ProductCatalog
+│   ├── Catalog.php
+│   └──  Product.php
+</code></pre>
+
+<p>Y que queremos integrar de la forma más simple posible ese código con nuestra aplicación
+Slim.</p>
+
+<h2 id="instalaci%C3%B3n">Instalación</h2>
+
+<p>Primero instalamos el paquete con Composer.</p>
+
+<pre><code class="bash">$ composer require comphppuebla/slim-modules
+</code></pre>
+
+<p>Puedes revisar la <a href="http://comphppuebla.github.io/slim-modules/">documentación</a> y esta <a href="https://github.com/MontealegreLuis/easy-forms-examples">aplicación</a> que ya usa el módulo, para más
+detalles.</p>
+
+<h2 id="registrando-los-servicios">Registrando los servicios</h2>
+
+<p>El paquete está pensado para integrar módulos, pero también puedes integrar librerías
+de terceros, similar a los <a href="http://silex.sensiolabs.org/doc/providers.html">services providers</a> de Silex. Supongamos que queremos
+integrar Twig, podemos usar la interfaz <code>ComPHPPuebla\Slim\ServiceProvider</code> de la
+siguiente forma:</p>
+
+<pre><code class="php">use ComPHPPuebla\Slim\ServiceProvider;
+
+class TwigProvider implements ServiceProvider
+{
+    public function configure(Slim $app, array $parameters = [])
+    {
+        $app-&gt;container-&gt;singleton('twig.loader', function() {
+            return new Twig_Loader_Filesystem($parameters['twig.paths']);
+        });
+        $app-&gt;container-&gt;singleton('twig.environment', function() use ($app) {
+            return new Twig_Environment(
+                $app-&gt;container-&gt;get('twig.loader'),
+                $parameters['twig.options']
+            );
+        });
+    }
+}
+</code></pre>
+
+<p>Una vez definido, puedes registrar tu proveedor en <code>index.php</code></p>
+
+<pre><code class="php">$app = new Slim\Slim();
+
+$twigProvider = new TwigProvider([
+    'twig.paths' =&gt; [
+        'app/templates'
+        'src/ProductCatalogModule/Resources/templates',
+    ],
+    'twig.options' =&gt; [
+        'cache' =&gt; 'var/cache/twig',
+        'strict_variables' =&gt; true,
+    ],
+]);
+
+$twigProvider-&gt;register($app);
+
+$app-&gt;run();
+</code></pre>
+
+<h2 id="registrando-m%C3%B3dulos">Registrando módulos</h2>
+
+<p>La implementación para los servicios de un módulo es similar, solo que registraríamos
+controladores, repositorios, servicios de aplicación, formularios, etc. Por ejemplo:</p>
+
+<pre><code class="php">namespace ProductCatalogModule;
+
+use ComPHPPuebla\Slim\ServiceProvider;
+use ProductCatalogModule\Controllers;
+use ProductCatalogModule\Forms;
+use ProductCatalog\Catalog;
+
+class ProductCatalogServices implements ServiceProvider
+{
+    public function configure(Slim $app, array $parameters = [])
+    {
+        $app-&gt;container-&gt;singleton(
+            'product_catalog.search_products_controller',
+            function() use ($app) {
+                return new SearchProductsController(
+                    $app-&gt;container-&gt;get('twig.environment'),
+                    new SearchProductsForm(),
+                    $app-&gt;container-&gt;get('product_catalog.product_repository'),
+                );
+            }
+        );
+        $app-&gt;container-&gt;singleton(
+            'product_catalog.product_repository',
+            function() use ($app) {
+                return new new Catalog($app-&gt;container-&gt;get('dbal.connection'));
+            }
+        );
+        /* more services here... */
+    }
+}
+</code></pre>
+
+<p>Registramos los servicios del módulo igual que hicimos con el ejemplo de Twig.</p>
+
+<pre><code class="php">$app = new Slim\Slim();
+
+/* More providers here... */
+
+$productCatalog = new ProductCatalogServices();
+$productCatalog-&gt;register($app);
+
+$app-&gt;run();
+</code></pre>
+
+<h2 id="registrando-las-rutas">Registrando las rutas</h2>
+
+<p>Para registrar las rutas, debemos crear una clase que implemente la interfaz
+<code>ComPHPPuebla\Slim\ControllerProvider</code></p>
+
+<pre><code class="php">namespace ProductCatalogModule;
+
+use ComPHPPuebla\Slim\ControllerProvider;
+use ComPHPPuebla\Slim\ControllerResolver;
+use Slim\Slim;
+
+class ProductCatalogControllers implements ControllerProvider
+{
+    public function register(Slim $app, ControllerResolver $resolver)
+    {
+        $app-&gt;map('/catalog/search', $resolver-&gt;resolve(
+            $app, 'product_catalog.search_products_controller:searchProducts'
+        ))-&gt;via('POST', 'GET');
+        /* More routes here... */
+    }
+}
+</code></pre>
+
+<p>En el ejemplo, cada que la aplicación haga match con <code>/catalog/search</code> se ejecutará
+el método <code>searchProducts</code> del servicio registrado con el nombre
+<code>product_catalog.search_products_controller</code>. El objeto <code>ControllerResolver</code> usa el
+patrón <code>id_controlador:metodo</code> para resolver qué método se ejecutará en cada ruta.
+El controlador no se crea hasta que Slim hace match con esa ruta, el resolvedor
+simplemente crea una función (similar a lo que sucede cuando ejecutas
+<code>$app-&gt;container-&gt;protect</code>) que realiza las siguientes tareas:</p>
+
+<ul>
+<li>Genera un <a href="http://php.net/manual/es/language.types.callable.php">callable</a> con el controlador y método que encontró a partir
+de la cadena <code>id_controlador:metodo</code>.</li>
+<li>Recupera los argumentos que Slim genera a partir de la ruta, por ejemplo si la
+ruta es <code>/products/:id</code>, recupera el valor de <code>$id</code> y lo pasa al método del controlador.</li>
+<li>Agrega el objeto <code>Request</code> como penúltimo argumento y a tu aplicación Slim como
+último argumento. De modo que <strong>todas</strong> las llamadas a métodos de controladores tienen
+por default <strong>la misma estructura</strong>:</li>
+</ul>
+
+<pre><code class="php">Controller::method(/* $route_param_1, ... $route_param_n */ $request, $app)
+</code></pre>
+
+<ul>
+<li>Una vez que se resuelven los argumentos, se ejecuta el método del controlador</li>
+</ul>
+
+<h3 id="modificando-argumentos">Modificando argumentos</h3>
+
+<p>El resolvedor puede recibir como tercer argumento una función que altere los
+parámetros que se le pasan a un controlador. Supongamos que tenemos un controlador
+que edita los datos de un producto. El método en el controlador sólo necesita el
+ID del producto y la instancia de la aplicación de Slim para llamar al método
+<code>notFound</code> en caso de que no encontremos el producto asociado al ID proporcionado.
+No nos hace falta en este caso el objeto <code>Request</code>.</p>
+
+<pre><code class="php">namespace ProductCatalogModule\Controllers;
+
+/* ... */
+
+class ProductController
+{
+    /* ... */
+
+    public function editProduct($productId, Slim $app)
+    {
+        if (!$product = $this-&gt;catalog-&gt;productOf($productId)) {
+            $app-&gt;notFound();
+        }
+
+        // Populate your form and pass it to the view
+    }
+
+    /* ... */
+}
+</code></pre>
+
+<p>Si no usamos un convertidor de argumentos, generaríamos un error porque el
+argumento que pasaríamos en segundo lugar sería de tipo <code>Request</code> y no de tipo
+<code>Slim</code>, ya que ese es el comportamiento default.</p>
+
+<p>Para evitar este error registramos un convertidor que elimine el <code>Request</code>
+de nuestro arreglo de argumentos.</p>
+
+<pre><code class="php"># ProductCatalogModule\ProductCatalogControllers
+
+public function register(Slim $app, ControllerResolver $resolver)
+{
+    $app-&gt;get('/catalog/product/edit/:id', $resolver-&gt;resolve(
+        $app,
+        'product_catalog.product_controller:editProduct',
+        function (array $arguments) {
+            // $arguments[0] is the product ID
+            unset($arguments[1]); // Remove the request
+            // $arguments[2] is our Slim application
+
+            return $arguments;
+        }
+    ));
+
+    /* ... */
+}
+</code></pre>
+
+<h3 id="reemplazando-argumentos">Reemplazando argumentos</h3>
+
+<p>Con los convertidores no solo podemos modificar los argumentos, los podemos
+reemplazar completamente. Supongamos que tenemos un controlador para realizar
+búsquedas de productos por categoría y palabras clave. Estos valores se pasan
+usando el <a href="http://es.wikipedia.org/wiki/Query_string">query string</a> y en la aplicación son manejados usando el siguiente
+objeto:</p>
+
+<pre><code class="php">namespace ProductCatalog;
+
+class ProductSearchCriteria
+{
+    protected $category;
+    protected $keywords;
+
+    public function __construct($category = null, $keywords = null)
+    {
+        $this-&gt;category = $category;
+        $this-&gt;keywords = $keywords;
+    }
+
+    public function hasCategory()
+    {
+        return !is_null($this-&gt;category);
+    }
+
+    public function category()
+    {
+        return $this-&gt;category;
+    }
+
+    public function hasKeywords()
+    {
+        return !is_null($this-&gt;keywords);
+    }
+
+    public function keywords()
+    {
+        return $this-&gt;keyword;
+    }
+}
+</code></pre>
+
+<p>Sin un convertidor de argumentos, nuestro controlador tendría código como este:</p>
+
+<pre><code class="php">namespace ProductCatalogModule\Controllers;
+
+/* .. */
+
+class SearchController
+{
+    /* ... */
+
+    public function searchProducts(Request $request)
+    {
+        $results = $this-&gt;catalog-&gt;productsMatching(new ProductSearchCriteria(
+            $request-&gt;get('category'), $request-&gt;get('keywords')
+        ));
+
+        // Pass your results to the view
+    }
+}
+</code></pre>
+
+<p>Con un convertidor podríamos pasar directamente el objeto <code>ProductSearchCriteria</code>
+al método del controlador en lugar de pasar el objeto <code>Request</code></p>
+
+<pre><code class="php"># ProductCatalogModule\ProductCatalogControllers
+
+public function register(Slim $app, ControllerResolver $resolver)
+{
+    $app-&gt;get('/catalog/product/search', $resolver-&gt;resolve(
+        $app,
+        'product_catalog.product_search_controller:searchProducts',
+        function (array $arguments) {
+            // $arguments[0] is the request, our route does not have parameters
+
+            return [new ProductSearchCriteria(
+                $arguments[0]-&gt;get('category'), $arguments[0]-&gt;get('keywords')
+            )];
+        }
+    ));
+
+    /* ... */
+}
+</code></pre>
+
+<p>Con este simple cambio, podemos modificar la firma del controlador.</p>
+
+<pre><code class="php">namespace ProductCatalogModule\Controllers;
+
+/* .. */
+
+class SearchController
+{
+    /* ... */
+
+    public function searchProducts(ProductSearchCriteria $criteria)
+    {
+        $results = $this-&gt;catalog-&gt;productsMatching($criteria);
+
+        // Pass your results to the view
+    }
+}
+</code></pre>
+
+<h2 id="organizando-todos-tus-servicios">Organizando todos tus servicios</h2>
+
+<p>En los ejemplos anteriores hemos registrado nuestros servicios por separado,
+sin embargo, podemos incluir todas nuestras definiciones en una sola clase si
+extendemos de <code>ComPHPPuebla\Slim\Services</code>.</p>
+
+<p>Podemos registrar <strong>todos</strong> nuestros proveedores en el método <code>init</code> usando el
+método <code>add</code>.</p>
+
+<pre><code class="php">namespace Application;
+
+use ComPHPPuebla\Slim\Services;
+use ProductCatalogModule\ProductCatalogServices;
+
+class ApplicationServices extends Services
+{
+    /**
+     * Add the providers for your modules here
+     */
+    protected function init()
+    {
+        $this
+            -&gt;add(new ProductCatalogServices())
+            // Register more modules here...
+            -&gt;add(new TwigProvider())
+            // Register more providers here...
+        ;
+    }
+}
+</code></pre>
+
+<h2 id="organizando-todas-tus-rutas">Organizando todas tus rutas</h2>
+
+<p>También podemos agrupar el registro de las rutas en una sola clase
+si extendemos de <code>ComPHPPuebla\Slim\Controllers</code>, también agregamos nuestros
+controladores en el método <code>init</code> el cual se llama automáticamente al
+registrar nuestras rutas.</p>
+
+<pre><code class="php">namespace Application;
+
+use ComPHPPuebla\Slim\Controllers;
+use ProductCatalogModule\ProductCatalogControllers;
+
+class ApplicationControllers extends Controllers
+{
+    protected function init()
+    {
+        $this
+            -&gt;add(new ProductCatalogControllers())
+            // Register more controllers modules here...
+        ;
+    }
+}
+</code></pre>
+
+<p>Una vez agrupadas las definiciones de todos tus servicios y todas tus rutas,
+la configuración en tu archivo <code>index.php</code> se reduce a algo similar a las
+siguientes líneas.</p>
+
+<pre><code class="php">$app = new Slim\Slim();
+
+$services = new Application\ApplicationServices();
+$services-&gt;configure($app);
+
+$controllers = new Application\ApplicationControllers();
+$controllers-&gt;register($app);
+
+$app-&gt;run();
+</code></pre>
+
+<p>Agradeceré mucho tus comentarios, dudas, quejas, sugerencias o reclamaciones.</p>
+]]></content>
+        </entry>
+            <entry>
+            <title type="html"><![CDATA[Un formulario no tiene porque hacer todo]]></title>
+            <link href="http://www.montealegreluis.com/blog/2015/02/05/un-formulario-no-tiene-porque-hacer-todo"/>
+            <updated>2015-02-05T00:00:00+00:00</updated>
+            <id>http://www.montealegreluis.com/blog/2015/02/05/un-formulario-no-tiene-porque-hacer-todo</id>
+            <content type="html"><![CDATA[<p>Una de las tareas más comunes a las que nos enfrentamos como desarrolladores Web, es el
+procesamiento de formularios.</p>
+
+<p>En PHP existen varios paquetes que nos permiten trabajar con formularios, entre los más
+populares están los componentes de <a href="http://symfony.com/doc/current/components/form/introduction.html">ZF2</a> y <a href="http://framework.zend.com/manual/current/en/modules/zend.form.intro.html">Symfony2</a>. Sin embargo, creo que tienen sus
+desventajas si queremos usarlos fuera de su respectivo framework. Ambos paquetes requieren de
+varias dependencias que podrías no necesitar en tu proyecto. Estas son las dependencias que
+instalas al requerir cualquiera de los dos paquetes:</p>
+
+<table class="table table-striped table-hover table-responsive">
+    <tr>
+        <th>Paquete</th>
+        <th>Dependencias</th>
+    </tr>
+    <tr>
+        <td><code>zendframework/zend-form</code></td>
+        <td>
+            <ul>
+                <li><code>zend-stdlib</code></li>
+                <li><code>zend-validator</code></li>
+                <li><code>zend-filter</code></li>
+                <li><code>zend-inputfilter</code></li>
+            </ul>
+        </td>
+    </tr>
+    <tr>
+        <td><code>symfony/form</code></td>
+        <td>
+            <ul>
+                <li><code>property-access</code></li>
+                <li><code>options-resolver</code></li>
+                <li><code>intl</code></li>
+                <li><code>event-dispatcher</code></li>
+            </ul>
+        </td>
+    </tr>
+</table>
+
+<p>Me gusta el enfoque que usa Symfony2 ya que permite agregar funcionalidad, a través de
+extensiones que permiten la integración con otros paquetes, por ejemplo: validación,
+HTTP Foundation, Twig, etc. Aunque como puedes observar, tienes que instalar componentes
+que tal vez no uses como el manejador de eventos o el componente de internacionalización.</p>
+
+<p>En este post explicaré a través de ejemplos como creo que podríamos <em>desacoplar</em> de una mejor
+forma el manejo de formularios y evitar instalar paquetes que tal vez no necesitemos,
+además de simplificar las tareas rutinarias con formularios, <em>separando claramente las
+diferentes responsabilidades relacionadas con formularios</em>, evitando así que el formulario
+sepa hacer todo. Para esto revisaré la siguiente funcionalidad:</p>
+
+<ul>
+<li>Procesamiento</li>
+<li>Validación</li>
+<li>Integración con Twig</li>
+<li>Captchas y tokens CSRF</li>
+<li>Modificación dinámica de un formulario</li>
+</ul>
+
+<p>Para los ejemplos usare el paquete <a href="https://github.com/ComPHPPuebla/easy-forms">comphppuebla/easy-forms</a> que puedes instalar con Composer</p>
+
+<pre><code class="bash">$ composer require comphppuebla/easy-forms:~1.0@dev
+</code></pre>
+
+<p>Si encuentras la librería interesante, por favor revisa la <a href="http://comphppuebla.github.io/easy-forms/">documentación</a></p>
+
+<h2 id="procesamiento">Procesamiento</h2>
+
+<p>Cuando procesamos un formulario solo necesitamos saber el nombre de los elementos en el formulario,
+ya que esos nombres se mapean con las llaves en las variables superglobales <code>$_GET</code>, <code>$_POST</code> y
+<code>$_FILES</code>. Las etiquetas HTML, los atributos HTML, los validadores, y mensajes de error no son
+responsabilidad de los elementos o del formulario en sí, todas esas tareas corresponden a otros
+componentes (validación y plantillas respectivamente).</p>
+
+<p>La forma más simple de crear un formulario con este paquete es extendiendo de la clase
+<code>EasyForms\Form</code>. Por ejemplo, si queremos un formulario para login tendríamos la siguiente clase.</p>
+
+<pre><code class="php">use EasyForms\Elements\Text;
+use EasyForms\Elements\Password;
+use EasyForms\Form;
+
+class LoginForm extends Form
+{
+    public function __construct()
+    {
+        $this
+            -&gt;add(new Text('username'))
+            -&gt;add(new Password('password'))
+        ;
+    }
+}
+</code></pre>
+
+<p>Si ya tienes un componente de validación puedes pasar los valores a <code>LoginForm</code> para mostrarlos
+en una plantilla. Nota que para procesar el formulario no necesitamos saber cómo se validan
+o filtran sus datos, ni como se mostrarán al usuario.</p>
+
+<pre><code class="php">$loginForm = new LoginForm();
+$errors = $validator-&gt;validate($_POST); // whatever component you use
+$loginForm-&gt;submit($_POST);
+$loginForm-&gt;setErrorMessages($errors);
+// Render the form however you want...
+</code></pre>
+
+<h2 id="validaci%C3%B3n">Validación</h2>
+
+<p>Ya vimos que el formulario no necesita saber de un componente de validación, sin embargo el paquete
+proporciona una interfaz <code>EasyForms\Validation\FormValidator</code> que puedes usar para integrar cualquier
+componente de validación. El paquete ya cuenta con una integración con <a href="http://framework.zend.com/manual/current/en/modules/zend.input-filter.intro.html">zend-inputfilter</a>.
+Supongamos que ya tenemos el siguiente filtro:</p>
+
+<pre><code class="php">use Zend\Filter\StringTrim;
+use Zend\InputFilter\Input;
+use Zend\InputFilter\InputFilter;
+use Zend\Validator\NotEmpty;
+use Zend\Validator\StringLength;
+
+class LoginFilter extends InputFilter
+{
+    public function __construct()
+    {
+        $this
+            -&gt;add($this-&gt;buildUsernameInput())
+            -&gt;add($this-&gt;buildPasswordInput())
+        ;
+    }
+
+    protected function buildUsernameInput()
+    {
+        $username = new Input('username');
+        $username
+            -&gt;getValidatorChain()
+            -&gt;attach(new NotEmpty())
+            -&gt;attach(new StringLength([
+                'min' =&gt; 3,
+            ]))
+        ;
+        $username
+            -&gt;getFilterChain()
+            -&gt;attach(new StringTrim())
+        ;
+        return $username;
+    }
+
+    protected function buildPasswordInput()
+    {
+        $password = new Input('password');
+        $password
+            -&gt;getValidatorChain()
+            -&gt;attach(new NotEmpty())
+            -&gt;attach(new StringLength([
+                'min' =&gt; 8,
+            ]))
+        ;
+        return $password;
+    }
+}
+</code></pre>
+
+<p>Una primera opción es seguir usándolo sin integrarlo al formulario:</p>
+
+<pre><code class="php">$filter = new LoginFilter();
+$filter-&gt;setData($_POST);
+if (!$filter-&gt;isValid()) {
+    $form-&gt;setErrorMessages($filter-&gt;getMessages());
+}
+$form-&gt;submit($filter-&gt;getValues());
+// Render the form however you want...
+</code></pre>
+
+<p>La segunda opción es usar el validador que ya viene incluido en el paquete</p>
+
+<pre><code class="php">use EasyForms\Bridges\Zend\InputFilter\InputFilterValidator;
+
+$validator = new InputFilterValidator(new LoginFilter());
+$validator-&gt;validate($form = new LoginForm());
+// Render the form however you want... Error messages will be set, if any
+</code></pre>
+
+<h2 id="integraci%C3%B3n-con-twig">Integración con Twig</h2>
+
+<p>Como ya explicamos, el formulario puede usar cualquier mecanismo de validación, lo mismo sucede
+para la capa de presentación el formulario no necesita saber que apariencia tendrá.</p>
+
+<p>La forma más simple de mostrar un formulario en una plantilla es simplemente llamando al método
+<code>buildView</code> del formulario y pasar el resultado a cualquier motor de plantillas que usemos,
+supongamos incluso que no usamos uno (aunque deberíamos):</p>
+
+<pre><code class="php">$view = $form-&gt;buildView()
+
+// inside your template
+echo "&lt;label for=\"{$view-&gt;username-&gt;attributes['name']}\"&gt;Username&lt;/label&gt;";
+$htmlAttributes = '';
+foreach ($view-&gt;username-&gt;attributes as $attribute =&gt; $value) {
+    $htmlAttributes .= "{$attribute}=\"{$value}\" ";
+}
+echo '&lt;input ' . trim($htmlAttributes) . '&gt;';
+</code></pre>
+
+<p>El paquete cuenta con una integración con Twig, inspirada en la forma en la que se muestra los formularios
+de Symfony2. La integración consiste de una extensión con 3 funciones principales <code>form_start</code>,
+<code>form_end</code> y <code>element_row</code>. La explicación de las primeras dos funciones es un tanto obvia.
+La funcion <code>element_row</code> muestra al elemento en tres secciones, una etiqueta, el elemento HTML
+y los mensajes de error.</p>
+
+<p>La extensión se registra de la siguiente forma:</p>
+
+<pre><code class="php">use EasyForms\Bridges\Twig\BlockOptions;
+use EasyForms\Bridges\Twig\FormExtension;
+use EasyForms\Bridges\Twig\FormRenderer;
+use EasyForms\Bridges\Twig\FormTheme;
+
+$environment = new Twig_Environment(new Twig_Loader([
+  'vendor/comphppuebla/easy-forms/src/EasyForms/Bridges/Twig', // extension templates
+  'path/to/your/templates',
+]));
+$theme = new FormTheme($environment, "layouts/bootstrap3.html.twig"); // form's theme
+$renderer = new FormRenderer($theme, new BlockOptions());
+$environment-&gt;addExtension(new FormExtension($renderer));
+</code></pre>
+
+<p>Como podemos observar en el código, la extensión utiliza temas para dar formato a los formularios.
+Un tema es un grupo de plantillas que define o sobrescribe los bloques que muestran cada uno de los
+elementos del formulario. El paquete cuenta con dos temas por defecto, uno es el tema <code>default</code>
+que simplemente agrupa un elemento, su etiqueta y mensajes de error dentro de un <code>div</code>. El otro
+tema da formato a un formulario con <a href="http://getbootstrap.com/">Bootstrap 3</a>.</p>
+
+<p>Supongamos que pasamos desde el controlador nuestro formulario a una plantilla de Twig.</p>
+
+<pre><code class="php">$environment-&gt;render('login.html.twig', [
+    'login' =&gt; $loginForm-&gt;buildView(),
+]);
+</code></pre>
+
+<p>El código que usaríamos en nuestra plantilla de Twig para mostrar el formulario sería:</p>
+
+<pre><code class="twig">{{ form_start(login) }}
+{{ element_row(login.username, {'label': 'Username', 'attr': {'id': 'username'}}) }}
+{{ element_row(login.password, {'label': 'Password', 'attr': {'id': 'password'}}) }}
+&lt;button type="submit" class="btn btn-default"&gt;
+    &lt;span class="glyphicon glyphicon-home"&gt;&lt;/span&gt; Login
+&lt;/button&gt;
+{{ form_end() }}
+</code></pre>
+
+<p>Como podemos observar, <code>element_row</code> recibe dos argumentos, el primero es el elemento del formulario
+y el segundo es un arreglo asociativo, donde podemos definir la etiqueta del elemento <code>label</code>,
+los atributos HTML de la etiqueta <code>label_attr</code>, los atributos HTML del elemento <code>attr</code> y <code>options</code>
+que nos sirve para sobrescribir los valores de los bloques que se usan en la plantilla para mostrar
+el elemento. Los bloques que podemos sobrescribir en <code>options</code> son <code>block</code> que sobrescribe el HTML
+por default del elemento, y <code>rowBlock</code> que sobrescribe la forma en que se muestran la etiqueta, el
+elemento y sus mensajes de error.</p>
+
+<h3 id="personalizar-la-apariencia-de-un-elemento">Personalizar la apariencia de un elemento</h3>
+
+<p>Podemos agregar plantillas a nuestro tema o usar la misma plantilla que despliega nuestro formulario
+para definir y sobrescribir bloques. Por ejemplo, supongamos que tenemos un formulario para agregar
+productos a un catálogo en una aplicación de e-commerce y queremos dar formato de moneda al elemento
+donde capturamos el precio unitario del elemento.</p>
+
+<pre><code class="twig">{# Use this template as part of the theme #}
+{% form_theme [_self] %}
+{# Custom block #}
+{%- block money -%}
+    &lt;div class="input-group"&gt;&lt;div class="input-group-addon"&gt;$&lt;/div&gt;
+        {%- set options = options|merge({'block': 'input'}) -%}
+        {{- element(element, attr, options) -}}
+    &lt;div class="input-group-addon"&gt;.00&lt;/div&gt;&lt;/div&gt;
+{%- endblock money -%}
+{{ form_start(product) }}
+{{ element_row(product.name, {'label': 'Name'}) }}
+{{ element_row(product.description, {'label': 'Description'}) }}
+{# Override the element's default rendering block #}
+{{ element_row(product.unitPrice, {'label': 'Unit price', 'options': {'block': 'money'}}) }}
+&lt;button type="submit" class="btn btn-default"&gt;
+    &lt;span class="glyphicon glyphicon-th-list"&gt;&lt;/span&gt; Add to catalog
+&lt;/button&gt;
+{{ form_end() }}
+</code></pre>
+
+<p>En el ejemplo definimos un bloque personalizado llamado <code>money</code> y sobrescribimos el bloque por defecto
+que usa nuestro elemento <code>unitPrice</code> para que lo utilice.</p>
+
+<p>De este modo desacoplamos el procesamiento y validación del formulario de la forma en que se presenta
+al usuario, si necesitamos por ejemplo usar <a href="http://foundation.zurb.com/">Foundation</a> en lugar de Bootstrap, solo necesitamos
+crear un tema que herede del tema default y agregar las clases que usa Foundation. O si necesitamos
+usar <a href="http://laravel.com/docs/5.0/templates">Blade</a> en lugar de Twig podemos crear una extensión que use <code>sections</code> en lugar de <code>blocks</code>
+que funcione como la extensión de Twig.</p>
+
+<h2 id="captchas-y-tokens-csrf">Captchas y tokens CSRF</h2>
+
+<p>Hasta ahora hemos visto como procesar, validar y mostrar los datos de un formulario, dejando cada
+responsabilidad a su respectivo componente. Hay funcionalidad en formularios que tal vez no necesitemos
+siempre como pueden ser los <a href="http://es.wikipedia.org/wiki/Captcha">captchas</a> y los <a href="https://www.owasp.org/index.php/Cross-Site_Request_Forgery_%28CSRF%29_Prevention_Cheat_Sheet#Encrypted_Token_Pattern">tokens para prevenir CSRF</a>.</p>
+
+<h3 id="captchas">Captchas</h3>
+
+<p>Para manejar captchas el paquete cuenta con una integración con <a href="http://framework.zend.com/manual/current/en/modules/zend.captcha.operation.html">zend-captcha</a> y actualmente podemos
+usar captchas de imagen y <a href="https://www.google.com/recaptcha/intro/index.html">reCaptcha</a> (la versión anterior al No Captcha captcha). Supongamos que
+tenemos un formulario para comentarios:</p>
+
+<pre><code class="php">use EasyForms\Elements\Captcha;
+use EasyForms\Elements\Captcha\CaptchaAdapter;
+use EasyForms\Elements\TextArea;
+use EasyForms\Form;
+
+class CommentForm extends Form
+{
+    public function __construct(CaptchaAdapter $adapter)
+    {
+        $this
+            -&gt;add(new TextArea('message'))
+            -&gt;add(new Captcha('captcha', $adapter))
+        ;
+    }
+}
+</code></pre>
+
+<p>Al usar un adaptador, el formulario no necesita saber que tipo de captcha va a usar si de imagen o
+ReCaptcha o algún otro. Si queremos usar reCaptcha lo único que debemos hacer es pasarle como
+argumento el adaptador indicado, por ejemplo:</p>
+
+<pre><code class="php">use EasyForms\Bridges\Zend\Captcha\ReCaptchaAdapter;
+use Zend\Captcha\ReCaptcha;
+use Zend\Http\Client;
+use ZendService\ReCaptcha\ReCaptcha as ReCaptchaService;
+
+$reCaptcha = new ReCaptchaAdapter($captcha = new ReCaptcha([
+    'service' =&gt; new ReCaptchaService(
+        'your_public_key_xxx',
+        'your_private_key_xxx',
+        $params = null,
+        $options = null,
+        $ip = null,
+        new Client($uri = null, ['adapter' =&gt; new Client\Adapter\Curl()])
+    )
+]));
+
+$form = new CommentForm($reCaptcha);
+</code></pre>
+
+<p>Para mostrar el formulario en una plantilla Twig, necesitamos agregar la plantilla para captchas al
+tema, como la funcionalidad de captchas es opcional, no está incluida en los temas por default.
+Así, nuestra plantilla con el captcha quedaría como:</p>
+
+<pre><code class="twig">{% form_theme ['layouts/captcha-bootstrap3.html.twig'] %}
+{{ form_start(comment) }}
+{{ element_row(comment.message, {'label': 'Share your opinion'}) }}
+{{ element_row(comment.captcha, {'label': 'Type the words in the image below'}) }}
+&lt;button type="submit" class="btn btn-default"&gt;
+    &lt;span class="glyphicon glyphicon-comment"&gt;&lt;/span&gt; Comment
+&lt;/button&gt;
+{{ form_end() }}
+</code></pre>
+
+<p>Para validar el captcha podemos usar el siguiente filtro:</p>
+
+<pre><code class="php">use Zend\Captcha\ReCaptcha;
+use Zend\Filter\StringTrim;
+use Zend\Filter\StripTags;
+use Zend\InputFilter\Input;
+use Zend\InputFilter\InputFilter;
+use Zend\Validator\NotEmpty;
+use Zend\Validator\StringLength;
+
+class CommentFilter extends InputFilter
+{
+    public function __construct(ReCaptcha $validator)
+    {
+        $this
+            -&gt;add($this-&gt;buildMessageInput())
+            -&gt;add($this-&gt;buildCaptchaInput($validator))
+        ;
+    }
+
+    protected function buildMessageInput()
+    {
+        $message = new Input('message');
+        $message
+            -&gt;getFilterChain()
+            -&gt;attach(new StringTrim())
+            -&gt;attach(new StripTags())
+        ;
+        $message
+            -&gt;getValidatorChain()
+            -&gt;attach(new NotEmpty())
+            -&gt;attach(new StringLength([
+                'max' =&gt; 2000,
+            ]))
+        ;
+        return $message;
+    }
+
+    public function buildCaptchaInput(ReCaptcha $validator)
+    {
+        $reCaptcha = new Input('captcha');
+        $reCaptcha-&gt;setContinueIfEmpty(true);
+        $reCaptcha
+            -&gt;getValidatorChain()
+            -&gt;attach($validator)
+        ;
+        return $reCaptcha;
+    }
+}
+</code></pre>
+
+<p>En nuestro controlador tendríamos algo como esto:</p>
+
+<pre><code class="php">$validator = new InputFilterValidator(new CommentFilter($captcha));
+$validator-&gt;validate($form = new CommentForm($reCaptcha));
+// Render the form...
+</code></pre>
+
+<h3 id="tokens-csrf">Tokens CSRF</h3>
+
+<p>Este paquete cuenta también con una integración con <a href="https://github.com/symfony/security-csrf">symfony/security-csrf</a>. Podemos usar como
+ejemplo nuestro formulario de login y agregarle un token CSRF, usando un objeto de la clase <code>Csrf</code>
+Este elemento necesita dos argumentos, un identificador para el token y un proveedor de tokens.</p>
+
+<pre><code class="php">use EasyForms\Elements\Csrf\TokenProvider;
+use EasyForms\Elements\Text;
+use EasyForms\Elements\Password;
+use EasyForms\Elements\Csrf;
+use EasyForms\Form;
+
+class LoginForm extends Form
+{
+    public function __construct(TokenProvider $csrfTokenProvider)
+    {
+        $this
+            -&gt;add(new Text('username'))
+            -&gt;add(new Password('password'))
+            -&gt;add(new Csrf('csrf_token', '_login_csrf_token', $csrfTokenProvider))
+        ;
+    }
+}
+</code></pre>
+
+<p>El proveedor es una interfaz así que podemos usar un componente distinto al de Symfony2, si queremos,
+sin afectar nuestro formulario. Podemos entonces crear un proveedor para nuestro formulario de la
+siguiente forma:</p>
+
+<pre><code class="php">use EasyForms\Bridges\SymfonyCsrf\CsrfTokenProvider;
+use Symfony\Component\Security\Csrf\CsrfTokenManager;
+use Symfony\Component\Security\Csrf\TokenGenerator\UriSafeTokenGenerator;
+use Symfony\Component\Security\Csrf\TokenStorage\NativeSessionTokenStorage;
+
+$provider = new CsrfTokenProvider(
+    new CsrfTokenManager(new UriSafeTokenGenerator(), new NativeSessionTokenStorage())
+);
+$form = new LoginForm($provider);
+// Process the form...
+// Pass it to template...
+</code></pre>
+
+<p>Para validar el token podemos agregar un validador a nuestro filtro anterior de la siguiente forma:</p>
+
+<pre><code class="php">use EasyForms\Bridges\Zend\InputFilter\Validator\CsrfValidator;
+use EasyForms\Elements\Csrf\TokenProvider;
+use Zend\InputFilter\Input;
+use Zend\InputFilter\InputFilter;
+
+class LoginFilter extends InputFilter
+{
+    public function __construct(TokenProvider $tokenProvider)
+    {
+        $this
+            /* ... */
+            -&gt;add($this-&gt;buildCsrfInput($tokenProvider))
+        ;
+    }
+
+    /* ... */
+
+    protected function buildCsrfInput(TokenProvider $tokenProvider)
+    {
+        $csrf = new Input('csrf_token');
+        $csrf-&gt;setContinueIfEmpty(true);
+        $csrf
+            -&gt;getValidatorChain()
+            -&gt;attach(new CsrfValidator([
+                'tokenProvider' =&gt; $tokenProvider,
+                'tokenId' =&gt; '_login_csrf_token',
+                'updateToken' =&gt; true,
+            ]))
+        ;
+        return $csrf;
+    }
+}
+</code></pre>
+
+<p>Podemos entonces pasar nuestro proveedor al filtro y validar como de costumbre.</p>
+
+<pre><code class="php">use EasyForms\Bridges\Zend\InputFilter\InputFilterValidator;
+
+$validator = new InputFilterValidator(new LoginFilter($provider));
+$form = new LoginForm($provider);
+$form-&gt;submit($_POST);
+$validator-&gt;validate($form);
+// Render the form...
+</code></pre>
+
+<p>Para mostrar este elemento solo debemos agregarlo a la plantilla, no hay necesidad de agregar
+plantillas al tema, ya que este elemento es un <code>hidden</code> común en nuestro formulario.</p>
+
+<pre><code class="twig">{{ form_start(login) }}
+{# ... #}
+{{ element_row(login.csrf_token) }}
+{# ... #}
+{{ form_end() }}
+</code></pre>
+
+<h2 id="modificaci%C3%B3n-din%C3%A1mica-de-un-formulario">Modificación dinámica de un formulario</h2>
+
+<p>Al trabajar con formularios es común que llenemos sus valores con información de nuestra base
+de datos, o que agreguemos opciones a los <code>select</code> con los datos de una tabla, y que eso se
+tenga que ver reflejado en los validadores de ese elemento. Creo que estas tareas no son
+responsabilidad del formulario, en su lugar podemos generar objetos que configuren el
+formulario. Regresemos al ejemplo de agregar productos al catálogo de una aplicación de 
+e-commerce.</p>
+
+<pre><code class="php">use EasyForms\Elements\Text;
+use EasyForms\Elements\TextArea;
+use EasyForms\Form;
+
+class ProductForm extends Form
+{
+    public function __construct()
+    {
+        $this
+            -&gt;add(new Text('name'))
+            -&gt;add(new Text('unitPrice'))
+            -&gt;add(new Select('category'))
+        ;
+    }
+}
+</code></pre>
+
+<p>Queremos que al cargar el formulario las categorías de los productos se agreguen a las opciones
+del <code>select</code>. Supongamos que nuestra clase <code>Catalog</code> es la responsable de manejar los datos de los
+productos en la base de datos. El método <code>getCategoryOptions</code> consulta la base de datos a través de
+<code>Catalog</code> y genera un array asociativo con los IDs y los nombres de las categorías.</p>
+
+<pre><code class="php">class ProductFormConfiguration
+{
+    protected $catalog;
+    protected $categoryOptions;
+
+    public function __construct(Catalog $catalog)
+    {
+        $this-&gt;catalog = $catalog;
+    }
+
+    public function getCategoryOptions()
+    {
+        $this-&gt;categoryOptions = [];
+        array_map(function (CategoryInformation $category) use (&amp;$options) {
+            $this-&gt;categoryOptions[$category-&gt;categoryId] = $category-&gt;name;
+        }, $this-&gt;catalog-&gt;allCategories());
+        return $this-&gt;categoryOptions;
+    }
+}
+</code></pre>
+
+<p>Podemos entonces agregar un método al formulario que reciba como argumento nuestro objeto de
+configuración y agregue las categorías al elemento correspondiente. Por ejemplo:</p>
+
+<pre><code class="php">class ProductForm extends Form
+{
+    /* .. */
+
+    public function configure(ProductFormConfiguration $configuration)
+    {
+        /** @var Select $category */
+        $category = $this-&gt;get('category');
+        $category-&gt;setChoices($configuration-&gt;getCategoryOptions());
+    }
+}
+</code></pre>
+
+<p>En nuestro controlador tendríamos el siguiente código:</p>
+
+<pre><code class="php">$form = new ProductForm();
+$form-&gt;configure(new ProductFormConfiguration(new Catalog());
+// work with the form
+</code></pre>
+
+<p>Podemos actualizar el validador con una estrategía similar, supongamos que nuestro filtro
+verifica que la categoría, es alguna de las que tenemos en nuestro catálogo y tenemos el
+siguiente filtro:</p>
+
+<pre><code class="php">use Zend\InputFilter\Input;
+use Zend\InputFilter\InputFilter;
+use Zend\Validator\InArray;
+use Zend\Validator\Int;
+use Zend\Validator\NotEmpty;
+
+class ProductFilter extends InputFilter
+{
+    public function __construct()
+    {
+        $this
+            /* ... */
+            -&gt;add($this-&gt;buildCategoryInput())
+        ;
+    }
+
+    /* ... */
+
+    protected function buildCategoryInput()
+    {
+        $category = new Input('category');
+        $category
+            -&gt;getValidatorChain()
+            -&gt;attach(new NotEmpty())
+        ;
+        $category
+            -&gt;getFilterChain()
+            -&gt;attach(new Int())
+        ;
+        return $category;
+    }
+
+    public function configure(ProductFormConfiguration $configuration)
+    {
+        $category = $this-&gt;get('category');
+        $category
+            -&gt;getValidatorChain()
+            -&gt;attach(new InArray([
+                'haystack' =&gt; $configuration-&gt;getValidCategories(),
+            ]))
+        ;
+    }
+}
+</code></pre>
+
+<p>El método <code>getValidCategories</code> funciona de forma similar, la diferencia es que el método
+devuelve únicamente los IDs de las categorías, que es lo que el validador necesita.</p>
+
+<pre><code class="php">class ProductFormConfiguration
+{
+    /* ... */
+
+    public function getValidCategories()
+    {
+        if (!$this-&gt;categoryOptions) {
+            $this-&gt;categoryOptions();
+        }
+
+        return array_keys($this-&gt;categoryOptions);
+    }
+}
+</code></pre>
+
+<p>El filtro se configuraría de forma similar en nuestro controlador</p>
+
+<pre><code class="php">use EasyForms\Bridges\Zend\InputFilter\InputFilterValidator;
+
+$configuration = new ProductFormConfiguration(new Catalog());
+$form = new ProductForm();
+$form-&gt;configure($configuration);
+$filter = new ProductFilter();
+$filter-&gt;configure($configuration);
+$validator = new InputFilterValidator($filter);
+$form-&gt;submit($_POST);
+$validator-&gt;validate($form)
+// do more work with the form...
+</code></pre>
+
+<p>El último caso que revisaremos es cuando editamos un registro de la base de datos usando
+un formulario. Si seguimos con nuestro ejemplo, la forma más simple es agregar un método al
+formulario que reciba un producto y asigne los valores de las propiedades del producto a los
+elementos del formulario.</p>
+
+<pre><code class="php">class ProductForm extends Form
+{
+    /* ... */
+
+    public function addProductId()
+    {
+        $this-&gt;add(new Hidden('productId'));
+    }
+
+    public function populateFrom(ProductInformation $product)
+    {
+        $this-&gt;populate([
+            'productId' =&gt; $product-&gt;productId,
+            'unitPrice' =&gt; $product-&gt;unitPrice,
+            'name' =&gt; $product-&gt;name,
+            'category' =&gt; $product-&gt;categoryId,
+        ]);
+    }
+}
+</code></pre>
+
+<p>Donde el objeto <code>ProductInformation</code> es un <a href="http://en.wikipedia.org/wiki/Data_transfer_object">DTO</a> con los datos de un producto que recuperamos
+de nuestro catálogo. Nuestro controlador sería algo similar al siguiente:</p>
+
+<pre><code class="php">$form-&gt;addProductId(); // Add the ID to be able to update the record
+$form-&gt;populateFrom($product = $catalog-&gt;productOf($productId));
+// Values of product are now in the form's elements values
+</code></pre>
+
+<p>Gracias por haber leido hasta aquí, si quieres ver más ejemplos revisa este <a href="https://github.com/MontealegreLuis/easy-forms-examples">repositorio</a>. En el
+siguiente post explicaré como la separación de responsabilidades <em>facilita</em> realizar tareas como
+traducción y la integración de elementos que usan JavaScript (barras de progreso o vistas de árbol,
+por ejemplo).</p>
+
+<p>Agradeceré mucho tus comentarios, dudas, quejas, sugerencias o reclamaciones.</p>
+]]></content>
+        </entry>
+            <entry>
+            <title type="html"><![CDATA[Tests de aceptación con Codeception]]></title>
+            <link href="http://www.montealegreluis.com/blog/2014/12/15/tests-de-aceptacion-con-codeception"/>
+            <updated>2014-12-15T00:00:00+00:00</updated>
+            <id>http://www.montealegreluis.com/blog/2014/12/15/tests-de-aceptacion-con-codeception</id>
+            <content type="html"><![CDATA[<p>Este post es una continuación al post de <a href="http://www.montealegreluis.com/blog/2014/11/23/testing-de-componentes-flight/">Testing de componentes Flight</a>, que trataba de una aplicación ficticia para
+la compra de productos, donde desarrollamos los specs para los componentes de Flight usando Jasmine. La configuración
+para los tests era un poco más complicada que la que se genera normalmente con <a href="https://github.com/flightjs/generator-flight">Yeoman</a>. El objetivo era evitar el
+uso del navegador para ejecutar nuestros specs, porque las pruebas con un navegador van incluidas en las pruebas de
+aceptación que podemos escribir con un framework de pruebas como <a href="http://codeception.com">Codeception</a>.</p>
+
+<p>En este post desarrollaremos las siguientes tareas:</p>
+
+<ul>
+<li>Configurar Codeception para ejecutar tests headless usando <a href="http://phantomjs.org/">PhantomJS</a></li>
+<li>Generar fixtures de datos para nuestras pruebas usando <a href="https://github.com/nelmio/alice">Alice</a> y <a href="https://github.com/fzaninotto/Faker">Faker</a></li>
+<li>Escribir una prueba de aceptación para nuestra aplicación de muestra</li>
+</ul>
+
+<h2 id="configuraci%C3%B3n-de-codeception">Configuración de Codeception</h2>
+
+<p>Codeception es un framework de pruebas para PHP cuyo objetivo es crear tests legibles que describan acciones desde la
+perspectiva del usuario.</p>
+
+<p>Instalaremos Codeception usando Composer. Codeception proporciona una interfaz de línea de comando que por default se
+instala en  <code>vendor/bin/codecept</code>. Nosotros modificaremos nuestro archivo <code>composer.json</code> para que quede instalado en
+<code>bin/codecept</code>.</p>
+
+<pre><code class="json">"config": {
+    "bin-dir": "bin/"
+}
+</code></pre>
+
+<p>Una vez configurado agregamos el paquete de Codeception como una dependencia de desarrollo.</p>
+
+<pre><code class="bash">$ composer require --dev codeception/codeception
+</code></pre>
+
+<p>Después de instalar podemos inicializar nuestro ambiente de pruebas con el siguiente comando:</p>
+
+<pre><code class="php">$ php bin/codecept bootstrap
+</code></pre>
+
+<p>Como Codeception nos permite hacer pruebas de aceptación, funcionales y unitarias, este comando crea la siguiente
+estructura de directorios. Cada tipo de prueba esta separada en suites. En lo personal uso Codeception únicamente para
+pruebas de aceptación. Así que lo siguiente que hago, por lo general, es eliminar todos los archivos que no están
+relacionados con ese tipo de pruebas.</p>
+
+<pre><code>tests/
+├── acceptance
+│   ├── AcceptanceTester.php
+│   └── _bootstrap.php
+├── acceptance.suite.yml
+├── _bootstrap.php
+├── _data
+│   └── dump.sql
+├── functional
+│   ├── _bootstrap.php
+│   └── FunctionalTester.php
+├── functional.suite.yml
+├── _output
+├── _support
+│   ├── AcceptanceHelper.php
+│   ├── FunctionalHelper.php
+│   └── UnitHelper.php
+├── unit
+│   ├── _bootstrap.php
+│   └── UnitTester.php
+└── unit.suite.yml
+</code></pre>
+
+<h3 id="algunos-conceptos-b%C3%A1sicos">Algunos conceptos básicos</h3>
+
+<h4 id="actores">Actores</h4>
+
+<p>Ya que las pruebas se representan como acciones realizadas por un usuario, un <strong>actor</strong> es un objeto que representa a
+una persona realizando pruebas a nuestra aplicación. En nuestro caso trabajaremos con el actor <code>AcceptanceTester</code>. Las
+clases que representan a los actores se generan a partir de la configuración de cada suite.</p>
+
+<p>Si modificamos la configuración de alguna suite podemos actualizar la definición de nuestros actores con el comando:</p>
+
+<pre><code class="bash">$ php bin/codecept build
+</code></pre>
+
+<h4 id="escenarios">Escenarios</h4>
+
+<p>Por defecto las pruebas en codeception se escriben como escenarios narrativos. Para crear un escenario debemos crear un
+archivo con el sufijo <code>Cept</code>. Podemos crear una prueba usando el comando:</p>
+
+<pre><code class="bash">$ php bin/codecept generate:cept acceptance ShoppingCart
+</code></pre>
+
+<p>La prueba más simple consiste en pasar a nuestro actor un escenario.</p>
+
+<pre><code class="php">&lt;?php
+# tests/acceptance/ShoppingCartCept.php
+
+$I = new AcceptanceTester($scenario);
+?&gt;
+</code></pre>
+
+<p>Existe otro tipo de formato para las pruebas llamado <code>Cest</code>, el cual es mi preferido. Un test del tipo <code>Cest</code> agrupa
+nuestras pruebas en clases. Podemos crear un <code>Cest</code> con el comando:</p>
+
+<pre><code class="bash">$ php bin/codecept generate:cest acceptance ShoppingCart
+</code></pre>
+
+<p>Este comando genera una clase como la siguiente:</p>
+
+<pre><code class="php">&lt;?php
+# tests/acceptance/ShoppingCartCest.php
+
+class ShoppingCartCest
+{
+    public function _before(AcceptanceTester $I)
+    {
+    }
+
+    public function _after(AcceptanceTester $I)
+    {
+    }
+
+    // tests
+    public function tryToTest(AcceptanceTester $I)
+    {
+    }
+}
+</code></pre>
+
+<p>Cada método públic en un Cest (excepto por los que inician con <code>_</code>) se ejecutarán como una prueba y recibirán como
+argumento un objeto actor y un escenario como segundo argumento.</p>
+
+<p>Los métoodos <code>_before</code> y <code>_after</code> son los equivalentes del <code>setUp</code> y <code>tearDown</code> en PHPUnit y se ejecutan antes y después
+de cada test respectivamente.</p>
+
+<h3 id="configuraci%C3%B3n-de-la-suite">Configuración de la suite</h3>
+
+<p>Para nuestras pruebas usaremos el navegador headless de PhantomJS en el modo ghostdriver, para lo cual debemos modificar
+el archivo de configuración.</p>
+
+<pre><code class="yaml"># tests/acceptance.suite.yml
+class_name: AcceptanceTester
+modules:
+    enabled:
+        - WebDriver
+        - AcceptanceHelper
+    config:
+        WebDriver:
+            url: 'http://shoppingcart.dev/'
+            browser: phantomjs
+</code></pre>
+
+<p>Por último, usaremos <a href="http://gruntjs.com/">Grunt</a> para ejecutar las pruebas. Debes instalar de forma global Grunt con npm.</p>
+
+<pre><code class="bash">$ npm install -g grunt-cli
+</code></pre>
+
+<p>Una vez que tenemos la instalación global de Grunt es necesario agregarlo también a nuestro archivo <code>packages.json</code>
+junto con PhantomJS y un par de tareas que nos servirán para ejecutar nuestros tests.</p>
+
+<pre><code class="json">{
+  "devDependencies": {
+    "grunt": "~0.4",
+    "grunt-run": "~0.3",
+    "grunt-exec": "~0.4",
+    "phantomjs": "~1.9"
+  }
+}
+</code></pre>
+
+<p>En nuestro archivo <code>Gruntfile.js</code> registramos una nueva tarea que inicie PhantomJS, ejecute los tests y por último
+detenga PhantomJS.</p>
+
+<pre><code class="javascript">module.exports = function(grunt) {
+    var phantomjs = require('phantomjs');
+    var phantombin = phantomjs.path;
+
+    grunt.initConfig({
+        exec: {
+            codecept: {
+                stdout: true,
+                command: [
+                    'php bin/codecept clean',
+                    'php bin/codecept run web --steps'
+                ].join('&amp;&amp;')
+            }
+        },
+        run: {
+            phantomjs: {
+                options: {
+                    wait: false,
+                    quiet: true,
+                    ready: /running on port/
+                },
+                cmd: phantombin,
+                args: [
+                    '--webdriver=4444'
+                ],
+            }
+        }
+    });
+
+    grunt.loadNpmTasks('grunt-exec');
+    grunt.loadNpmTasks('grunt-run');
+
+    grunt.registerTask('default', []);
+
+    grunt.registerTask('test', ['run:phantomjs', 'exec:codecept', 'stop:phantomjs']);
+};
+</code></pre>
+
+<p>Una vez configurado todo podemos correr nuestro <code>Cest</code> con el comando:</p>
+
+<pre><code class="bash">$ grunt test
+</code></pre>
+
+<p>Como nuestro test está vacío debemos ver un resultado similar al siguiente:</p>
+
+<pre><code class="bash">Acceptance Tests (1) -------------------------------------------------------------------------
+Trying to try to test (ShoppingCartCest::tryToTest)
+Scenario:
+ PASSED
+</code></pre>
+
+<h2 id="primero-los-fixtures">Primero los fixtures</h2>
+
+<p>Para nuestros test de aceptación necesitamos crear unos <a href="http://en.wikipedia.org/wiki/Test_fixture">fixtures</a> de datos con Alice. Alice nos permite generar
+fixtures con datos ficticios para nuestras pruebas, usando archivos YAML. Podemos instalar Alice con Composer.</p>
+
+<pre><code class="bash">$ composer require --dev nelmio/alice
+</code></pre>
+
+<p>Alice cuenta con una integración con <a href="http://www.doctrine-project.org/projects/orm.html">Doctrine ORM</a>, sin embargo, para mantener nuestro ejemplo simple, nuestro
+proyecto solo usa <a href="http://php.net/manual/es/book.pdo.php">PDO</a>. Nuestra clase producto es la siguiente:</p>
+
+<pre><code class="php">class Product
+{
+    protected $productId;
+    protected $name;
+    protected $unitPrice;
+
+    public function __construct($productId, $name, $unitPrice)
+    {
+        $this-&gt;prductId = $productId;
+        $this-&gt;name = $name;
+        $this-&gt;unitPrice = $unitPrice;
+    }
+
+    public function productId()
+    {
+        return $this-&gt;productId;
+    }
+
+    public function name()
+    {
+        return $this-&gt;name;
+    }
+
+    public function unitPrice()
+    {
+        return $this-&gt;unitPrice;
+    }
+}
+</code></pre>
+
+<p>Nuestra clase <code>ProductCatalog</code> es la encargada de persistir nuestra información. Para mantener el ejemplo simple, usamos
+<a href="http://www.sqlite.org/">SQLite</a>.</p>
+
+<pre><code class="php">class ProductCatalog
+{
+    protected $connection;
+
+    public function __construct(PDO $connection)
+    {
+        $this-&gt;connection = $connection;
+    }
+
+    public function add(Product $product)
+    {
+        $sql = 'INSERT INTO products(product_id, name, unit_price) VALUES (?, ?, ?)';
+        $statement = $this-&gt;connection-&gt;prepare($sql);
+        $statement-&gt;execute([
+            $product-&gt;productId(),
+            $product-&gt;name(),
+            $product-&gt;unitPrice(),
+        ]);
+    }
+}
+</code></pre>
+
+<p>Para mantener el código de nuestras rutas de Slim limpio, registramos la conexión a la base de datos y nuestro catálogo
+como servicios en el componente de <a href="http://docs.slimframework.com/#DI-Overview">inyección de dependencias de Slim</a>.</p>
+
+<pre><code class="php"># app/resources.php
+
+$app-&gt;container-&gt;singleton('connection', function() {
+    $connection = new PDO('sqlite:var/store.sqlite');
+    $connection-&gt;setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    $connection-&gt;setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
+
+    return $connection;
+});
+
+$app-&gt;container-&gt;singleton('catalog', function() use ($app) {
+
+    return new ProductCatalog($app-&gt;connection);
+});
+</code></pre>
+
+<p>Para cargar los datos de nuestros fixtures crearemos una clase que utilice la misma conexión que definimos en nuestra
+aplicación de Slim.</p>
+
+<pre><code class="php"># tests/support/FixturesLoader.php
+
+use Slim\Slim;
+
+class FixturesLoader
+{
+    protected $connection;
+
+    public function __construct()
+    {
+        $app = new Slim();
+        require __DIR__ . '/../../app/resources.php';
+
+        $this-&gt;connection = $app-&gt;connection;
+    }
+
+    public function connection()
+    {
+        return $this-&gt;connection;
+    }
+}
+</code></pre>
+
+<p>La clase <code>Loader\Yaml</code> de Alice creará nuestras entidades usando <a href="http://php.net/manual/es/intro.reflection.php">Reflection</a>, así que para nuestro ejemplo, la
+variable <code>$entities</code> será un arreglo de objetos <code>Product</code>. El segundo argumento de el método <code>loadFixture</code> es un objeto
+que nos permitirá guardar los datos de las entidades en la base de datos, en nuestro caso, un objeto de la clase
+<code>ProductCatalog</code>.</p>
+
+<pre><code class="php">use Nelmio\Alice\Loader\Yaml;
+
+class FixturesLoader
+{
+    // ...
+
+    public function loadFixture($fixture, $persister)
+    {
+        $loader = new Yaml();
+        $entities = $loader-&gt;load($fixture);
+
+        array_map(function($entity) use ($persister) {
+            $persister-&gt;add($entity);
+        }, $entities);
+    }
+}
+</code></pre>
+
+<p>Cómo nuestros tests se ejecutarán muchas veces, necesitamos de un método que nos permita eliminar los datos que se
+generaron en pruebas anteriores.</p>
+
+<pre><code class="php">class FixturesLoader
+{
+    // ...
+
+    public function purge($table)
+    {
+        $statement = $this-&gt;connection-&gt;prepare(sprintf('DELETE FROM %s', $table));
+        $statement-&gt;execute();
+    }
+}
+</code></pre>
+
+<p>Ahora que tenemos nuestra clase para cargar fixtures, la podemos usar en el método <code>_before</code> de nuestro <code>Cest</code></p>
+
+<pre><code class="php"># tests/acceptance/ShoppingCartCest.php
+
+class ShoppingCartCest
+{
+    /** @type FixturesLoader */
+    protected $loader;
+
+    public function _before()
+    {
+        $this-&gt;loader = new FixturesLoader();
+
+        $this-&gt;loader-&gt;purge('products');
+        $this-&gt;loader-&gt;loadFixture(
+            __DIR__ . '/../_data/fixtures/products.yml',
+            new ProductCatalog($this-&gt;loader-&gt;connection())
+        );
+    }
+
+    // ...
+}
+</code></pre>
+
+<h3 id="%C2%BFy-los-fixtures%3F">¿Y los fixtures?</h3>
+
+<p>Por último debemos generar el archivo <code>.yml</code> con los datos de prueba. Lo primero que necesita nuestro archivo es el nombre
+de la clase, cada entrada después del nombre de la clase representa un objeto de esa clase. Debemos colocarles un nombre
+para poder identificarlos después, en caso que se usen como referencias en otros objetos.</p>
+
+<pre><code class="yaml"># tests/_data/fixtures/products.yml
+
+Store\Product:
+    product0:
+        __construct: false # Do not use the constructor
+        productId: 1
+        name: Tetris
+        unitPrice: 100.20
+    product1:
+        __construct: false
+        productId: 2
+        name: Minecraft
+        unitPrice: 200.80
+</code></pre>
+
+<p>Aunque resulta relativamente simple generar datos manualmente, una mejor opción es la generación automática. Para este
+fin, Alice usa los proveedores de datos de Faker. Para usar un <a href="https://github.com/fzaninotto/Faker#formatters">proveedor de Faker</a> solo es necesario usar el nombre
+del método y sus argumentos, cuando sea necesario, después de la priopiedad del objeto en nuestro archivo YAML. En el
+ejemplo estamos usando también rangos <code>product{2..12}</code> para generar de forma automática los identificadores de los
+objetos, en este caso serán desde <code>product2</code> hasta <code>product12</code>.</p>
+
+<pre><code class="yaml">Store\Product:
+    product{2..12}:
+        __construct: false
+        productId (unique): &lt;numberBetween(1, 20)&gt;
+        name: &lt;sentence(2)&gt;
+        unitPrice: &lt;randomFloat(2, 5, 100)&gt;
+</code></pre>
+
+<p>Si ejecutamos nuevamente nuestro test y hacemos una consulta a nuestra tabla de productos, veremos una salida similar a
+la siguiente:</p>
+
+<p><img src="/images/content/alice-faker-data.png" class="img-responsive img-thumbnail center-block" alt="Datos de prueba de Alice y Faker"></p>
+
+<p>Podemos generar nuestro propio proveedor de datos aleatorios para hacer que todos nuestros productos sean videojuegos.
+Un proveedor no requiere de nada particular, los método publicos del proveedor que registremos con Alice estarán
+disponibles desde nuestro archivo de fixtures.</p>
+
+<pre><code class="php"># tests/support/ProductsProvider.php
+
+class ProductsProvider
+{
+    protected $products = [
+        'Super Mario Bros',
+        'Grand Theft Auto',
+        'Call of Duty',
+        'Mario Kart',
+        'Pokémon Diamond and Pearl',
+        'Sonic the Hedgehog',
+        'Diablo III',
+        'Battlefield 3',
+        'Mortal Kombat II',
+        'Street Fighter II: Special Champion Edition',
+    ];
+
+    public function product()
+    {
+        return $this-&gt;products[array_rand($this-&gt;products)];
+    }
+}
+</code></pre>
+
+<p>Para que funcione debemos pasar el proveedor a nuestro loader.</p>
+
+<pre><code class="php"># ShoppingCartCest::_before
+$this-&gt;loader-&gt;loadFixture(
+    __DIR__ . '/../_data/fixtures/products.yml',
+    new ProductCatalog($this-&gt;loader-&gt;connection()),
+    [new ProductsProvider()] // Our provider
+);
+
+# FixturesLoader::loadFixtures
+public function loadFixture($fixture, $persister, $providers = [])
+{
+    $loader = new Yaml('en_US', $providers);
+    // ...
+}
+</code></pre>
+
+<p>Y utilizarlo en nuestro archivo de fixtures.</p>
+
+<pre><code class="yaml">product{2..12}:
+    __construct: false
+    productId (unique): &lt;numberBetween(3, 20)&gt;
+    name: &lt;product()&gt;
+    unitPrice: &lt;randomFloat(2, 5, 100)&gt;
+</code></pre>
+
+<p>Los datos generados ahora, serían similares a los siguientes:</p>
+
+<p><img src="/images/content/datos-con-proveedor-de-faker.png" class="img-responsive img-thumbnail center-block" alt="Datos de proveedor de Faker"></p>
+
+<h2 id="las-pruebas-de-aceptaci%C3%B3n-por-fin...">Las pruebas de aceptación (por fin...)</h2>
+
+<p>El objetivo de las pruebas es que describan las acciones como si fueran realizadas por un usuario de la aplicación. Para
+ese fin codeception nos proporciona algunos métodos para describir el objetivo de cada prueba similar al formato
+<a href="http://blog.firsthand.ca/2010/08/user-story-format.html">Connextra</a>.</p>
+
+<pre><code class="php">$I-&gt;am('videogames buyer');
+$I-&gt;wantTo('buy my favorite videogames');
+$I-&gt;lookForwardTo('add videogames to my shopping cart');
+</code></pre>
+
+<p>Estos pasos mostraran una salida más descriptiva que nos permite saber cuál es el propósito de nuestro test.</p>
+
+<pre><code class="bash">Trying to buy my favorite videogames (ShoppingCartCest::toAddProductsToMyShoppingCart)
+Scenario:
+* As a videogames buyer
+* So that I add videogames to my shopping cart
+</code></pre>
+
+<p>A fin de evitar colocar código CSS o XPath directamente en nuestros tests, Codeception cuenta con una implementación del
+patrón de diseño <a href="https://code.google.com/p/selenium/wiki/PageObjects">PageObject</a> que representa una página Web como una clase y los elementos del DOM como sus
+propiedades.</p>
+
+<pre><code class="bash">$ php bin/codecept generate:pageobject ShoppingCartPage
+</code></pre>
+
+<p>En nuestra página de carrito los elementos DOM que nos interesan son: el <code>select</code> con los productos, el <code>text</code> con la
+cantidad de productos a comprar, el botón para agregar el producto. También es importante verificar que se actualicen
+los valores del precio total del producto seleccionado (precio unitario multpilicado por la cantidad) y la celda con el
+total a pagar por los productos seleccionados.</p>
+
+<pre><code class="php">class ShoppingCartPage
+{
+    public static $URL = '/order';
+    public static $product = 'Product';
+    public static $quantity = 'Quantity';
+    public static $addToCart = 'Add to cart';
+    public static $firstItemPrice = '//tbody//tr[1]//td[last()]';
+    public static $secondItemPrice = '//tbody//tr[2]//td[last()]';
+    public static $total = '#cart-total';
+}
+</code></pre>
+
+<p>Nuestra prueba agregaría 5 copias de Tetris que nos da un total de $501.50 ($100.21 cada uno) y dos copias de Minecraft
+$401.66 ($200.83 cada uno). El total que debe tener nuestro carro de compra es de $902.71.</p>
+
+<pre><code class="php">public function tryToAddProductsToMyShoppingCart(AcceptanceTester $I)
+{
+    $I-&gt;am('videogames buyer');
+    $I-&gt;wantTo('buy my favorite videogames');
+    $I-&gt;lookForwardTo('add videogames to my shopping cart');
+
+    $I-&gt;amOnPage(ShoppingCartPage::$URL);
+    $I-&gt;selectOption(ShoppingCartPage::$product, 'Tetris');
+    $I-&gt;fillField(ShoppingCartPage::$quantity, 5);
+    $I-&gt;click(ShoppingCartPage::$addToCart);
+
+    $I-&gt;see(501.05, ShoppingCartPage::$firstItemPrice);
+
+    $I-&gt;selectOption(ShoppingCartPage::$product, 'Minecraft');
+    $I-&gt;fillField(ShoppingCartPage::$quantity, 2);
+    $I-&gt;click(ShoppingCartPage::$addToCart);
+
+    $I-&gt;see(401.66, ShoppingCartPage::$secondItemPrice);
+
+    $I-&gt;see(902.71, ShoppingCartPage::$total);
+}
+</code></pre>
+
+<p>De las cosas más interesantes que nos ofrece Codeception es su simpleza, ya que podemos leer cada línea de nuestro test
+casi como una oración en ingles. Por ejemplo:</p>
+
+<p><code>$I-&gt;amOnPage(ShoppingCartPage::$URL);</code> estoy en la página del carrito de compras (<code>/order</code>),
+<code>$I-&gt;selectOption(ShoppingCartPage::$product, 'Tetris');</code> selecciono la opción Tetris de los
+productos, <code>$I-&gt;fillField(ShoppingCartPage::$quantity, 5);</code> y lleno el campo cantidad con un 5,
+<code>$I-&gt;click(ShoppingCartPage::$addToCart);</code> cuando doy clic en el botón agregar al carrito,
+<code>$I-&gt;see(501.05, ShoppingCartPage::$firstItemPrice);</code> debería ver el valor 501.05 en el precio total del producto
+(última celda de la primera fila de la tabla).</p>
+
+<p>Con esta prueba estamos validando también el correcto funcionamiento de nuestro componentes de Flight, razón por la cuál
+en el post anterior, no escribimos las pruebas usando Karma. El código de este ejemplo lo desarrollé en una máquina
+virtual generada con <a href="https://puphpet.com/">PuPHPet</a>, razón por la que describí como ejecutar las pruebas usando PhantomJS. Sólo que hay
+un pequeño detalle que encontré. PhantomJS no tiene soporte para la función <code>bind</code> de JavaScript, debido a la versión
+de QtWebKit en la que está basado, y al parecer no tendrá solución hasta la versión 2 como se explica en este
+<a href="https://github.com/ariya/phantomjs/issues/10522">issue</a>. Podemos usar algunos polyfills para solucionar el problema, en el <a href="https://github.com/MontealegreLuis/flight-demo">repo de este ejemplo</a> puedes ver
+como se incluye de manera condicional un <a href="https://github.com/MontealegreLuis/flight-demo/blob/master/app/templates/order.html.twig#L56">snippet</a> de código que tomé de las respuestas en el issue cuando estamos
+en el ambiente de testing. Es importante señalar que este snippet en nuestro template sólo tiene sentido si usamos
+PhantomJS, no lo necesitamos con ningún otro navegador.</p>
+
+<p>Espero que este post te haya servido para darte una mejor idea de como funciona el testing de aceptación con Codeception
+y como complementa los otros tipos de testing que revisamos en posts anteriores. Agradeceré mucho tus sugerencias,
+críticas y quejas en los comentarios.</p>
+]]></content>
+        </entry>
+            <entry>
+            <title type="html"><![CDATA[Testing de componentes Flight]]></title>
+            <link href="http://www.montealegreluis.com/blog/2014/12/04/testing-de-componentes-flight"/>
+            <updated>2014-12-04T00:00:00+00:00</updated>
+            <id>http://www.montealegreluis.com/blog/2014/12/04/testing-de-componentes-flight</id>
+            <content type="html"><![CDATA[<p>Esta es la segunda parte del post de <a href="http://www.montealegreluis.com/blog/2014/11/23/aplicaciones-desacopladas-con-flight-js/">Aplicaciones desacopladas con Flight JS</a>. En esta segunda parte desarrollaremos
+las pruebas unitarias para los componentes de nuestra aplicación de ejemplo.</p>
+
+<p>La aplicación de ejemplo que desarrollamos en el post anterior puede crearse con <a href="http://yeoman.io/">Yeoman</a>. Hay un generador para
+<a href="https://github.com/flightjs/generator-flight">Flight</a> que podemos instalar de manera global.</p>
+
+<pre><code class="bash">$ npm install -g generator-flight
+</code></pre>
+
+<p>Este generador nos permite crear aplicaciones, componentes, mixins y páginas</p>
+
+<pre><code class="bash">$ flight &lt;app-name&gt;
+$ flight:component &lt;component-name&gt;
+$ flight:mixin &lt;mixin-name&gt;
+$ flight:page &lt;page-name&gt;
+</code></pre>
+
+<p>El generador instala algunas dependencias usando <a href="http://bower.io/">bower</a> y otras usando <a href="http://npmjs.org/">npm</a></p>
+
+<p>Con Bower instala:</p>
+
+<ul>
+<li>Flight, RequireJS, Jasmine jQuery y Jasmine Flight</li>
+</ul>
+
+<p>Con npm instala:</p>
+
+<ul>
+<li>Gulp, el runner de pruebas unitarias de Karma, y el servidor de archivos estáticos de Node.</li>
+</ul>
+
+<p>Las dependencias que instala con npm son para poder ejecutar las pruebas unitarias de los componentes Flight con Jasmine.
+Las pruebas se ejecutan usando <a href="http://karma-runner.github.io/0.12/index.html">Karma</a> que nos permite ejecutar las pruebas en un navegador en modo headless con
+<a href="http://phantomjs.org/">PhantomJS</a>.</p>
+
+<p>En este post explicaré como ejecutar los specs para componentes de Flight sin Karma, ya que considero que no es
+necesario ejecutar pruebas en modo 'headless' para los componentes. En su lugar podemos escribir pruebas de
+<a href="http://codeception.com/docs/04-AcceptanceTests">aceptación</a> con <a href="http://codeception.com/05-13-2013/phantom-js-headless-testing.html">Codeception</a> que incluyan el funcionamiento de los componentes (que también pueden hacerse
+'headles' con PhantomJS). Lo cuál explicaré en el siguiente post.</p>
+
+<p>La configuración que usaré resulta excesiva si es que ya probaste el generador y te dejó todo listo para usar Karma.
+Para hacer que las pruebas unitarias funcionen debemos hacer una combinación de paquetes de bower instalados con npm, ya
+que el objetivo es evitar el navegador y que nuestros tests sean lentos. Si no te interesa evitar el
+navegador puedes saltar a la parte de <a href="#data-providers">proveedores de datos</a> y
+<a href="#fake-data">generación de datos para pruebas</a>.</p>
+
+<h2 id="evitando-el-navegador">Evitando el navegador</h2>
+
+<p>El primer problema es configurar un ambiente similar al de un navegador. Esto significa que variables como <code>window</code> y
+<code>document</code> existan en el espacio de nombres <code>global</code> de Node. Esto se puede lograr con los paquetes <a href="https://github.com/tmpvar/jsdom">jsdom</a>
+y <a href="https://www.npmjs.org/package/jquery/">jQuery</a></p>
+
+<pre><code class="javascript"># specs-runner.js
+
+var jQuery;
+var jsdom = require('jsdom');
+
+// Setup window and document, jQuery will need them to work properly
+global.window = jsdom.jsdom().parentWindow
+global.document = global.window.document;
+
+// Add jQuery and $ to the global space
+jQuery = require('jquery');
+global.jQuery = global.$ = jQuery;
+</code></pre>
+
+<p>El siguiente paso es configurar <a href="http://requirejs.org/">RequireJS</a>, ya que en el navegador nuestros componentes lo usan. Debemos tener la
+misma configuración en Node para que funcionen, y agregar la funcion <code>define</code> al espacio global.</p>
+
+<pre><code class="javascript"># specs-runner.js
+
+var requirejs = require('requirejs');
+
+// Use the same value you use in the browser for 'paths' key.
+requirejs.config({
+    baseUrl: './web/js',
+    nodeRequire: require,
+    paths: {
+        'flight': 'vendor/flight',
+        'store': 'src/store',
+        'component': 'src/component'
+    }
+});
+
+global.define = requirejs;
+</code></pre>
+
+<p>Debemos también instalar y configurar <a href="https://github.com/mhevery/jasmine-node">Jasmine para Node</a> en su versión beta 4, ya que es la que usa <a href="http://jasmine.github.io/2.0/introduction.html">Jasmine</a> en su
+versión 2 y que necesitamos para poder usar <a href="https://github.com/velesin/jasmine-jquery">Jasmine para jQuery</a>. Debemos agregar algunas variables y funciones al
+espacio global para que funcionen igual que en el navegador.</p>
+
+<pre><code class="javascript"># specs-runner.js
+
+var jasmine;
+
+// Setup Jasmine
+jasmine = require('jasmine-node/lib/jasmine-node/jasmine-loader.js');
+global.jasmine = jasmine;
+
+// map jasmine.Env to global namespace
+jasmineEnv = global.jasmine.getEnv();
+for (key in jasmineEnv) {
+    if (jasmineEnv[key] instanceof Function) {
+        global[key] = jasmineEnv[key];
+    }
+};
+
+global.jasmine.addMatchers = jasmineEnv.addMatchers;
+</code></pre>
+
+<p>El siguiente paso es configurar <a href="https://github.com/flightjs/jasmine-flight">Jasmine para Flight</a>. Al igual que en los otros casos es necesario registrar
+algunas funciones en el espacio global.</p>
+
+<pre><code class="javascript"># specs-runner.js
+
+var jasmineFlight;
+
+jasmineFlight = require('jasmine-flight');
+
+// map jasmine-flight methods to global namespace
+for (key in jasmineFlight) {
+    if (jasmineFlight[key] instanceof Function) {
+        global[key] = jasmineFlight[key];
+    }
+};
+</code></pre>
+
+<p>Por último para poder crear 'spies' para eventos debemos usar Jasmine para jQuery y agregar <code>spyOnEvent</code> al espacio
+global.</p>
+
+<pre><code class="javascript"># specs-runner.js
+
+jasminejQuery = require('jasmine-jquery/lib/jasmine-jquery');
+global.spyOnEvent = window.spyOnEvent;
+</code></pre>
+
+<p>En el caso de Jasmine para Flight, no pude configurarlo para que use la función <code>require</code> de RequireJS en lugar del
+<code>require</code> de Node. Si sabes de alguna forma te agredeceré que lo expongas en los comentarios. Así que el demo usa un
+<a href="https://github.com/MontealegreLuis/jasmine-flight/tree/no_browser">fork mio</a> donde reemplazo las apariciones de <code>require</code> por <code>requirejs</code>. Para esto debemos agregar la función al espacio
+global de nombres <code>global.requirejs = requirejs</code>. Así, el contenido del archivo <code>package.json</code> sería el siguiente:</p>
+
+<pre><code class="json">{
+  "name": "flight_demo",
+  "version": "1.0.0",
+  "devDependencies": {
+    "jasmine-flight": "https://github.com/MontealegreLuis/jasmine-flight/archive/no_browser.tar.gz",
+    "jasmine-jquery": "https://github.com/velesin/jasmine-jquery/archive/2.0.5.tar.gz",
+    "jasmine-node": "^2.0.0-beta4",
+    "jquery": "^2.1.1",
+    "jsdom": "^1.3.1",
+    "requirejs": "~2.1.11"
+  },
+  "scripts": {
+    "test": "node ./specs-runner.js"
+  }
+}
+</code></pre>
+
+<p>Puedes revisar el contenido completo del archivo <code>specs-runner.js</code> <a href="https://github.com/MontealegreLuis/flight-demo/blob/master/specs-runner.js">aquí</a>.</p>
+
+<h2 id="testing-de-componentes">Testing de componentes</h2>
+
+<p>Cuando hacemos tests a los componentes de Flight es muy importante hacer pruebas a la <strong>interfaz</strong> del componente y no a su
+comportamiento interno (es una recomendación que se puede aplicar al testing en general). Esto asegura que no tengamos
+que modificar las pruebas cada que modificamos el código del componente. Desde el punto de vista de la interfaz, los
+componentes de flight se suscriben a eventos y en ocasiones, como respuesta, publican eventos, esa es su interfaz.</p>
+
+<h3 id="pruebas-a-nuestro-componente-de-datos">Pruebas a nuestro componente de datos</h3>
+
+<p>Jasmine Flight nos proporciona métodos para crear specs para componentes de Flight. La primera diferencia con un spec
+de Jasmine tradicional es que reemplazamos <code>describe</code> por la función <code>describeComponent</code>. Dentro de <code>describeComponent</code>
+en el <code>beforeEach</code> podemos llamar al método <code>setupComponent</code> que nos permite pasar a nuestro componente los valores de
+sus atributos, de forma similar al método <code>attachTo</code>. En nuestro ejemplo creamos dos <a href="http://xunitpatterns.com/Fake%20Object.html">fakes</a> uno para <code>catalog</code> y
+otro para <code>cart</code>. El spec más simple que podemos generar verifica que el componente esté definido (<code>toBeDefined</code>).</p>
+
+<pre><code class="javascript"># web/js/spec/component/DataShoppingCart.spec.js
+
+describeComponent('component/DataShoppingCart', function () {
+
+    beforeEach(function () {
+        this.setupComponent({
+            catalog: {allProducts: function(){}, productOfId: function(){}},
+            cart: {addItem: function() { return {} }}
+        });
+    });
+
+    it('should be defined', function () {
+        expect(this.component).toBeDefined();
+    });
+});
+</code></pre>
+
+<p>En el siguiente test verificamos que el componente publique el evento <code>data.whenItemIsAddedToCart</code> cuando se publique
+el evento <code>ui.whenProductIsAdded</code>. Para lograrlo creamos un <a href="http://xunitpatterns.com/Test%20Spy.html">spy</a> para el evento <code>ui.whenProductIsAdded</code>. Disparamos
+el evento <code>ui.whenProductIsAdded</code> en el nodo HTML asociado con el componente, y verificamos que el componente publique
+el evento esperado.</p>
+
+<pre><code class="javascript"># web/js/spec/component/DataShoppingCart.spec.js
+
+it("should listen for 'ui.whenProductIsAdded' events and trigger 'data.whenItemIsAddedToCart' event", function () {
+    spyOnEvent(this.$node, 'data.whenItemIsAddedToCart');
+
+    this.$node.trigger('ui.whenProductIsAdded', {});
+
+    expect('data.whenItemIsAddedToCart').toHaveBeenTriggeredOn(this.$node);
+});
+</code></pre>
+
+<p>El componente también debe publicar el evento <code>data.whenProductsAreLoaded</code> al ejecutar el método <code>loadProducts</code>. El
+código es similar solo que en lugar de disparar un evento en el nodo HTML del componente, ejecutamos el método y
+verificamos que el evento haya sido publicado.</p>
+
+<pre><code class="javascript"># web/js/spec/component/DataShoppingCart.spec.js
+
+it("should trigger 'data.whenProductsAreLoaded' event when method 'loadProducts' is executed", function () {
+    spyOnEvent(this.$node, 'data.whenProductsAreLoaded');
+
+    this.component.loadProducts({});
+
+    expect('data.whenProductsAreLoaded').toHaveBeenTriggeredOn(this.$node);
+});
+</code></pre>
+
+<h3 id="pruebas-a-nuestro-componente-de-interfaz">Pruebas a nuestro componente de interfaz</h3>
+
+<p>Para probar nuestro componente de interfaz, necesitaremos un <a href="https://github.com/junit-team/junit/wiki/Test-fixtures">fixture</a> de HTML que pasaremos como primer argumento
+al método <code>setupComponent</code>. Este fixture reemplaza al nodo HTML asociado al componente que Jasmine Flight crea por
+default (el cual es un <code>div</code>). Lo necesitamos porque nuestro componente de interfaz busca elementos HTML con IDs
+específicos que necesitamos pasar a nuestro spec para que funcione.</p>
+
+<p>El primer test verifica que el componente actualice el HTML de la tabla que contiene los elementos del carro de compras
+cada vez que se publique el evento <code>data.whenItemIsAddedToCart</code>.</p>
+
+<pre><code class="javascript"># web/js/spec/component/UiShoppingCart.spec.js
+
+describeComponent('component/UiShoppingCart', function () {
+    var itemRow = '&lt;tr&gt;&lt;td&gt;Lightsaber&lt;/td&gt;&lt;td&gt;$20.00&lt;/td&gt;&lt;td&gt;2&lt;/td&gt;&lt;td&gt;$ 40.00&lt;/td&gt;&lt;/tr&gt;';
+    var cartTotal = '&lt;p&gt;$40.00&lt;/p&gt;';
+
+    beforeEach(function () {
+        this.setupComponent(
+            '&lt;table&gt;&lt;tbody&gt;&lt;/tbody&gt;&lt;tr&gt;&lt;td id="cart-total"&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;', {
+            totalSelector: '#cart-total',
+            cartItemsSelector: 'tbody',
+            itemTemplate: {render: function() {return itemRow;}},
+            totalTemplate: {render: function() {return cartTotal;}}
+        });
+    });
+
+    it("should listen for 'data.whenItemIsAddedToCart' events and update the cart items HTML", function () {
+        this.component.trigger(document, 'data.whenItemIsAddedToCart', {});
+
+        expect(this.component.select('cartItemsSelector').html()).toEqual(itemRow);
+    });
+});
+</code></pre>
+
+<h2 id="data-providers">Proveedores de datos</h2>
+
+<p>El objetivo de un proveedor de datos es alimentar un test con varios valores de prueba para evitar repetir el código de
+un spec varias veces. Investigando encontré este <a href="http://blog.jphpsf.com/2012/08/30/drying-up-your-javascript-jasmine-tests">post</a> que implementa una función <code>using</code> que provee de datos a un spec.
+Encontré también este segundo <a href="http://softwarechaos.wordpress.com/2013/03/03/using-dataprovider-for-jasmine/">post</a> donde se mueve la función <code>using</code> fuera del spec y permite el uso de funciones
+para alimentar el test con datos. Me gustó más el estilo del primer post, aunque es un poco antiguo (Jasmine 1.2), así
+que terminé con una combinación de ambos ejemplos:</p>
+
+<pre><code class="javascript"># web/js/spec/helpers/UsingHelper.js
+
+global.using = function(name, values, func) {
+    for (var i = 0, count = values.length; i &lt; count; i++) {
+        if (Object.prototype.toString.call(values[i]) !== '[object Array]') {
+            values[i] = [values[i]];
+        }
+        // Pass the name of the spec and its values to add them to their description
+        it.specName = name;
+        it.data = values[i];
+        func.apply(this, values[i]);
+        // Clear the extra data once it has been used
+        it.data = null;
+        it.specName = null;
+    }
+}
+var it_multi = function _it_multi(desc, func) {
+    var _data = [], _desc = desc;
+
+    // Check if the current spec was called inside a 'using' call
+    if (it.data) {
+        _data = it.data;
+        // Update the spec description
+        _desc = desc + ' (with ' + it.specName +  ' using values [' + _data.toString() + '])';
+    }
+
+    jasmine.getEnv().it(_desc, function() {
+        return function() {
+            func.apply(func, _data);
+        }
+    });
+};
+
+if ( it &amp;&amp; typeof it == 'function') {
+    it = it_multi;
+}
+</code></pre>
+
+<p>Debemos incluir este archivo en <code>specs-runner.js</code> para usarlo en nuestros specs. Tomemos como
+ejemplo el método <code>total</code> del módulo <code>OrderItem</code>. El segundo argumento que pasamos a <code>using</code> es un arreglo donde el
+primer elemento representan valores para el precio unitario y la cantidad de productos que se agregan al carro y el
+segundo argumento es el total que esperamos que calcule nuestro módulo.</p>
+
+<pre><code class="javascript">describe('OrderItem', function () {
+    using(
+        'valid products',
+        [
+            [[2000, 4], 8000],
+            [[3000, 3], 9000],
+            [[1500, 5], 7500]
+        ],
+        function(item, total) {
+            it('should calculate an item total price', function () {
+                var cartItem = new OrderItem(item[0], item[1]);
+
+                expect(cartItem.total()).toBe(total);
+            });
+        }
+    );
+});
+</code></pre>
+
+<p>Sin embargo la salida que producen nuestros specs no es tan descriptiva como quisieramos.</p>
+
+<pre><code>should calculate an item total price (with valid products using values [2000,4,8000]) - 156 ms
+should calculate an item total price (with valid products using values [3000,3,9000]) - 1 ms
+should calculate an item total price (with valid products using values [1500,5,7500]) - 1 ms
+</code></pre>
+
+<p>Podemos mejorar la legibilidad de nuestros specs si convertimos nuestros valores en objetos y les agregamos un método
+<code>toString</code>.</p>
+
+<pre><code class="javascript">var toString = function() {
+    return 'price: ' + this.product.unitPrice + ', quantity: ' + this.quantity;
+};
+var totalToString = function() {
+    return ' expecting total to be: ' + this.total;
+}
+
+describe('OrderItem', function () {
+    using(
+        'valid products',
+        [
+            [
+                {product: {unitPrice: 2000}, quantity: 4, toString: toString},
+                {total: 8000, toString: totalToString}
+            ],
+            [   {product: {unitPrice: 3000}, quantity: 3, toString: toString},
+                {total: 9000, toString: totalToString}
+            ],
+            [
+                {product: {unitPrice: 1500}, quantity: 5, toString: toString},
+                {total: 7500, toString: totalToString}
+            ]
+        ],
+        function(item, expected) {
+            it('should calculate an item total price', function () {
+                var cartItem = new OrderItem(item.product, item.quantity);
+
+                expect(cartItem.total()).toBe(expected.total);
+            });
+        }
+    );
+});
+</code></pre>
+
+<p>Lo cual mejora notablemente la legibilidad de nuestros specs.</p>
+
+<pre><code>should calculate an item total price (with valid products using values [price: 2000, quantity: 4, expecting total to be: 8000]) - 133 ms
+should calculate an item total price (with valid products using values [price: 3000, quantity: 3, expecting total to be: 9000]) - 1 ms
+should calculate an item total price (with valid products using values [price: 1500, quantity: 5, expecting total to be: 7500]) - 1 ms
+</code></pre>
+
+<h2 id="fake-data">Generando datos de prueba</h2>
+
+<p>Crear los valores para los proveedores de datos es una tarea tediosa que podemos evitar usando un generador de datos como
+<a href="https://github.com/FotoVerite/Faker.js">Fake</a>. Podemos poner de ejemplo un spec para el módulo <code>ProductsCatalog</code> donde queremos generar productos para
+verificar que podemos encontrarlos por su ID. En el ejemplo creamos una función <code>buildProducts</code> que crea productos
+con ID y nombres aleatorios (100 productos en nuestro spec). Esos datos se usan para verificar que un producto se puede
+encontrar por ID.</p>
+
+<pre><code class="javascript">define(['store/ProductsCatalog'], function(ProductsCatalog) {
+    var faker, catalog;
+    var buildProducts = function(amount) {
+        var i, products = [];
+
+        for (i = 1; i &lt;= amount; i++) {
+            products[i] = {productId: faker.Helpers.randomNumber(10), name: faker.Lorem.words(2)};
+        }
+
+        return products;
+    };
+
+    beforeEach(function () {
+        catalog = new ProductsCatalog();
+        faker = require('Faker');
+    });
+
+    describe('ProductsCatalog', function () {
+
+        it('should find a product by its identifier', function () {
+            var products = buildProducts(100);
+            var expectedProduct = products[5]; // Fifth product
+            var product;
+
+            catalog.setProducts(products);
+
+            product = catalog.productOfId(expectedProduct.productId);
+
+            expect(product.productId).toEqual(expectedProduct.productId);
+            expect(product.name).toEqual(expectedProduct.name);
+        });
+    });
+});
+</code></pre>
+
+<p>Espero que este post te sea de utilidad para realizar testing a componentes Flight y módulos en general. Si tienes algun
+comentario lo agradeceré mucho. Puedes revisar el código completo en este repo en <a href="https://github.com/MontealegreLuis/flight-demo">Github</a>. Si al probar el código
+algo no funciona y necesitas ayuda por favor deja tu pregunta <a href="https://github.com/MontealegreLuis/flight-demo/blob/master/specs-runner.js">aquí</a> así más gente puede ayudarte y más se
+beneficiarán con la respuesta.</p>
+]]></content>
+        </entry>
+            <entry>
+            <title type="html"><![CDATA[Configurando Satis con SSH]]></title>
+            <link href="http://www.montealegreluis.com/blog/2014/11/28/configurando-satis-con-ssh"/>
+            <updated>2014-11-28T00:00:00+00:00</updated>
+            <id>http://www.montealegreluis.com/blog/2014/11/28/configurando-satis-con-ssh</id>
+            <content type="html"><![CDATA[<p><a href="https://getcomposer.org/">Composer</a> es una herramienta para el manejo de dependencias en PHP que nos permite declarar los paquetes que
+utilizan nuestros proyectos y los instala en la carpeta <code>vendor</code>. Composer basa su funcionamiento en dos conceptos
+importantes <strong>paquetes</strong> y <strong>repositorios</strong>.</p>
+
+<ol>
+<li>Un paquete es escencialmente un directorio que contiene código PHP, aunque en teoría podría contener cualquier tipo
+de archivos. Un paquete se identifica a través de su nombre y su versión, además contiene otros metadatos necesarios
+para su instalación.</li>
+<li>Un <a href="https://getcomposer.org/doc/05-repositories.md">repositorio</a> es el lugar donde se encuentra el código de los paquetes PHP. <a href="http://packagist.org/">Packagist</a> es el
+repositorio por default que utiliza Composer, aunque es posible usar más repositorios.</li>
+</ol>
+
+<p>Existen varios tipos de repositorios:</p>
+
+<ul>
+<li><strong>composer</strong>: un repositorio del tipo composer es un archivo <code>packages.json</code> servido a través de HTTP, FTP, o SSH, que
+contiene una lista con la información de los paquetes de ese repositorio.</li>
+<li><strong>vcs</strong>: El repositorio del tipo vcs puede recuperar paquetes de repositorios <code>git</code>, <code>svn</code> y <code>hg</code>.</li>
+<li><strong>pear</strong>: Sirve para instalar cualquier repositorio de <a href="http://pear.php.net/">PEAR</a>.</li>
+<li><strong>package</strong>: Este tipo de repositorio sirve para código que no soporta Composer. Basicamente incluimos la definición
+del paquete (nombre y versión) y una URL de descarga (generalmente a un archivo <code>zip</code> o un <code>tar</code>.</li>
+</ul>
+
+<p>Si quieres aprender como funciona Composer revisa esta <a href="http://www.slideshare.net/rdohms/composer-for-busy-developers-phptek13">presentación de Rafael Dohms</a>. Ahora, si tu interés es
+aprender a construir paquetes para PHP te recomiendo mucho este <a href="https://leanpub.com/principles-of-php-package-design">libro de Matthias Noback</a>.</p>
+
+<h2 id="%C2%BFqu%C3%A9-es-satis%3F">¿Qué es Satis?</h2>
+
+<p>Satis es un generador estático de repositorios del tipo <code>composer</code>, es de <a href="https://github.com/composer/satis">código abierto</a> y básicamente te permite tener
+una versión privada minimalista de Packagist. Es este post explicaré como instalar y configurar un repositorio de Satis
+con acceso SSH.</p>
+
+<h2 id="instalaci%C3%B3n">Instalación</h2>
+
+<p>Primero tienes que instalar Composer en el servidor donde quieres alojar tu repositorio de Satis. Supongamos que yo lo
+quiero alojar en <code>http://packages.montealegreluis.com</code>. Primero debo instalar Composer de forma global.</p>
+
+<pre><code class="bash"># replace 'satis_user' with your user
+$ curl -s https://getcomposer.org/installer | php -- --install-dir=/home/satis_user/bin
+$ mv ~/bin/composer.phar ~/bin/composer
+$ chmod u+x ~/bin/composer
+</code></pre>
+
+<p>Lo siguiente es instalar Satis</p>
+
+<pre><code class="bash">$ composer create-project composer/satis --stability=dev --keep-vcs
+</code></pre>
+
+<p>Esto creará una carpeta <code>satis</code> con el binario que nos permitirá crear nuestro repositorio. El primer paso es
+definir un archivo de configuración (<code>satis.json</code>) con la lista de paquetes privados que quieres usar.
+Supongamos que tengo un repositorio privado en Github (<code>https://github.com/ComPHPPuebla/dbal-fixtures</code>) con el paquete
+<code>comphppuebla/dbal-fixtures</code> que quiero usar en mi proyecto  con una versión estable entre <code>1.0.0</code> y  <code>2.0.0</code>.</p>
+
+<pre><code class="json">{
+    "name": "My Repository",
+    "homepage": "http://packages.montealegreluis.com",
+    "repositories": [
+        { "type": "vcs", "url": "https://github.com/ComPHPPuebla/dbal-fixtures" }
+    ],
+    "require-all": true
+}
+</code></pre>
+
+<p>La llave <code>require-all</code> indica que queremos todas las versiones de todos los paquetes. <a href="https://getcomposer.org/doc/articles/handling-private-packages-with-satis.md#setup">Aquí</a> hay ejemplos si
+quieres hacer una selección más específica. Muy probablemente quieras poner el archivo <code>satis.json</code> en su propio
+repositorio en Git.</p>
+
+<p>Para construir el repositorio a partir del archivo de configuración ejecutamos el siguiente comando:</p>
+
+<pre><code class="bash">$ php bin/satis build satis.json storage/
+</code></pre>
+
+<p><code>storage</code> es la carpeta donde se guardarán los archivos de nuestro repositorio.</p>
+
+<h2 id="uso-de-satis">Uso de Satis</h2>
+
+<p>Siguiendo con el ejemplo, una vez que tengo instalado el repositorio Satis, tengo que agregar al archivo <code>composer.json</code>
+de mi proyecto la URL del repositorio Satis que acabo de generar.</p>
+
+<pre><code class="json">{
+  "require": {
+    "php": "&gt;=5.5",
+    "comphppuebla/dbal-fixtures": "~1.0",
+  },
+  "repositories": [
+    {
+      "type": "composer",
+      "url": "ssh2.sftp://packages.mandragora-web-systems.com/home/satis_user/satis/storage"
+    }
+  ]
+}
+</code></pre>
+
+<p>La URL <code>ssh2.sftp://packages.mandragora-web-systems.com/home/satis_user/satis/storage</code> indica que accederemos a
+Satis a través de SSH y que el archivo <code>packages.json</code> que necesita Composer para saber cuáles son los paquetes que
+aloja nuestro repositorio, está ubicado en la carpeta <code>/home/satis_user/satis/storage</code>. Para que puedas tener acceso a
+traves de SSH debes tener instalada la <a href="http://pecl.php.net/package/ssh2">extension PECL SSH2</a>.</p>
+
+<p>Si no tienes instalada la extensión estos son los comandos para instalarla en Ubuntu.</p>
+
+<pre><code class="bash">$ apt-get install -y libssh2-1 libssh2-1-dev
+$ apt-get install -y php-pear
+$ pecl -d preferred_state=beta install ssh2
+$ echo "extension=ssh2.so" &gt;&gt; /etc/php5/apache2/php.ini
+</code></pre>
+
+<p>Como el acceso es a través de SSH debemos indicar la ubicación de las llaves y el nombre de usuario que usaremos para
+autenticarnos a través del valor de <code>options</code>.</p>
+
+<pre><code class="json">{
+    "repositories": {
+        "montealegreluis": {
+            "type": "composer",
+            "url": "ssh2.sftp://packages.mandragora-web-systems.com:/home/satis_user/satis/storage",
+            "options": {
+                "ssh2": {
+                    "username": "satis_user",
+                    "pubkey_file": "/home/luis/.ssh/id_rsa.pub",
+                    "privkey_file": "/home/luis/.ssh/id_rsa"
+                }
+            }
+        }
+    }
+}
+</code></pre>
+
+<h2 id="configurando-satis-de-forma-global">Configurando Satis de forma global</h2>
+
+<p>Podemos configurar nuestro repositorio en el archivo <code>composer.json</code> para cada proyecto. Sin embargo no resulta tan
+práctico ya que, estamos poniendo rutas absolutas para la opción <code>pubkey_file</code> y <code>privkey_file</code>, cuyo valor es
+<code>/home/luis/.ssh/id_rsa.pub</code> y <code>/home/luis/.ssh/id_rsa</code> respectivamente. Si quiero instalar el proyecto en otra
+computadora y no tiene el usuario <code>luis</code> tendré que modificar las rutas hacias las llaves.</p>
+
+<p>Composer cuenta con un archivo de configuración global <code>config.json</code> al que podemos agregar repositorios como el que
+acabamos de crear de forma global. Si continuamos con el ejemplo en mi caso el archivo estaría en
+<code>/home/luis/.composer/config.json</code>.</p>
+
+<p>Si quieres saber cuáles son tus configuraciones globales actuales puedes ejecutar el comando:</p>
+
+<pre><code class="bash">$ composer config -g -l
+</code></pre>
+
+<p>Así lo único que tienes que hacer es copiar y pegar las configuraciones de tu repositorio desde el archivo <code>composer.json</code>
+de tu proyecto al archivo <code>config.json</code></p>
+
+<p>Para que funcione el ejemplo debes agregar tus llaves al servidor donde se encuentra el repositorio Satis. Si aún no
+tienes tus llaves SSH las puedes crear así:</p>
+
+<pre><code class="bash">$ ssh-keygen -t rsa -C "your_email@example.com"
+</code></pre>
+
+<p>Y las puedes copiar a tu servidor Satis así:</p>
+
+<pre><code class="bash">$ ssh-copy-id -i ~/.ssh/id_rsa.pub satis_user@packages.montealegreluis.com
+</code></pre>
+
+<p>Una vez que tienes todo configurado sólo es cuestión de ejecutar el <code>install</code>  de Composer y tu paquete se instalará
+desde tu repositorio Satis.</p>
+
+<pre><code class="bash">$ composer install
+</code></pre>
+
+<p>Espero que el post te sirva para configurar tu propio repositorio Satis. Si tienes algun comentario o alguna experiencia
+que quieras compartir te lo agradeceré mucho.</p>
+]]></content>
+        </entry>
+            <entry>
+            <title type="html"><![CDATA[Aplicaciones desacopladas con Flight JS]]></title>
+            <link href="http://www.montealegreluis.com/blog/2014/11/23/aplicaciones-desacopladas-con-flight-js"/>
+            <updated>2014-11-23T00:00:00+00:00</updated>
+            <id>http://www.montealegreluis.com/blog/2014/11/23/aplicaciones-desacopladas-con-flight-js</id>
+            <content type="html"><![CDATA[<p><a href="http://flightjs.github.io/">Flight</a> es un framework Javascript ligero, basado en componentes y dirigido por eventos desarrollado por Twitter.
+Flight mapea componentes a nodos del <a href="http://es.wikipedia.org/wiki/Document_Object_Model">DOM</a> y refuerza la <a href="http://en.wikipedia.org/wiki/Separation_of_concerns">separación de responsabilidades</a> en nuestro código,
+ya que no es posible crear relaciones explícitas entre componentes. En su lugar los components de Flight publican
+eventos, a los que se suscriben otros componentes.</p>
+
+<p>Flight usa los eventos del DOM como 'proxies' para los eventos de componentes, lo cual le da mayor flexibilidad, ya que:</p>
+
+<ol>
+<li>Un componente puede suscribirse a un evento a nivel de documento (<code>ḑocument</code>) o puede solo escuchar eventos
+pertenecientes a un nodo del DOM (<code>#price</code>).</li>
+<li>Los componentes que se suscriben a eventos no distinguen entre eventos de otros componentes (p. ej.
+<code>clientProceedToCheckout</code>) y eventos nativos (p. ej. <code>click</code>).</li>
+</ol>
+
+<p>Otra ventaja de Flight es que podemos distinguir dos tipos de componentes principales: componentes de <strong>interfaz</strong> y
+componentes <strong>de datos</strong>. De este modo las aplicaciones de Flight pueden entenderse como colecciones de componentes.</p>
+
+<h2 id="show-me-the-code">Show me the code</h2>
+
+<p>Para ejemplificar el uso de Flight desarrollaremos una pequeña interfaz de 'carro de compras', con un formulario
+con productos y una tabla donde se mostrarán los productos que vamos agregando, así como el total a pagar.</p>
+
+<p><img src="/images/content/flight-demo-page.png" class="img-responsive img-thumbnail" alt="Interfaz de carro de compras"></p>
+
+<h3 id="primero-los-m%C3%B3dulos">Primero los módulos</h3>
+
+<p>Antes de iniciar con los componentes, pensemos en los <a href="http://eloquentjavascript.net/10_modules.html">módulos</a> que conforman nuestra aplicación. Necesitaremos un
+catálogo de productos para que los clientes puedan seleccionar lo que quieren comprar. Nuestro catálogo debe poder
+recuperar todos los productos disponibles y debe poder buscar un producto en particular.</p>
+
+<pre><code class="javascript">// web/js/store/ProductsCatalog.js
+
+var ProductsCatalog = function() {
+
+    var products;
+
+    this.load = function(options) {
+        var productsLoaded = options.callback || this.setProducts;
+
+        options.request.ajax({
+            url: options.url,
+            dataType: 'json',
+            async: false,
+            success: productsLoaded
+        });
+    };
+
+    this.setProducts = function(allProducts) {
+        products = allProducts;
+    };
+
+    this.productOfId = function(id) {
+        var i;
+
+        for (i in products) {
+            if (products[i].productId == id) {
+                return products[i];
+            }
+        }
+    };
+
+    this.allProducts = function() {
+        return products;
+    }
+
+    return this;
+};
+</code></pre>
+
+<p>Nuestro carro de compras manejará una única orden de compra, la cual estará compuesta por varios elementos (items) que
+contienen los datos del producto y la cantidad que se desea comprar. Cada item debe poder calcular el total a pagar por
+la cantidad de productos seleccionados.</p>
+
+<pre><code class="javascript">// web/js/store/OrderItem.js
+
+var OrderItem = function(product, quantity) {
+
+    this.productId = function() {
+        return product.productId;
+    };
+
+    this.productName = function() {
+        return product.name;
+    };
+
+    this.unitPrice = function() {
+        return product.unitPrice;
+    }
+
+    this.quantity = function() {
+        return quantity;
+    }
+
+    this.total = function() {
+        return product.unitPrice * quantity;
+    };
+
+    return this;
+};
+</code></pre>
+
+<p>Por último, nuestro carro de compra, al cual podemos agregar o quitar productos y le podemos consultar cuál será el
+total a pagar.</p>
+
+<pre><code class="javascript">// web/js/store/ShoppingCart.js
+
+var ShoppingCart = function() {
+
+    var orderItems = [];
+
+    this.addItem = function(product, quantity) {
+        var item = new OrderItem(product, quantity);
+
+        orderItems[item.productId()] = item;
+
+        return item;
+    }
+
+    this.removeItem = function(item) {
+        orderItems.splice(item.productId(), 1);
+    }
+
+    this.total = function() {
+        var index, total = 0;
+
+        for (index in orderItems) {
+            total += orderItems[index].total();
+        }
+
+        return total;
+    }
+
+    return this;
+};
+</code></pre>
+
+<p>Una ventaja de diseñar los módulos antes que los componentes Flight, es que podemos hacer pruebas unitarias sin necesidad
+de asociarlos a ninguna interfaz gráfica. Además de que si algún día decidimos dejar de usar Flight nuestra lógica no
+se encuentra contenida en el código del framework.</p>
+
+<h3 id="algunos-detalles-de-flight">Algunos detalles de Flight</h3>
+
+<p>Flight utiliza <a href="http://requirejs.org/">RequireJS</a> para la carga de módulos y <a href="http://jquery.com/">jQuery</a> para el manejo de eventos y manipulación del DOM.
+La definición de un componente en Flight es de la siguiente forma:</p>
+
+<pre><code class="javascript">define(['vendor/flight/lib/component'], function(defineComponent) {
+    var Component = function() { /* ... */ };
+
+    return defineComponent(Component);
+}
+</code></pre>
+
+<p>Flight asocia un componente a un nodo del DOM a través del método <code>attachTo</code> el cuál recibe dos argumentos, el primero
+es un selector válido, y el segundo es un objeto con los atributos que queremos que tenga nuestro componente.
+Generalmente los atributos son selectores de nodos dentro del nodo principal (el selector de un botón submit dentro de
+un form, por ejemplo) u objetos que queremos inyectar como dependencia a nuestro componente, por ejemplo un objeto
+<code>ProductsCatalog</code>.</p>
+
+<pre><code class="javascript">Component.attachTo('#element-id', {
+    selector: '#some-id',
+    dependency: module,
+});
+</code></pre>
+
+<h3 id="ahora-si%2C-los-componentes">Ahora si, los componentes</h3>
+
+<p>Primero identificaremos qué componentes de datos y qué componentes de interfaz serán necesarios. De inicio tenemos dos
+componentes de interfaz uno para el formulario (<code>UiOrderItem</code>) y otro para la tabla con los productos agregados
+(<code>UiShoppingCart</code>) y un componente de datos (<code>DataShoppingCart</code>).</p>
+
+<p><img src="/images/content/flight-demo-components.png" class="img-responsive img-thumbnail" alt="Los componentes"></p>
+
+<h4 id="uiorderitem">UiOrderItem</h4>
+
+<p>El componente <code>UiOrderItem</code> tiene dos tareas, una es actualizar las opciones del elemento <code>select</code> del formulario,
+para la cual se suscribe al evento <code>data.whenProductsAreLoaded</code> y la otra es notificar cuando se agrega un elemento al
+carrito, para lo cual publica el evento <code>ui.whenProductIsAdded</code>, este evento se emite en el evento <code>submit</code> del
+formulario.</p>
+
+<p><img src="/images/content/ui-order-item-events.png" class="img-responsive img-thumbnail center-block" alt="Eventos de UiOrderItem"></p>
+
+<p>Si consideramos que nuestro formulario es el siguiente:</p>
+
+<pre><code class="html">&lt;!-- web/order.html --&gt;
+
+&lt;form id="item-form"&gt;
+    &lt;label for="product"&gt;Product&lt;/label&gt;
+    &lt;select name="product" id="product"&gt;
+        &lt;option value=""&gt;Choose a product&lt;/option&gt;
+    &lt;/select&gt;
+    &lt;label for="quantity"&gt;Quantity&lt;/label&gt;
+    &lt;input type="text" name="quantity" id="quantity"&gt;
+    &lt;button type="submit"&gt;Add to cart&lt;/button&gt;
+&lt;/form&gt;
+</code></pre>
+
+<p>Estaríamos asociando nuestro componente <code>UiOrderItem</code> al formulario con ID <code>item-form</code>. También necesitamos indicarle al
+componente cuál es el selector para productos (y que se puedan actualizar los elementos <code>option</code> del <code>select</code>) y el
+selector del <code>input</code> de cantidad para indicar al carro de compras cuántos productos quiere nuestro cliente.</p>
+
+<p>Para generar los elementos <code>option</code> usaremos un template de <a href="https://github.com/justjohn/twig.js/">Twig.js</a> con el siguiente contenido:</p>
+
+<pre><code class="twig">{# web/js/templates/products.html.twig #}
+
+&lt;option value=""&gt;Choose a product&lt;/option&gt;
+{% for product in products %}
+    &lt;option value="{{ product.productId }}"&gt;{{ product.name }}&lt;/option&gt;
+{% endfor %}
+</code></pre>
+
+<p>Flight utiliza módulos a los que llama <strong>páginas</strong>, donde se cargan los componentes que usará la aplicación y se
+inicializan todos nuestros módulos y objetos. Así, el código para asociar nuestro componente quedaría de la siguiente
+forma:</p>
+
+<pre><code class="javascript">// web/js/page/ShoppingCartPage.js
+
+define(function (require) {
+
+    var view = require('twig');
+    var UiOrderItem = require('component/UiOrderItem');
+
+    var ShoppingCartPage = function() {
+
+        this.init = function() {
+            view.twig({href: '/js/templates/products.html.twig', async: false, id: 'products'});
+
+            UiOrderItem.attachTo('#item-form', {
+                quantitySelector: '#quantity',
+                productSelector: '#product',
+                productsTemplate: view.twig({ref: 'products'})
+            });
+        };
+    };
+
+    return ShoppingCartPage;
+};
+</code></pre>
+
+<p>Dentro de nuestro componente usamos el método <code>attributes</code> para declarar los atributos (selectores o dependencias) de
+nuestro componente. El objeto que pasamos a <code>atributes</code> declara valores default para las propiedades diferentes de
+<code>null</code> (p. ej. <code>productsSelector: '#product'</code> indica que el valor default del atributo es <code>#product</code>), mientras que un
+valor nulo indica que el atributo es obligatorio y que debemos proporcionar su valor a través del
+método <code>attachTo</code> (p. ej. <code>productsTemplate: null</code> indica que el atributo es obligatorio).</p>
+
+<pre><code class="javascript">// web/js/component/UiOrderITem.js
+
+var UiOrderItem = function() {
+
+    this.attributes({
+        /* All attributes are mandatory */
+        quantitySelector: null,
+        productSelector: null,
+        productsTemplate: null
+    });
+
+    /* ... */
+};
+</code></pre>
+
+<p>Los métodos de un componente que se suscriben a un evento reciben dos argumentos.</p>
+
+<ol>
+<li>El primero es el nombre del evento (para el caso de eventos de componentes) o un objeto <code>event</code> (para el caso de los
+eventos nativos del DOM).</li>
+<li>El segundo argumento es un objeto con los valores que el componente que publica el evento considera necesarios.</li>
+</ol>
+
+<p>Para nuestro ejemplo, el objeto que recibe el método <code>refreshProductsOptions</code> como segundo argumento contiene los
+productos que se mostrarán en el <code>select</code> (<code>data.products</code>).</p>
+
+<pre><code class="javascript">// web/js/component/UiOrderITem.js
+
+var UiOrderItem = function() {
+
+    /* .. */
+
+    this.refreshProductsOptions = function(event, data) {
+        this
+            .select('productSelector')
+            .html(this.attr.productsTemplate.render({products: data.products}));
+    };
+
+    /* .. */
+};
+</code></pre>
+
+<p>El nodo asociado a un componente en Flight es accesible a través de dos variables.</p>
+
+<ol>
+<li>La variable <code>node</code> que hace referencia al elemento del DOM y</li>
+<li>la variable <code>$node</code> que es su equivalente en jQuery.</li>
+</ol>
+
+<p>El método <code>select</code> de un component es el equivalente de <code>$node.find(attributeName)</code>. En nuestro caso
+<code>this.select('productSelector')</code> es equivalente a <code>this.$node.find('#product')</code> ya que el valor de
+<code>this.attr.productSelector</code> es <code>#product</code>.</p>
+
+<p>El método <code>addItem</code> se suscribirá al evento <code>submit</code> de nuestro formulario y publicará el evento <code>ui.whenProductIsAdded</code>
+pasando como datos el ID del producto y la cantidad de productos que ingresó nuestro cliente.</p>
+
+<pre><code class="javascript">// web/js/component/UiOrderITem.js
+
+var UiOrderItem = function() {
+
+    /* ... */
+
+    this.addItem = function (event) {
+        event.preventDefault();
+
+        this.trigger('ui.whenProductIsAdded', {
+            productId: this.select('productSelector').val(),
+            quantity: this.select('quantitySelector').val()
+        });
+    };
+
+    /* .. */
+};
+</code></pre>
+
+<p>Para registrar los eventos de un componente usamos el método <code>after</code> de Flight. En nuestro ejemplo, el método 
+<code>refreshProductsOptions</code> se suscribe al evento <code>data.whenProductsAreLoaded</code> y el método <code>addItem</code> se suscribe al evento
+<code>submit</code></p>
+
+<pre><code class="javascript">// web/js/component/UiOrderITem.js
+
+var UiOrderItem = function() {
+
+    /* ... */
+
+    this.after('initialize', function () {
+        this.on(document, 'data.whenProductsAreLoaded', this.refreshProductsOptions);
+        this.on('submit', this.addItem);
+    });
+
+    /* ... */
+};
+</code></pre>
+
+<h4 id="uishoppingcart">UiShoppingCart</h4>
+
+<p>El componente <code>UiShoppingCart</code> no publica ningún evento, pero se suscribe a dos eventos. El primero es
+<code>data.whenItemIsAddedToCart</code> al cuál deberá responder agregando una fila a la tabla. El segundo es
+<code>data.whenCartTotalHasChanged</code> al cual deberá responder actualizando la celda de total.</p>
+
+<p><img src="/images/content/ui-shopping-cart-events.png" class="img-responsive img-thumbnail center-block" alt="Eventos de UiShoppingCart"></p>
+
+<p>Si consideramos que la tabla que contendrá los productos en nuestro carro de compras es el siguiente:</p>
+
+<pre><code class="html">&lt;!-- web/order.html --&gt;
+
+&lt;table id="items-table"&gt;
+    &lt;thead&gt;
+        &lt;tr&gt;
+            &lt;th&gt;Product&lt;/th&gt;
+            &lt;th&gt;Unit price&lt;/th&gt;
+            &lt;th&gt;Quantity&lt;/th&gt;
+            &lt;th&gt;Total&lt;/th&gt;
+        &lt;/tr&gt;
+    &lt;/thead&gt;
+    &lt;tbody&gt;&lt;/tbody&gt;
+    &lt;tfoot&gt;
+        &lt;tr&gt;
+            &lt;td colspan="3"&gt;Total&lt;/td&gt;
+            &lt;td id="cart-total"&gt;&lt;/td&gt;
+        &lt;/tr&gt;
+    &lt;/tfoot&gt;
+&lt;/table&gt;
+</code></pre>
+
+<p>Nuestro componente quedaría registrado de la siguiente forma (el código de los templates esta en <a href="https://github.com/MontealegreLuis/flight-demo/blob/master/web/js/templates/item.html.twig">item.html.twig</a> y
+<a href="https://github.com/MontealegreLuis/flight-demo/blob/master/web/js/templates/cart-total.html.twig">cart-total.html.twig</a>):</p>
+
+<pre><code class="javascript">// web/js/page/ShoppingCartPage.js
+
+view.twig({href: '/js/templates/item.html.twig', async: false, id: 'item'});
+view.twig({href: '/js/templates/cart-total.html.twig', async: false, id: 'total'});
+
+UiShoppingCart.attachTo('#items-table', {
+    tableBodySelector: 'tbody',
+    totalSelector: '#cart-total',
+    itemTemplate: view.twig({ref: 'item'}),
+    totalTemplate: view.twig({ref: 'total'})
+});
+</code></pre>
+
+<p>Y el código de nuestro componente quedaría de la siguiente forma:</p>
+
+<pre><code class="javascript">// web/js/component/UiShoppingCart.js
+
+var UiShoppingCart = function() {
+
+    this.attributes({
+        totalSelector: null,
+        tableBodySelector: null,
+        itemTemplate: null,
+        totalTemplate: null
+    });
+
+    this.appendProduct = function (event, data) {
+        this.select('tableBodySelector').append(this.attr.itemTemplate.render({item: data.item}));
+    }
+
+    this.updateTotal = function (event, data) {
+        this.select('totalSelector').html(this.attr.totalTemplate.render({cart: data.cart}));
+    }
+
+    this.after('initialize', function() {
+        this.on(document, 'data.whenItemIsAddedToCart', this.appendProduct);
+        this.on(document, 'data.whenCartTotalHasChanged', this.updateTotal);
+    });
+};
+</code></pre>
+
+<h4 id="datashoppingcart">DataShoppingCart</h4>
+
+<p>Por último nuestro componente de datos:</p>
+
+<p><img src="/images/content/data-shopping-cart-events.png" class="img-responsive img-thumbnail center-block" alt="Eventos de DataShoppingCart"></p>
+
+<p>Nuestro componente de datos suscribe el método <code>addItemToCart</code> al evento <code>ui.whenProductIsAdded</code>. El método <code>addItemToCart</code>
+agrega al carro de compras un producto que recupera del catálogo a través de su ID, y después publica los eventos
+<code>data.whenItemIsAddedToCart</code> y <code>data.whenCartTotalHasChanged</code>. El método <code>loadProducts</code> recupera los productos del
+catálogo y publica el evento <code>data.whenProductsAreLoaded</code>.</p>
+
+<pre><code class="javascript">// web/js/component/DataShoppingCart.js
+
+var DataShoppingCart = function() {
+
+    this.attributes({
+        catalog: null,
+        cart: null
+    });
+
+    this.loadProducts = function() {
+        this.trigger('data.whenProductsAreLoaded', {products: this.attr.catalog.allProducts()});
+    };
+
+    this.addItemToCart = function(event, item) {
+        var productItem = this.attr.cart.addItem(
+            this.attr.catalog.productOfId(item.productId), item.quantity
+        );
+
+        this.trigger('data.whenItemIsAddedToCart', {item: productItem});
+        this.trigger('data.whenCartTotalHasChanged', {cart: this.attr.cart});
+    };
+
+    this.after('initialize', function () {
+        this.on('ui.whenProductIsAdded', this.addItemToCart);
+        this.loadProducts();
+    });
+};
+</code></pre>
+
+<p>Este componente no tiene atributos que hagan referencia a la interfaz (selectores o templates). En su lugar tiene como
+dependencias los módulos con la lógica de nuestra aplicación (<code>ProductsCatalog</code> y <code>ShoppingCart</code>).</p>
+
+<pre><code class="javascript">// web/js/page/ShoppingCartPage.js
+
+var $ = require('jquery');
+var ShoppingCart = require('store/ShoppingCart');
+var ProductsCatalog = require('store/ProductsCatalog');
+
+var cart = new ShoppingCart();
+var catalog = new ProductsCatalog();
+
+catalog.load({request: $, url: '/products'});
+
+DataShoppingCart.attachTo(document, {
+    catalog: catalog,
+    cart: cart
+});
+</code></pre>
+
+<p>Podemos resumir las relaciones entre componentes de nuestra aplicación de la siguiente forma. Las flechas indican qué
+componente publica o se suscribe un evento y a través de qué método. Los componentes aparecen encerrados en círculos,
+los eventos aparecen dentro de rectángulos redondeados y los métodos aparecen subrayados.</p>
+
+<p><img src="/images/content/application-components-diagram.png" class="img-responsive img-thumbnail" alt="Aplicación"></p>
+
+<p>Por último, como la mayoría de las aplicaciones que usan RequireJs la aplicación se inicializa en un archivo <code>main.js</code>
+donde llamamos al método <code>init</code> de nuestra página.</p>
+
+<pre><code class="javascript">// web/js/main.js
+
+require([
+        'vendor/flight/lib/compose',
+        'vendor/flight/lib/registry',
+        'vendor/flight/lib/advice',
+    ],
+    function (compose, registry, advice) {
+        compose.mixin(registry, [advice.withAdvice]);
+
+        require(['page/ShoppingCartPage'], function (ShoppingCartPage) {
+            var page = new ShoppingCartPage();
+
+            page.init();
+        });
+    }
+);
+</code></pre>
+
+<p>Espero que este post te de una idea del uso y ventajas de Flight. En el siguiente post haremos el <a href="http://www.montealegreluis.com/blog/2014/12/04/testing-de-componentes-flight/">testing de nuestros
+componentes y módulos</a>. Si tienes algun comentario lo agradeceré mucho. Puedes revisar el código completo en este repo en
+<a href="https://github.com/MontealegreLuis/flight-demo">Github</a>. Si al probar el código algo no funciona y necesitas ayuda por favor deja tu pregunta <a href="http://preguntas.hfpuebla.org/">aquí</a> así más
+gente puede ayudarte y más personas se beneficiarán con la respuesta.</p>
+]]></content>
+        </entry>
+            <entry>
+            <title type="html"><![CDATA[Testing con Jasmine]]></title>
+            <link href="http://www.montealegreluis.com/blog/2014/11/17/testing-con-jasmine"/>
+            <updated>2014-11-17T00:00:00+00:00</updated>
+            <id>http://www.montealegreluis.com/blog/2014/11/17/testing-con-jasmine</id>
+            <content type="html"><![CDATA[<p>Recientemente encontré un <a href="https://shanetomlinson.com/2013/testing-javascript-frontend-part-1-anti-patterns-and-fixes/">artículo</a> que trataba sobre como separar el código JavaScript de modo que podamos hacer
+pruebas unitarias a código que involucre la manipulación de <a href="http://es.wikipedia.org/wiki/Document_Object_Model">DOM</a> y solicitudes <a href="http://es.wikipedia.org/wiki/XMLHttpRequest">XHR</a>. Me di cuenta de lo poco que
+se sobre testing y código desacoplado en JavaScript y me decidí a escribir un ejemplo.</p>
+
+<p>El ejemplo trata de los clásicos <code>selects</code> encadenados, donde al seleccionar un valor del primer <code>select</code> se
+actualizan los valores del segundo, usando la típica relación estados-ciudades.</p>
+
+<p>El código que generalmente escribimos para tener este comportamiento es más o menos así:</p>
+
+<pre><code class="html">&lt;form role="form"&gt;
+    &lt;!-- ... --&gt;
+&lt;/form&gt;
+&lt;script&gt;
+    $('#states').on('change', function() {
+        var optionTemplate = '&lt;option value="{value}"&gt;{label}&lt;/option&gt;';
+        var options='', i, citiesCount;
+
+        $.ajax({
+            url: '/app/cities.json',
+            dataType: 'json',
+            data: {'state': $(this).val()},
+            success: function(cities) {
+                citiesCount = cities.length
+                for (i = 0; i &lt; citiesCount; i++) {
+                    options += optionTemplate
+                        .replace('{value}', cities[i].value)
+                        .replace('{label}', cities[i].label);
+                }
+                $('#cities').html(options);
+            }
+        });
+    });
+&lt;/script&gt;
+</code></pre>
+
+<p>Para simplificar el ejemplo, <code>/app/cities.json</code> es un archivo con extensión <code>.json</code> que tiene un contenido similar al
+siguiente.</p>
+
+<pre><code class="json">[
+    // ..
+    {
+        "value": "114",
+        "label": "Puebla"
+    },
+    // ..
+    {
+        "value": "207",
+        "label": "Zacapoaxtla"
+    }
+]
+</code></pre>
+
+<h2 id="problemas">Problemas</h2>
+
+<p>Este código si bien no es difícil de entender, resulta muy difícil de testear. El primero de los problemas
+que encontramos es que el código JavaScript está dentro del HTML y resulta imposible testearlo por separado. Segundo
+aunque estuviera en un archivo separado no cuenta con una interfaz pública que podamos validar a través de pruebas.
+Un punto más en contra es que tampoco es posible hacer pruebas a las funciones anónimas que utiliza. Además el uso de
+manejadores de eventos que actualizan el DOM es una muestra de la mezcla de responsabilidades dentro del código.
+Para terminar, el uso de solicitudes XHR sin un mecanismo que nos permita saber cuando terminaron su ejecución,
+complica aún más las cosas.</p>
+
+<h2 id="separando-responsabilidades">Separando responsabilidades</h2>
+
+<p>Podemos comenzar reemplazando el código que genera HTML concatenando cadenas, por una librería de plantillas que genere
+los elementos <code>option</code> de nuestro select. Para nuestro ejemplo usaremos <a href="https://github.com/justjohn/twig.js/">Twig.js</a> que es una implementación en
+JavaScript de <a href="http://twig.sensiolabs.org/">Twig</a>.</p>
+
+<p>Para generar los elementos <code>option</code> con Twig usamos una plantilla que itera sobre los resultados que nos devuelve
+nuestra llamada AJAX generando nuestros elementos <code>option</code>.</p>
+
+<pre><code class="twig">{% for city in cities %}
+    &lt;option value="{{ city.value }}"&gt;{{ city.label }}&lt;/option&gt;
+{% endfor %}
+</code></pre>
+
+<p>Para poder usar la plantilla debemos cargarla primero.</p>
+
+<pre><code class="javascript">twig({href: '/js/app/templates/cities.html.twig', id: 'cities', async: false});
+twig({ref: 'cities'}).render({cities: cities});
+</code></pre>
+
+<p>Así nuestra llamada AJAX quedaría de la siguiente forma:</p>
+
+<pre><code class="javascript">$.ajax({
+    url: '/app/cities.json',
+    dataType: 'json',
+    data: {'state': $(this).val()},
+    success: function(cities) {
+        twig({href: '/js/app/templates/cities.html.twig', id: 'cities', async: false});
+        $('#cities').html(twig({ref: 'cities'}).render({cities: cities}));
+    }
+});
+</code></pre>
+
+<p>El siguiente paso es convertir la función anónima que se ejecuta al finalizar la solicuitud AJAX (<code>success</code>) en un
+<a href="http://addyosmani.com/resources/essentialjsdesignpatterns/book/#modulepatternjavascript">módulo</a>. Con esto comenzaremos a dar una interfaz pública a nuestro código para poder testearlo por separado.</p>
+
+<pre><code class="javascript">var ShippingForm = function($city, view) {
+    'use strict';
+
+    this.refreshOptions = function(cities) {
+        $city.html(view({ref: 'cities'}).render({cities: cities}));
+    };
+
+    return this;
+};
+</code></pre>
+
+<p>Así en lugar de usar una función anónima podemos usar <code>ShippingForm.refreshOptions</code> como <a href="http://javascriptissexy.com/understand-javascript-callback-functions-and-use-them/">callback</a>.</p>
+
+<pre><code class="javascript">var form = new ShippingForm($('#cities'), twig);
+
+$.ajax({
+    url: '/app/cities.json',
+    dataType: 'json',
+    data: {'state': $(this).val()},
+    success: form.refreshOptions
+});
+</code></pre>
+
+<p>La lógica relacionada con el evento <code>change</code> de nuestro <code>select</code> de estados también es una función anónima que podemos
+mover dentro de nuestro módulo (<code>ShippingForm.getCities</code>).</p>
+
+<pre><code class="javascript">var ShippingForm = function($city, view, $state, $, citiesUrl, refreshOptions) {
+    'use strict';
+
+    var form = this;
+
+    //...
+
+    this.getCities = function() {
+        var stateId = $state.val();
+
+        if (!stateId) {
+            return;
+        }
+
+        refreshOptions = refreshOptions || form.refreshOptions;
+
+        $.ajax({
+            url: citiesUrl,
+            dataType: 'json',
+            data: {'state': stateId},
+            success: refreshOptions
+        });
+    };
+};
+</code></pre>
+
+<p>De nuevo reemplazamos la función anónima con el método <code>getCities</code> de nuestro módulo.</p>
+
+<pre><code class="javascript">var form = new ShippingForm($('#cities'), twig, $('#states'), $, '/app/cities.json');
+
+$('#states').on('change', form.getCities);
+</code></pre>
+
+<p>Por útlimo podemos encapsular la asociación del evento <code>change</code> con el método <code>getCities</code> dentro de nuestro módulo, lo
+cuál nos dará oportunidad de testear todo el código que teníamos al inicio. Es importante mencionar que estamos
+<a href="http://es.wikipedia.org/wiki/Inyecci%C3%B3n_de_dependencias">inyectando</a> todas nuestras dependencias (DOM y solictudes XHR) a fin de poder reemplazarlas por <a href="http://en.wikipedia.org/wiki/Test_double">dobles</a>
+en nuestras pruebas.</p>
+
+<pre><code class="javascript">var ShippingForm = function($city, view, $state, $, refreshOptions) {
+    //...
+};
+
+var form = new ShippingForm($('#cities'), twig, $('#states'), $);
+
+form.init();
+</code></pre>
+
+<p>Nuestro siguiente paso es mover nuestro módulo a un archivo separado. Para esto utilizaré <a href="http://requirejs.org/">RequireJS</a> que es un
+<code>loader</code> de módulos y archivos, optimizado para trabajar en navegadores. RequireJS utiliza un solo archivo como punto
+de entrada para nuestra aplicación, al cual generalmente se le nombra <code>main.js</code>.</p>
+
+<pre><code class="html">&lt;script data-main="js/app/main" src="js/vendor/requirejs/require.js"&gt;&lt;/script&gt;
+</code></pre>
+
+<p>El archivo <code>main.js</code> se usa para configurar las dependencias iniciales de nuestra aplicación, en nuestro caso
+jQuery y Twig. También es el encargado de iniciar nuestra aplicación a través de un módulo escrito por nosotros llamado
+<code>app</code>.</p>
+
+<pre><code class="javascript">require.config({
+    paths: {
+        'jquery': '../vendor/jquery/dist/jquery',
+        'twig': '../vendor/twig.js/twig.min'
+    },
+    baseUrl: '/js/app'
+});
+
+require(['./app'], function(app) {
+    app.init();
+});
+</code></pre>
+
+<p>El módulo <code>app</code> hace la carga inicial de dependencias, incluidos nuestros módulos (<code>ShippingForm</code>).</p>
+
+<pre><code class="javascript">define(['twig', 'jquery', './src/ShippingForm'], function (view, $, ShippingForm) {
+    'use strict';
+
+    var app = {};
+
+    app.init = function() {
+        var form;
+
+        view.twig({
+            href: '/js/app/templates/cities.html.twig',
+            async: false,
+            id: 'cities'
+        });
+
+        form = new ShippingForm($, $('#states'), $('#cities'), view, '/app/cities.json');
+        form.init();
+    };
+
+    return app;
+});
+</code></pre>
+
+<h2 id="escribiendo-los-tests">Escribiendo los tests</h2>
+
+<p>Para las pruebas usaré <a href="http://jasmine.github.io/">Jasmine</a> que es un framework para testing del tipo <a href="http://en.wikipedia.org/wiki/Behavior-driven_development">BDD</a> que se destaca por tener una
+sintaxis muy fácil de entender. Jasmine utiliza suites, que son un conjunto de casos de pruebas llamados specs.</p>
+
+<p>Usaremos <a href="https://www.npmjs.org/">npm</a> para instalar las dependencias. <code>npm</code> utiliza el archivo <code>package.json</code> para determinar cuales son
+las dependencias a instalar.</p>
+
+<pre><code class="json">{
+  "name": "@montealegreluis/testing",
+  "license": "MIT",
+  "devDependencies": {
+    "jasmine-node": "~1.14",
+    "requirejs": "~2.1"
+  },
+  "scripts": {
+    "test": "node ./specs-runner.js"
+  }
+}
+</code></pre>
+
+<p>Una vez definidas nuestras dependencias (Jasmine y RequireJS), las instalamos.</p>
+
+<pre><code class="bash">$ npm install
+</code></pre>
+
+<p>Para poder ejecutar nuestras pruebas, necesitamos configurar Jasmine y RequireJS para que funcionen de manera similar a
+como funcionan en un navegador, para esto necesitamos un <a href="https://github.com/MontealegreLuis/jstesting/blob/master/specs-runner.js">runner</a> especial, el cual está basado en la configuración
+de este repo de <a href="https://github.com/rjz/jasmine-require-coffee-backbone-node">Zaworski</a>.</p>
+
+<p>Con este archivo (el cuál se configura en la llave <code>scripts</code> del archivo <code>package.json</code>) podemos ya ejecutar nuestros
+tests desde la consola usando <code>npm</code></p>
+
+<pre><code class="bash">$ npm test
+</code></pre>
+
+<p>Nuestra suite verifica los métodos del módulo <code>ShippingForm</code>. Para esto debemos crear el archivo
+<code>js/app/spec/ShippingForm.spec.js</code>. Nuestro primer spec verifica que se inicialice correctamente el evento <code>change</code>
+de nuestro <code>select</code> de estados. Para esto creamos un doble del tipo <a href="http://xunitpatterns.com/Test%20Spy.html">spy</a> para nuestro elemento <code>$state</code> que
+verifica que se llame al método <code>on</code> con los parámetros correctos.</p>
+
+<pre><code class="javascript">define(['src/ShippingForm'], function(ShippingForm) {
+    'use strict';
+
+    describe('ShippingForm', function () {
+        it('should initialize onchange event', function () {
+            var $state = jasmine.createSpyObj('state', ['on']);
+            var form = new ShippingForm({}, $state);
+
+            form.init();
+
+            expect($state.on).toHaveBeenCalledWith('change', form.getCities);
+        });
+    });
+});
+</code></pre>
+
+<p>Nuestro segundo spec verifica que si el valor del elemento seleccionado en nuestro <code>select</code> es vacío, la llamada AJAX
+no se ejecute. En esta ocasión se crea un <a href="http://xunitpatterns.com/Test%20Stub.html">stub</a> para <code>$state</code> que nos devuelva una cadena vacía, que nos permita
+ verificar en el spy para <code>$</code> que el método <code>ajax</code> no se llamó.</p>
+
+<pre><code class="javascript">it('should skip getting the cities if there is no current state selected', function () {
+    var $state = {
+        val: function() {}
+    };
+    var $ = jasmine.createSpyObj('$', ['ajax']);
+    var form = new ShippingForm($, $state);
+
+    spyOn($state, 'val').andReturn('');
+
+    form.getCities();
+
+    expect($state.val).toHaveBeenCalled();
+    expect($.ajax).not.toHaveBeenCalled();
+});
+</code></pre>
+
+<p>Nuestro siguiente spec verifica que si se selecciona un valor no vacío en el <code>select</code> de estado, se realice la llamada
+AJAX que devuelva las ciudades. Para esto creamos un spy de la función <code>refreshOptions</code> para verificar que se llame al
+callback de éxito al terminar la solicitud AJAX, también necesitamos un stub de <code>$state</code> para que devuelva un valor no
+vacío y que el spy de <code>$</code> ejecute el método <code>ajax</code>.</p>
+
+<pre><code class="javascript">it('should get the cities when a state is selected', function () {
+    var $state = {
+        val: function() {}
+    };
+    var $ = {
+        ajax: function(options) {
+            options.success.call();
+        }
+    };
+    var refreshOptions = jasmine.createSpy('refreshOptions');
+    var form = new ShippingForm($, $state, {}, {}, '/app/cities.json', refreshOptions);
+
+    spyOn($state, 'val').andReturn('21');
+    spyOn($, 'ajax').andCallThrough();
+
+    form.getCities();
+
+    expect($state.val).toHaveBeenCalled();
+    expect($.ajax).toHaveBeenCalled();
+    expect(refreshOptions).toHaveBeenCalled();
+});
+</code></pre>
+
+<p>Por último verificamos que el método <code>refreshOptions</code> de nuestro módulo funcione correctamente. Para esto creamos un spy
+de <code>twig</code> y un spy de <code>$city</code> para verificar las llamadas a los métodos <code>render</code> y <code>html</code> respectivamente.</p>
+
+<pre><code class="javascript">it('should refresh the cities options', function () {
+    var $city = jasmine.createSpyObj('city', ['html']);
+    var view = {
+        twig: function() {
+            return {
+                render: function() {}
+            };
+        }
+    }
+    var form = new ShippingForm({}, {}, $city, view, '/app/cities.json');
+
+    spyOn(view, 'twig').andCallThrough();
+
+    form.refreshOptions([{value: 12, label: 'Puebla'}]);
+
+    expect($city.html).toHaveBeenCalled();
+    expect(view.twig).toHaveBeenCalled();
+});
+</code></pre>
+
+<p>Espero que este post te sea de utilidad para realizar testing a código JavaScript. Si tienes algun comentario lo
+agradeceré mucho. Puedes revisar el código completo en este repo en <a href="https://github.com/MontealegreLuis/jstesting">Github</a>. Si al probar el código algo no
+funciona y necesitas ayuda por favor deja tu pregunta <a href="http://preguntas.hfpuebla.org/">aquí</a> así más gente puede ayudarte y más se beneficiarán
+con la respuesta.</p>
+]]></content>
+        </entry>
+    </feed>
