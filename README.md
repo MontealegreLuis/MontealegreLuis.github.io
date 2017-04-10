@@ -6,12 +6,6 @@ Primero instala Sculpin con Composer
 $ composer install
 ```
 
-Lo que sigue es instalar el blog
-
-```bash
-$ php bin/sculpin install
-```
-
 Revisa el contenido en [http://localhost:8000/][2] usando el siguiente comando:
 
 ```bash
