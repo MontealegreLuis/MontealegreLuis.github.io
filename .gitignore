@@ -1,3 +1,5 @@
-*
-!/.gitignore
-!/output_prod
+/bin
+/output_dev
+/output_prod
+/vendor
+/publish.sh
