@@ -46,6 +46,44 @@ h1, h2, h3, h4, h5 {
     border-top: 3px solid #00a79d;
 }
 
+.highlight {
+    background-color: #00a79d;
+    overflow: auto;
+    color: #fff;
+    clear: both;
+}
+
+.contact {
+    word-spacing: .5em;
+    line-height: 96px;
+    text-align: center;
+    min-height: 96px;
+    margin-bottom: 1em;
+    overflow: auto;
+}
+
+.contact a {
+    text-decoration: none;
+    border: 3px solid #00a79d;
+    display: inline-block;
+    margin-top: 10px;
+    padding-left: 15px;
+    margin-bottom: 0;
+}
+
+.contact a:hover {
+    background-color: #D8D9DA;
+}
+
+figcaption {
+    margin-top: 1em;
+    margin-bottom: 1em;
+}
+
+blockquote {
+    border-style: none;
+}
+
 a, a:hover {
     color: #00a79d;
 }
