@@ -31,6 +31,21 @@ h1, h2, h3, h4, h5 {
     color: #00a79d;
 }
 
+.title {
+    overflow: hidden;
+}
+
+.title:after {
+    content:"";
+    display: inline-block;
+    height: 0.5em;
+    vertical-align: bottom;
+    width: 100%;
+    margin-right: -100%;
+    margin-left: 10px;
+    border-top: 3px solid #00a79d;
+}
+
 a, a:hover {
     color: #00a79d;
 }
