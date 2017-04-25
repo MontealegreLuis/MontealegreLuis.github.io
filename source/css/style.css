@@ -33,6 +33,7 @@ h1, h2, h3, h4, h5 {
 
 .title {
     overflow: hidden;
+    margin-bottom: 1em;
 }
 
 .title:after {
@@ -47,10 +48,12 @@ h1, h2, h3, h4, h5 {
 }
 
 .highlight {
+    margin-top: 1.5em;
     background-color: #00a79d;
     overflow: auto;
     color: #fff;
     clear: both;
+    padding-bottom: .7em;
 }
 
 .contact {
