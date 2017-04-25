@@ -91,8 +91,17 @@ a, a:hover {
     color: #00a79d;
 }
 
-.panel-primary {
-    border-color: #00a79d;
+.panel-primary small {
+    color: #e6e7e8;
+}
+
+.panel-primary h2,
+.panel-primary .title {
+    color: #fff;
+}
+
+.panel-primary .title:after {
+    border-top: 3px solid #fff;
 }
 
 .panel-heading {
