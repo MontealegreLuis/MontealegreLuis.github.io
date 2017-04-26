@@ -31,6 +31,10 @@ h1, h2, h3, h4, h5 {
     color: #00a79d;
 }
 
+h2 {
+    margin-bottom: .5em;
+}
+
 .title {
     overflow: hidden;
     margin-bottom: 1em;
