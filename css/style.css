@@ -95,6 +95,11 @@ a, a:hover {
     color: #00a79d;
 }
 
+
+.panel-primary {
+    border-color: #00a79d;
+}
+
 .panel-primary small {
     color: #e6e7e8;
 }
