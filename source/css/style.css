@@ -129,10 +129,16 @@ a, a:hover {
     border-color: #00a79d;
 }
 
+.panel-php > .panel-footer,
 .panel-php > .panel-heading {
     background-color: #8892BF;
     border-color: #8892BF;
     color: #fff;
+}
+
+.panel-php > .panel-footer a {
+    color: #fff;
+    text-decoration: underline;
 }
 
 .panel-docker > .panel-heading {
@@ -147,9 +153,15 @@ a, a:hover {
     color: #fff;
 }
 
-.panel-js > .panel-heading {
+.panel-javascript > .panel-heading,
+.panel-javascript > .panel-footer {
     background-color: #F8DC3D;
     border-color: #F8DC3D;
+}
+
+.panel-javascript > .panel-footer a {
+    color: #333333;
+    text-decoration: underline;
 }
 
 .link-icon:hover {

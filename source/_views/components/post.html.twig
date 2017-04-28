@@ -1,12 +1,4 @@
-<div class="panel panel-primary">
-    <div class="panel-heading">
-        <h2 class="panel-title">
-            <span class="glyphicon glyphicon-bookmark"></span>
-            <a href="/blog/categorias/{{ post.meta.categories[0]|url_encode(true) }}/">
-                {{ post.categories[0] }}
-            </a>&nbsp;
-        </h2>
-    </div>
+<div class="panel panel-{{ post.categories[0]|lower }}">
     <div class="panel-body">
         <h1><a href="{{ post.url }}/">{{ post.title }}</a></h1>
     </div>
@@ -18,10 +10,16 @@
             </small>
         </p>
         <p>
+            <span class="glyphicon glyphicon-bookmark"></span>
+            <a href="/blog/categorias/{{ post.meta.categories[0]|url_encode(true) }}/">
+                {{ post.categories[0] }}
+            </a>
+        </p>
+        <p class="pull-right">
             <span class="glyphicon glyphicon-comment"></span>&nbsp;
             <a href="{{ site.url }}{{ post.url }}/#disqus_thread"></a>
         </p>
-        <p class="tags">
+        <p>
             <span class="glyphicon glyphicon-tags"></span>&nbsp;
             {% for tag in post.meta.tags %}
                 <a href="/blog/tags/{{ tag|url_encode(true) }}/">{{ tag }}</a>{% if not loop.last %},&nbsp;{% endif %}
