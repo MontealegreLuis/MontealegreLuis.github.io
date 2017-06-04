@@ -35,6 +35,18 @@ h2 {
     margin-bottom: .5em;
 }
 
+.language {
+    color: #fff;
+    font-weight: bolder;
+    border: 2px solid #fff;
+    padding: 2px 2px 0 2px;
+}
+
+.language-current {
+    color: #00a79d;
+    border: 2px solid #00a79d;
+}
+
 .title {
     overflow: hidden;
     margin-bottom: 1em;
