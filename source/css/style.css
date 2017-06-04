@@ -148,6 +148,10 @@ a, a:hover {
     color: #fff;
 }
 
+.code-badge {
+    text-decoration: none !important;
+}
+
 .panel-php > .panel-footer a {
     color: #fff;
     text-decoration: underline;
