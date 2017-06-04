@@ -1,0 +1,62 @@
+---
+layout: en/default
+title: Blog
+generator: pagination
+pagination:
+    max_per_page: 6
+use:
+    - posts_categories
+---
+<h1 class="title">What's this blog about?</h1>
+
+<p>
+    Friends will know that I love to spend my time <strong>learning</strong>.
+    Lately, I've been reading about, object-oriented design, agile methodologies
+    <a
+        href="http://es.wikipedia.org/wiki/Desarrollo_guiado_por_pruebas"
+        target="_blank"
+        rel="noopener"
+    >
+        TDD
+    </a>,
+    <a
+        href="http://en.wikipedia.org/wiki/Behavior-driven_development"
+        target="_blank"
+        rel="noopener"
+    >
+        BDD
+    </a>,
+    <a
+        href="http://es.wikipedia.org/wiki/Dise%C3%B1o_guiado_por_el_dominio"
+        target="_blank"
+        rel="noopener"
+    >
+        DDD
+    </a> and education. This blog's goal is to share the things I've learned
+    by practiving the things I read. All the posts here are about those topics
+    applied to <strong>Web development</strong>.
+</p>
+
+<div class="posts-list">
+{% for post in page.pagination.items %}
+    {% if loop.index0 % 2 == 0 %}<div class="row">{% endif %}
+    <div class="col-sm-6 posts-list">
+        {% include 'components/post.html.twig' %}
+    </div>
+    {% if loop.index0 % 2 == 1 or loop.last %}</div>{% endif %}
+{% endfor %}
+</div>
+{% if page.pagination.previous_page or page.pagination.next_page %}
+    <nav>
+        {% if page.pagination.previous_page %}
+            <a href="{{ page.pagination.previous_page.url }}" class="btn btn-primary btn-lg btn-block">
+                <span class="glyphicon glyphicon-calendar"></span> Most recent posts
+            </a>
+        {% endif %}<br />
+        {% if page.pagination.next_page %}
+            <a href="{{ page.pagination.next_page.url }}" class="btn btn-primary btn-lg btn-block">
+                <span class="glyphicon glyphicon-calendar"></span> Previous Posts
+            </a>
+        {% endif %}<br />
+    </nav>
+{% endif %}
