@@ -41,7 +41,7 @@ use:
 {% for post in page.pagination.items %}
     {% if loop.index0 % 2 == 0 %}<div class="row">{% endif %}
     <div class="col-sm-6 posts-list">
-        {% include 'components/post.html.twig' %}
+        {% include 'components/en/post.html.twig' %}
     </div>
     {% if loop.index0 % 2 == 1 or loop.last %}</div>{% endif %}
 {% endfor %}
