@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head lang="es-mx">
+    {% include 'components/head.html.twig' %}
+</head>
+<body class="home">
+    <header class="navigation">
+        {% include 'components/menu.html.twig' %}
+    </header>
+
+    <div class="image-bg-fixed-height">
+        <div class="container">
+            <div class="welcome">
+                <h1>Luis Montealegre</h1>
+                <h2>Web Developer</h2>
+                <ul class="social">
+                    <li>
+                        <a href="http://twitter.com/MontealegreLuis" class="link-icon" target="_blank">
+                            <img src="/images/twitter.png" alt="@MontealegreLuis">
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://www.google.com/+LuisMontealegreV" class="link-icon" target="_blank">
+                            <img src="/images/googleplus.png" alt="LuisMontealegreV">
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://www.linkedin.com/in/montealegreluis" class="link-icon" target="_blank">
+                            <img src="/images/linkedin.png" alt="MontealegreLuis">
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://github.com/MontealegreLuis" class="link-icon" target="_blank">
+                            <img src="/images/github.png" alt="MontealegreLuis">
+                        </a>
+                    </li>
+                    <li>
+                        <a href="mailto:montealegreluis@gmail.com" class="link-icon">
+                            <img src="/images/email.png" alt="montealegreluis@gmail.com">
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="content">
+        {% block content_wrapper %}{% block content %}{% endblock %}{% endblock %}
+    </div>
+
+    <footer>
+        {% include 'components/footer.html.twig' %}
+    </footer>
+
+    {% include 'components/scripts.html.twig' %}
+    {% include 'components/comments.html.twig' %}
+    {% include 'components/analytics.html.twig' %}
+</body>
+</html>
