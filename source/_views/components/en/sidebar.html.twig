@@ -1,0 +1,47 @@
+<div class="panel panel-default">
+    <div class="panel-heading"><h3 class="panel-title">Categories</h3></div>
+    <div class="list-group">
+        {% for category,posts in data.posts_categories %}
+            <a href="/blog/categorias/{{ category|url_encode(true) }}/" class="list-group-item">
+                {{ category }}
+            </a>
+        {% endfor %}
+    </div>
+</div>
+<div class="panel panel-default">
+    <div class="panel-heading"><h4 class="panel-title">Interesting sites</h4></div>
+    <div class="list-group">
+        <a href="http://www.comunidadphppuebla.com/" target="_blank" class="list-group-item">
+            PHP Puebla UG <small>spanish</small>
+        </a>
+        <a href="http://www.hfpuebla.org/" target="_blank" class="list-group-item">
+            Hackers & Founders <small>spanish</small>
+        </a>
+        <a href="http://www.montealegreluis.com/logica-programacion/" target="_blank" class="list-group-item">
+            Programming notes <small>spanish</small>
+        </a>
+        <a href="http://scala.org.mx/" target="_blank" class="list-group-item">
+            Scala MX <small>spanish</small>
+        </a>
+        <ul class="list-group-item list-unstyled">
+            <li>
+                <a href="http://scala.org.mx/news/2015/01/29/funciones-scala/" target="_blank">
+                    Functions en Scala <small>spanish</small>
+                </a>
+            </li>
+        </ul>
+        <a href="http://www.drupodcast.com/" class="list-group-item" target="_blank">
+            Drupodcast <small>spanish</small>
+        </a>
+        <ul class="list-group-item list-unstyled">
+            <li>
+                <a href="http://www.drupodcast.com/podcast/drupodcast-s03-e09-con-luis-montealegre" target="_blank">
+                    Season 3, Episode 9
+                </a>
+            </li>
+        </ul>
+        <a href="http://html5facil.com/" class="list-group-item" target="_blank">
+            HTML5 Fácil <small>spanish</small>
+        </a>
+    </div>
+</div>
