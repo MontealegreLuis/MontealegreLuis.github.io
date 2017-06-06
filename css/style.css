@@ -257,12 +257,15 @@ code {
         padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
         padding-bottom: 40px;
     }
-}
-
-@media (min-width: 980px) {
     .home {
         padding-top: 50px; /* 50px to make the container go all the way to the bottom of the topbar */
         padding-bottom: 40px;
+    }
+}
+
+@media (max-width: 768px) {
+    .content {
+        padding-top: 3em;
     }
 }
 
