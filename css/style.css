@@ -280,7 +280,7 @@ code {
 .image-bg-fixed-height {
     background: url('/images/background.jpg') no-repeat center center scroll;
     background-size: cover;
-    height: 520px;
+    height: 100vh;
 }
 
 .img-center {
