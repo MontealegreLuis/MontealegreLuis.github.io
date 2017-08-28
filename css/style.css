@@ -94,6 +94,11 @@ h2 {
     background-color: #D8D9DA;
 }
 
+.portfolio .panel-body {
+    min-height: 235px;
+    overflow: auto;
+}
+
 figcaption {
     margin-top: 1em;
     margin-bottom: 1em;
@@ -141,6 +146,10 @@ a, a:hover {
     border-color: #00a79d;
 }
 
+.filters {
+    margin-bottom: 3em;
+}
+
 .panel-php > .panel-footer,
 .panel-php > .panel-heading {
     background-color: #8892BF;
@@ -148,8 +157,30 @@ a, a:hover {
     color: #fff;
 }
 
+.github,
+.bitbucket {
+    text-decoration: none !important;
+}
+
+.github i,
+.bitbucket i {
+    vertical-align: middle;
+}
+
 .code-badge {
     text-decoration: none !important;
+    height: .5em;
+    display: inline-block;
+}
+
+.code-badge img {
+    height: 1em;
+}
+
+.panel-php > .panel-footer i,
+.panel-java > .panel-footer i,
+.panel-docker > .panel-footer i {
+    color: #fff;
 }
 
 .panel-php > .panel-footer a {
@@ -157,13 +188,15 @@ a, a:hover {
     text-decoration: underline;
 }
 
-.panel-docker > .panel-heading {
+.panel-docker > .panel-heading,
+.panel-docker > .panel-footer {
     background-color: #039BC6;
     border-color: #039BC6;
     color: #fff;
 }
 
-.panel-java > .panel-heading {
+.panel-java > .panel-heading,
+.panel-java > .panel-footer {
     background-color: #0070BB;
     border-color: #0070BB;
     color: #fff;
@@ -175,8 +208,13 @@ a, a:hover {
     border-color: #F8DC3D;
 }
 
+.panel-javascript > .panel-footer i {
+    color: #333;
+    text-decoration: none;
+}
+
 .panel-javascript > .panel-footer a {
-    color: #333333;
+    color: #333;
     text-decoration: underline;
 }
 
