@@ -146,6 +146,10 @@ a, a:hover {
     border-color: #00a79d;
 }
 
+.filters {
+    margin-bottom: 3em;
+}
+
 .panel-php > .panel-footer,
 .panel-php > .panel-heading {
     background-color: #8892BF;
