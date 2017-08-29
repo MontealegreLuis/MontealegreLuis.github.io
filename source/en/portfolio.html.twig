@@ -1,5 +1,5 @@
 ---
-layout: en/static
+layout: en/portfolio
 title: Portfolio
 use:
 - posts_categories
@@ -10,731 +10,627 @@ use:
         Portfolio
     </h1>
 </header>
-<section>
-    <h2 id="applications" class="title">
-        <i class="fa fa-bookmark" aria-hidden="true"></i>
-        Applications
-    </h2>
-    <div class="row">
-        <div class="col-sm-6">
-            <div class="panel panel-java">
-                <div class="panel-heading">
-                    <i class="devicon-java-plain"></i>
-                    Spring boot example
-                </div>
-                <div class="panel-body">
-                    Blog that demonstrates the use of Spring boot with MySQL
-                </div>
-                <div class="panel-footer">
-                    <a
-                        href="https://github.com/MontealegreLuis/spring-blog"
-                        target="_blank"
-                        rel="noopener"
-                        class="code-badge"
-                    >
-                        <img
-                            src="https://img.shields.io/github/license/mashape/apistatus.svg?maxAge=2592000"
-                            alt="license"
-                        >
-                    </a>
-                    <a
-                        href="https://travis-ci.org/MontealegreLuis/spring-blog"
-                        target="_blank"
-                        rel="noopener"
-                        class="code-badge"
-                    >
-                        <img
-                            src="https://travis-ci.org/MontealegreLuis/spring-blog.svg?branch=master"
-                            alt="Build Status"
-                        >
-                    </a>
-                    <a
-                        href="https://codebeat.co/projects/github-com-montealegreluis-spring-blog-master"
-                        target="_blank"
-                        rel="noopener"
-                        class="code-badge"
-                    >
-                        <img
-                            src="https://codebeat.co/badges/cb353c07-f5f0-4862-a7f1-419008e1c40b"
-                            alt="codebeat badge"
-                        >
-                    </a>
-                </div>
-            </div>
+<div class="row hidden-xs">
+    <div class="text-center filters">
+        <div class="btn-group" role="group">
+            <button type="button" data-filter="*" class="btn btn-primary active">All</button>
+            <button type="button" data-filter="application" class="btn btn-primary">Applications</button>
+            <button type="button" data-filter="library" class="btn btn-primary">Libraries</button>
+            <button type="button" data-filter="workshop" class="btn btn-primary">Workshops</button>
+            <button type="button" data-filter="tutorial" class="btn btn-primary">Video tutorials</button>
+            <button type="button" data-filter="java" class="btn btn-primary">Java</button>
+            <button type="button" data-filter="php" class="btn btn-primary">PHP</button>
+            <button type="button" data-filter="javascript" class="btn btn-primary">Javascript</button>
+            <button type="button" data-filter="docker" class="btn btn-primary">Docker</button>
         </div>
-        <div class="col-sm-6">
-            <div class="panel panel-java">
-                <div class="panel-heading">
-                    <i class="devicon-java-plain"></i>
-                    Hibernate example
-                </div>
-                <div class="panel-body">
-                    This is a command line application, showing how to map a
-                    many to many relationship using XML, and how to write some HQL
-                    queries. Tests demonstrate the use of JUnit + Hamcrest and Mockito.
-                </div>
-                <div class="panel-footer">
-                    <a
-                        href="https://github.com/MontealegreLuis/hibernate-example"
-                        target="_blank"
-                        rel="noopener"
-                        class="code-badge"
+    </div>
+</div>
+<section class="portfolio grid row">
+    <div class="col-sm-6 col-md-4 col-lg-3 grid-item application java">
+        <div class="panel panel-java">
+            <div class="panel-heading">
+                <i class="devicon-java-plain"></i>
+                Blog with Spring boot
+            </div>
+            <div class="panel-body">
+                Web application with login, posts management, image uploads written in Spring Boot
+                It implements method level security using a custom expression that allows
+                modifications only on our own posts
+            </div>
+            <div class="panel-footer">
+                <a
+                    href="https://github.com/MontealegreLuis/spring-blog"
+                    target="_blank"
+                    rel="noopener"
+                    class="github"
+                >
+                    <i class="devicon-github-plain"></i>
+                </a>
+                <a
+                    href="https://travis-ci.org/MontealegreLuis/spring-blog"
+                    target="_blank"
+                    rel="noopener"
+                    class="code-badge"
+                >
+                    <img
+                        src="https://travis-ci.org/MontealegreLuis/spring-blog.svg?branch=master"
+                        alt="Build Status"
                     >
-                        <img
-                            src="https://img.shields.io/github/license/mashape/apistatus.svg?maxAge=2592000"
-                            alt="license"
-                        >
-                    </a>
-                    <a
-                        href="https://travis-ci.org/MontealegreLuis/hibernate-example"
-                        target="_blank"
-                        rel="noopener"
-                        class="code-badge"
+                </a>
+                <a
+                    href="https://codebeat.co/projects/github-com-montealegreluis-spring-blog-master"
+                    target="_blank"
+                    rel="noopener"
+                    class="code-badge"
+                >
+                    <img
+                        src="https://codebeat.co/badges/cb353c07-f5f0-4862-a7f1-419008e1c40b"
+                        alt="codebeat badge"
                     >
-                        <img
-                            src="https://travis-ci.org/MontealegreLuis/hibernate-example.svg?branch=master"
-                            alt="Build Status"
-                        >
-                    </a>
-                    <a
-                        href="https://codebeat.co/projects/github-com-montealegreluis-hibernate-example"
-                        target="_blank"
-                        rel="noopener"
-                        class="code-badge"
-                    >
-                        <img
-                            src="https://codebeat.co/badges/df70242a-a3d4-4367-8785-6703e4e243e6"
-                            alt="codebeat badge"
-                        >
-                    </a>
-                </div>
+                </a>
             </div>
         </div>
     </div>
-    <div class="row">
-        <div class="col-sm-6">
-            <div class="panel panel-java">
-                <div class="panel-heading">
-                    <i class="devicon-java-plain"></i>
-                    Web application with Servlets example
-                </div>
-                <div class="panel-body">
-                    This web application to manage a catalog of movies. Tests demonstrate how to use
-                    JUnit, DBUnit and Mockito.
-                </div>
-                <div class="panel-footer">
-                    <a
-                        href="https://github.com/MontealegreLuis/hibernate-example"
-                        target="_blank"
-                        rel="noopener"
-                        class="code-badge"
-                    >
-                        <img
-                            src="https://img.shields.io/github/license/mashape/apistatus.svg?maxAge=2592000"
-                            alt="license"
-                        >
-                    </a>
-                    <a
-                        href="https://travis-ci.org/MontealegreLuis/movies"
-                        target="_blank"
-                        rel="noopener"
-                        class="code-badge"
-                    >
-                        <img
-                            src="https://travis-ci.org/MontealegreLuis/movies.svg?branch=master"
-                            alt="Build Status"
-                        >
-                    </a>
-                    <a
-                        href="https://codebeat.co/projects/github-com-montealegreluis-movies"
-                        target="_blank"
-                        rel="noopener"
-                        class="code-badge"
-                    >
-                        <img
-                            src="https://codebeat.co/badges/9a9920f0-dbf3-4424-a5dc-e7d429870bdc"
-                            alt="codebeat badge"
-                        >
-                    </a>
-                </div>
+    <div class="col-sm-6 col-md-4 col-lg-3 grid-item application php">
+        <div class="panel panel-php">
+            <div class="panel-heading">
+                <i class="devicon-zend-plain"></i>
+                Catalog using ZF1 & ZF2
             </div>
-        </div>
-        <div class="col-sm-6">
-            <div class="panel panel-javascript">
-                <div class="panel-heading">
-                    <i class="devicon-javascript-plain"></i>
-                    Simple Simon game
-                </div>
-                <div class="panel-body">
-                    This is a Simple Simon Game written with vanilla JS using TDD. This application
-                    has 2 versions one with ES5 features and the most recent one uses ES6 classes and
-                    modules. Tests in both versions use Jasmine + Testem. The ES6 version bundles
-                    the production code using Rollup and the tests using Webpack.
-                </div>
-                <div class="panel-footer">
-                    <a
-                        href="https://github.com/MontealegreLuis/simple-simon"
-                        target="_blank"
-                        rel="noopener"
-                        class="code-badge"
-                    >
-                        <img
-                            src="https://img.shields.io/github/license/mashape/apistatus.svg?maxAge=2592000"
-                            alt="license"
-                        >
-                    </a>
-                    <a
-                        href="https://travis-ci.org/MontealegreLuis/simple-simon"
-                        target="_blank"
-                        rel="noopener"
-                        class="code-badge"
-                    >
-                        <img
-                            src="https://travis-ci.org/MontealegreLuis/simple-simon.svg?branch=master"
-                            alt="Build Status"
-                        >
-                    </a>
-                    <a
-                        href="https://codebeat.co/projects/github-com-montealegreluis-simple-simon"
-                        target="_blank"
-                        rel="noopener"
-                        class="code-badge"
-                    >
-                        <img
-                            src="https://codebeat.co/badges/fc41b73e-e111-4349-bc44-6eb913087c40"
-                            alt="codebeat badge"
-                        >
-                    </a>
-                </div>
+            <div class="panel-body">
+                Products catalago written in ZF1. It integrates more modern components, like ZF2
+                service manage, phpspec and Twig.
             </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-sm-6">
-            <div class="panel panel-php">
-                <div class="panel-heading">
-                    <i class="devicon-php-plain"></i>
-                    PHP testing tools
-                </div>
-                <div class="panel-body">
-                    Code examples with several PHP testing tools: Behat, phpspec,
-                    PHPUnit, Mockery, Alice, Codeception, Eris, Humbug
-                </div>
-                <div class="panel-footer">
-                    <a
-                        href="https://github.com/MontealegreLuis/php-testing-tools"
-                        target="_blank"
-                        rel="noopener"
-                        class="code-badge"
-                    >
-                        <img
-                            src="https://img.shields.io/github/license/mashape/apistatus.svg?maxAge=2592000"
-                            alt="license"
-                        >
-                    </a>
-                    <a
-                        href="https://travis-ci.org/MontealegreLuis/php-testing-tools"
-                        target="_blank"
-                        rel="noopener"
-                        class="code-badge"
-                    >
-                        <img
-                            src="https://travis-ci.org/MontealegreLuis/php-testing-tools.svg?branch=master"
-                            alt="Build Status"
-                        >
-                    </a>
-                    <a
-                        href="https://codeclimate.com/github/MontealegreLuis/php-testing-tools"
-                        target="_blank"
-                        rel="noopener"
-                        class="code-badge"
-                    >
-                        <img
-                            src="https://codeclimate.com/github/MontealegreLuis/php-testing-tools/badges/gpa.svg"
-                            alt="Code Climate"
-                        >
-                    </a>
-                </div>
-            </div>
-        </div>
-        <div class="col-sm-6">
-            <div class="panel panel-php">
-                <div class="panel-heading">
-                    <i class="devicon-laravel-plain"></i>
-                    Lightweight clone of Reddit using Laravel
-                </div>
-                <div class="panel-body">
-                    This is a Laravel application implementing Reddit's basic functionality.
-                </div>
-                <div class="panel-footer">
-                    <a
-                        href="https://github.com/MontealegreLuis/readit"
-                        target="_blank"
-                        rel="noopener"
-                        class="code-badge"
-                    >
-                        <img
-                            src="https://img.shields.io/github/license/mashape/apistatus.svg?maxAge=2592000"
-                            alt="license"
-                        >
-                    </a>
-                    <a
-                        href="https://travis-ci.org/MontealegreLuis/readit"
-                        target="_blank"
-                        rel="noopener"
-                        class="code-badge"
-                    >
-                        <img
-                            src="https://travis-ci.org/MontealegreLuis/readit.svg?branch=master"
-                            alt="Build Status"
-                        >
-                    </a>
-                    <a
-                        href="https://insight.sensiolabs.com/projects/b412e223-6012-472f-ad54-ba81fe85eca4"
-                        target="_blank"
-                        rel="noopener"
-                        class="code-badge"
-                    >
-                        <img
-                            src="https://insight.sensiolabs.com/projects/b412e223-6012-472f-ad54-ba81fe85eca4/mini.png"
-                            alt="SensioLabsInsight"
-                        >
-                    </a>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-sm-6">
-            <div class="panel panel-php">
-                <div class="panel-heading">
-                    <i class="devicon-zend-plain"></i>
-                    Custom CMS using ZF1
-                </div>
-                <div class="panel-body">
-                    This is a custom CMS written in ZF1 for a Real Estate Consulting Company.
-                </div>
-                <div class="panel-footer">
-                    <a
-                        href="https://bitbucket.org/MontealegreLuis/edeco"
-                        target="_blank"
-                        rel="noopener"
-                        class="code-badge"
-                    >
-                        <img
-                            src="https://img.shields.io/github/license/mashape/apistatus.svg?maxAge=2592000"
-                            alt="license"
-                        >
-                    </a>
-                </div>
-            </div>
-        </div>
-        <div class="col-sm-6">
-            <div class="panel panel-php">
-                <div class="panel-heading">
-                    <i class="devicon-zend-plain"></i>
-                    Catalog of products using ZF1 and ZF2
-                </div>
-                <div class="panel-body">
-                    This is a catalog of products using ZF1. Where you can find some of my
-                    experiments on integrating more modern components, like ZF2's service manager,
-                    phpspec and Twig.
-                </div>
-                <div class="panel-footer">
-                    <a
+            <div class="panel-footer">
+                <a
                         href="https://bitbucket.org/MontealegreLuis/agata"
                         target="_blank"
                         rel="noopener"
-                        class="code-badge"
-                    >
-                        <img
-                            src="https://img.shields.io/github/license/mashape/apistatus.svg?maxAge=2592000"
-                            alt="license"
-                        >
-                    </a>
-                </div>
+                        class="bitbucket"
+                >
+                    <i class="devicon-bitbucket-plain"></i>
+                </a>
             </div>
         </div>
     </div>
-    <div class="row">
-        <div class="col-sm-6">
-            <div class="panel panel-php">
-                <div class="panel-heading">
-                    <i class="devicon-laravel-plain"></i>
-                    Fitbit API integration with Laravel
-                </div>
-                <div class="panel-body">
-                    Laravel application to demo the use of the Fitbit API
-                </div>
-                <div class="panel-footer">
-                    <a
-                        href="https://github.com/MontealegreLuis/fitbit-example"
+    <div class="col-sm-6 col-md-4 col-lg-3 grid-item application php">
+        <div class="panel panel-php">
+            <div class="panel-heading">
+                <i class="devicon-zend-plain"></i>
+                Custom CMS using ZF1
+            </div>
+            <div class="panel-body">
+                This is a custom CMS written in ZF1 for a Real Estate Consulting Company. The
+                application has integration tests written in PHPUnit
+            </div>
+            <div class="panel-footer">
+                <a
+                        href="https://bitbucket.org/MontealegreLuis/edeco"
                         target="_blank"
                         rel="noopener"
-                        class="code-badge"
-                    >
-                        <img
-                            src="https://img.shields.io/github/license/mashape/apistatus.svg?maxAge=2592000"
-                            alt="license"
-                        >
-                    </a>
-                </div>
+                        class="github"
+                >
+                    <i class="devicon-github-plain"></i>
+                </a>
             </div>
         </div>
     </div>
-</section>
-<section>
-    <h2 id="libraries" class="title">
-        <i class="fa fa-dropbox"></i>
-        Libraries
-    </h2>
-    <div class="row">
-        <div class="col-sm-6">
-            <div class="panel panel-php">
-                <div class="panel-heading">
-                    <i class="devicon-php-plain"></i>
-                    Slim 2 modules
-                </div>
-                <div class="panel-body">
-                    <p>
-                        This package introduces Service and Controller providers
-                        in order to group your Slim application in a module-like
-                        structure similar to Symfony bundles or Zend modules.
-                    </p>
-                    <pre><code>composer require comphppuebla/slim-modules</code></pre>
-                </div>
-                <div class="panel-footer">
-                    <a
-                        href="https://travis-ci.org/ComPHPPuebla/slim-modules"
-                        target="_blank"
-                        rel="noopener"
-                        class="code-badge"
-                    >
-                        <img
-                            src="https://travis-ci.org/ComPHPPuebla/slim-modules.svg?branch=master"
-                            alt="Build Status"
-                        >
-                    </a>
-                    <a
-                        href="https://packagist.org/packages/comphppuebla/slim-modules"
-                        target="_blank"
-                        rel="noopener"
-                        class="code-badge"
-                    >
-                        <img
-                            src="https://poser.pugx.org/comphppuebla/slim-modules/license.svg"
-                            alt="License"
-                        >
-                    </a>
-                    <a
-                        href="https://insight.sensiolabs.com/projects/b86318b0-47ce-4d47-a0a4-db6e98dc8451"
-                        target="_blank"
-                        rel="noopener"
-                        class="code-badge"
-                    >
-                        <img
-                            src="https://insight.sensiolabs.com/projects/b86318b0-47ce-4d47-a0a4-db6e98dc8451/mini.png"
-                            alt="SensioLabsInsight"
-                        >
-                    </a>
-                </div>
+    <div class="col-sm-6 col-md-4 col-lg-3 grid-item library docker">
+        <div class="panel panel-docker">
+            <div class="panel-heading">
+                <i class="devicon-docker-plain"></i>
+                Container with PHP 7
             </div>
-        </div>
-        <div class="col-sm-6">
-            <div class="panel panel-php">
-                <div class="panel-heading">
-                    <i class="devicon-doctrine-plain"></i>
-                    DBAL fixtures
-                </div>
-                <div class="panel-body">
-                    <p>
-                        This package allows you to define simple data fixture files using YAML and
-                        load them using Doctrine DBAL.
-                    </p>
-                    <pre><code>composer require comphppuebla/dbal-fixtures</code></pre>
-                </div>
-                <div class="panel-footer">
-                    <a
-                        href="https://travis-ci.org/ComPHPPuebla/dbal-fixtures"
+            <div class="panel-body">
+                This is a docker container to easily setup an application on PHP 7. As easy
+                as copying your code to the <code>sites</code> folder
+            </div>
+            <div class="panel-footer">
+                <a
+                        href="https://github.com/MontealegreLuis/php-container"
                         target="_blank"
                         rel="noopener"
-                        class="code-badge"
-                    >
-                        <img
-                            src="https://travis-ci.org/ComPHPPuebla/dbal-fixtures.svg?branch=master"
-                            alt="Build Status"
-                        >
-                    </a>
-                    <a
-                        href="https://packagist.org/packages/comphppuebla/dbal-fixtures"
-                        target="_blank"
-                        rel="noopener"
-                        class="code-badge"
-                    >
-                        <img
-                            src="https://poser.pugx.org/comphppuebla/dbal-fixtures/license.svg"
-                            alt="License"
-                        >
-                    </a>
-                    <a
-                        href="https://insight.sensiolabs.com/projects/d876000d-611d-473f-b58c-64582903f7a9"
-                        target="_blank"
-                        rel="noopener"
-                        class="code-badge"
-                    >
-                        <img
-                            src="https://insight.sensiolabs.com/projects/d876000d-611d-473f-b58c-64582903f7a9/mini.png"
-                            alt="SensioLabsInsight"
-                        >
-                    </a>
-                </div>
+                        class="github"
+                >
+                    <i class="devicon-github-plain"></i>
+                </a>
             </div>
         </div>
     </div>
-    <div class="row">
-        <div class="col-sm-6">
-            <div class="panel panel-php">
-                <div class="panel-heading">
-                    <i class="devicon-php-plain"></i>
-                    Easy forms
-                </div>
-                <div class="panel-body">
-                    <p>
-                        Light library to decouple form responsibilities into 3 categories:
-                        validation, rendering and translation.
-                    </p>
-                    <pre><code>composer require comphppuebla/easy-forms</code></pre>
-                </div>
-                <div class="panel-footer">
-                    <a
+    <div class="col-sm-6 col-md-4 col-lg-3 grid-item library php">
+        <div class="panel panel-php">
+            <div class="panel-heading">
+                <i class="devicon-php-plain"></i>
+                Easy forms
+            </div>
+            <div class="panel-body">
+                Light library to decouple form responsibilities into 3 categories:
+                validation, rendering and translation.
+            </div>
+            <div class="panel-footer">
+                <a
+                        href="https://github.com/ComPHPPuebla/easy-forms"
+                        target="_blank"
+                        rel="noopener"
+                        class="github"
+                >
+                    <i class="devicon-github-plain"></i>
+                </a>
+                <a
                         href="https://travis-ci.org/ComPHPPuebla/easy-forms"
                         target="_blank"
                         rel="noopener"
                         class="code-badge"
-                    >
-                        <img
+                >
+                    <img
                             src="https://travis-ci.org/ComPHPPuebla/easy-forms.svg?branch=master"
                             alt="Build Status"
-                        >
-                    </a>
-                    <a
-                        href="https://packagist.org/packages/comphppuebla/easy-forms"
-                        target="_blank"
-                        rel="noopener"
-                        class="code-badge"
                     >
-                        <img
-                            src="https://poser.pugx.org/comphppuebla/easy-forms/license.svg"
-                            alt="License"
-                        >
-                    </a>
-                    <a
+                </a>
+                <a
                         href="https://insight.sensiolabs.com/projects/b21b5fac-a347-4c1a-b9b0-9965a93893ea"
                         target="_blank"
                         rel="noopener"
                         class="code-badge"
-                    >
-                        <img
+                >
+                    <img
                             src="https://insight.sensiolabs.com/projects/b21b5fac-a347-4c1a-b9b0-9965a93893ea/mini.png"
                             alt="SensioLabsInsight"
-                        >
-                    </a>
-                </div>
-            </div>
-        </div>
-        <div class="col-sm-6">
-            <div class="panel panel-docker">
-                <div class="panel-heading">
-                    <i class="devicon-docker-plain"></i>
-                    Docker container with PHP 7
-                </div>
-                <div class="panel-body">
-                    <p>
-                        This is a docker container to easily setup an application on PHP 7. As easy
-                        as copying your code to the <code>sites</code> folder
-                    </p>
-                </div>
-                <div class="panel-footer">
-                    <a
-                        href="https://github.com/MontealegreLuis/php-container"
-                        target="_blank"
-                        rel="noopener"
-                        class="code-badge"
                     >
-                        <img
-                            src="https://img.shields.io/github/license/mashape/apistatus.svg?maxAge=2592000"
-                            alt="license"
-                        >
-                    </a>
-                </div>
+                </a>
             </div>
         </div>
     </div>
-</section>
-<section id="workshops">
-    <h2 class="title">
-        <i class="fa fa-code" aria-hidden="true"></i>
-        Coding workshops
-    </h2>
-    <div class="row">
-        <div class="col-sm-6">
-            <div class="panel panel-php">
-                <div class="panel-heading">
-                    <i class="devicon-php-plain"></i>
-                    Composer workshop
-                </div>
-                <div class="panel-body">
-                    This workshop incrementally builds a simple web framework, adding a PHP library
-                    with Composer on each phase.
-                </div>
-                <div class="panel-footer">
-                    <a
+    <div class="col-sm-6 col-md-4 col-lg-3 grid-item application php">
+        <div class="panel panel-php">
+            <div class="panel-heading">
+                <i class="devicon-laravel-plain"></i>
+                Fitbit OAuth with Laravel
+            </div>
+            <div class="panel-body">
+                Laravel application to demo how to authenticate using the Fitbit API
+            </div>
+            <div class="panel-footer">
+                <a
+                        href="https://github.com/MontealegreLuis/fitbit-example"
+                        target="_blank"
+                        rel="noopener"
+                        class="github"
+                >
+                    <i class="devicon-github-plain"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6 col-md-4 col-lg-3 grid-item library php">
+        <div class="panel panel-php">
+            <div class="panel-heading">
+                <i class="devicon-doctrine-plain"></i>
+                DBAL fixtures
+            </div>
+            <div class="panel-body">
+                This package allows you to define simple data fixture files using YAML and
+                load them using Doctrine DBAL.
+            </div>
+            <div class="panel-footer">
+                <a
+                        href="https://github.com/ComPHPPuebla/dbal-fixtures"
+                        target="_blank"
+                        rel="noopener"
+                        class="code-badge"
+                >
+                    <i class="devicon-github-plain"></i>
+                </a>
+                <a
+                        href="https://travis-ci.org/ComPHPPuebla/dbal-fixtures"
+                        target="_blank"
+                        rel="noopener"
+                        class="code-badge"
+                >
+                    <img
+                            src="https://travis-ci.org/ComPHPPuebla/dbal-fixtures.svg?branch=master"
+                            alt="Build Status"
+                    >
+                </a>
+                <a
+                        href="https://insight.sensiolabs.com/projects/d876000d-611d-473f-b58c-64582903f7a9"
+                        target="_blank"
+                        rel="noopener"
+                        class="code-badge"
+                >
+                    <img
+                            src="https://insight.sensiolabs.com/projects/d876000d-611d-473f-b58c-64582903f7a9/mini.png"
+                            alt="SensioLabsInsight"
+                    >
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6 col-md-4 col-lg-3 grid-item library php">
+        <div class="panel panel-php">
+            <div class="panel-heading">
+                <i class="devicon-php-plain"></i>
+                Slim 2 modules
+            </div>
+            <div class="panel-body">
+                This package introduces Service and Controller providers
+                in order to group your Slim application in a module-like
+                structure similar to Symfony bundles or Zend modules.
+            </div>
+            <div class="panel-footer">
+                <a
+                    href="https://github.com/ComPHPPuebla/slim-modules"
+                    target="_blank"
+                    rel="noopener"
+                    class="github"
+                >
+                    <i class="devicon-github-plain"></i>
+                </a>
+                <a
+                        href="https://travis-ci.org/ComPHPPuebla/slim-modules"
+                        target="_blank"
+                        rel="noopener"
+                        class="code-badge"
+                >
+                    <img
+                            src="https://travis-ci.org/ComPHPPuebla/slim-modules.svg?branch=master"
+                            alt="Build Status"
+                    >
+                </a>
+                <a
+                        href="https://insight.sensiolabs.com/projects/b86318b0-47ce-4d47-a0a4-db6e98dc8451"
+                        target="_blank"
+                        rel="noopener"
+                        class="code-badge"
+                >
+                    <img
+                            src="https://insight.sensiolabs.com/projects/b86318b0-47ce-4d47-a0a4-db6e98dc8451/mini.png"
+                            alt="SensioLabsInsight"
+                    >
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6 col-md-4 col-lg-3 grid-item application java">
+        <div class="panel panel-java">
+            <div class="panel-heading">
+                <i class="devicon-java-plain"></i>
+                Movies with Hibernate
+            </div>
+            <div class="panel-body">
+                Command line application to search movies by category or title. The entities are
+                mapped using XML. It includes several examples of queries with HQL.
+                Tests demonstrate the use of JUnit + Hamcrest and Mockito.
+            </div>
+            <div class="panel-footer">
+                <a
+                    href="https://github.com/MontealegreLuis/hibernate-example"
+                    target="_blank"
+                    rel="noopener"
+                    class="github"
+                >
+                    <i class="devicon-github-plain"></i>
+                </a>
+                <a
+                    href="https://travis-ci.org/MontealegreLuis/hibernate-example"
+                    target="_blank"
+                    rel="noopener"
+                    class="code-badge"
+                >
+                    <img
+                        src="https://travis-ci.org/MontealegreLuis/hibernate-example.svg?branch=master"
+                        alt="Build Status"
+                    >
+                </a>
+                <a
+                    href="https://codebeat.co/projects/github-com-montealegreluis-hibernate-example"
+                    target="_blank"
+                    rel="noopener"
+                    class="code-badge"
+                >
+                    <img
+                        src="https://codebeat.co/badges/df70242a-a3d4-4367-8785-6703e4e243e6"
+                        alt="codebeat badge"
+                    >
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6 col-md-4 col-lg-3 grid-item application java">
+        <div class="panel panel-java">
+            <div class="panel-heading">
+                <i class="devicon-java-plain"></i>
+                Movies with Servlets
+            </div>
+            <div class="panel-body">
+                This is a web application to manage a catalog of movies. It's implemented using
+                servlets, JSP/JSTL & JDBC. Integration tests use HSQLDB
+            </div>
+            <div class="panel-footer">
+                <a
+                    href="https://github.com/MontealegreLuis/hibernate-example"
+                    target="_blank"
+                    rel="noopener"
+                    class="github"
+                >
+                    <i class="devicon-github-plain"></i>
+                </a>
+                <a
+                    href="https://travis-ci.org/MontealegreLuis/movies"
+                    target="_blank"
+                    rel="noopener"
+                    class="code-badge"
+                >
+                    <img
+                        src="https://travis-ci.org/MontealegreLuis/movies.svg?branch=master"
+                        alt="Build Status"
+                    >
+                </a>
+                <a
+                    href="https://codebeat.co/projects/github-com-montealegreluis-movies"
+                    target="_blank"
+                    rel="noopener"
+                    class="code-badge"
+                >
+                    <img
+                        src="https://codebeat.co/badges/9a9920f0-dbf3-4424-a5dc-e7d429870bdc"
+                        alt="codebeat badge"
+                    >
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6 col-md-4 col-lg-3 grid-item application php">
+        <div class="panel panel-php">
+            <div class="panel-heading">
+                <i class="devicon-laravel-plain"></i>
+                Reddit using Laravel
+            </div>
+            <div class="panel-body">
+                This is a Laravel application implementing Reddit's basic functionality.
+                Tests for this application are written in phpspec
+            </div>
+            <div class="panel-footer">
+                <a
+                        href="https://github.com/MontealegreLuis/readit"
+                        target="_blank"
+                        rel="noopener"
+                        class="github"
+                >
+                    <i class="devicon-github-plain"></i>
+                </a>
+                <a
+                        href="https://travis-ci.org/MontealegreLuis/readit"
+                        target="_blank"
+                        rel="noopener"
+                        class="code-badge"
+                >
+                    <img
+                            src="https://travis-ci.org/MontealegreLuis/readit.svg?branch=master"
+                            alt="Build Status"
+                    >
+                </a>
+                <a
+                        href="https://insight.sensiolabs.com/projects/b412e223-6012-472f-ad54-ba81fe85eca4"
+                        target="_blank"
+                        rel="noopener"
+                        class="code-badge"
+                >
+                    <img
+                            src="https://insight.sensiolabs.com/projects/b412e223-6012-472f-ad54-ba81fe85eca4/mini.png"
+                            alt="SensioLabsInsight"
+                    >
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6 col-md-4 col-lg-3 grid-item application javascript">
+        <div class="panel panel-javascript">
+            <div class="panel-heading">
+                <i class="devicon-javascript-plain"></i>
+                Simple Simon game ES6
+            </div>
+            <div class="panel-body">
+                This is an implementation of the Simple Simon Game using TDD. It uses ES6 classes
+                and modules. Tests are written in Jasmine
+            </div>
+            <div class="panel-footer">
+                <a
+                    href="https://github.com/MontealegreLuis/simple-simon"
+                    target="_blank"
+                    rel="noopener"
+                    class="github"
+                >
+                    <i class="devicon-github-plain"></i>
+                </a>
+                <a
+                    href="https://travis-ci.org/MontealegreLuis/simple-simon"
+                    target="_blank"
+                    rel="noopener"
+                    class="code-badge"
+                >
+                    <img
+                        src="https://travis-ci.org/MontealegreLuis/simple-simon.svg?branch=master"
+                        alt="Build Status"
+                    >
+                </a>
+                <a
+                    href="https://codebeat.co/projects/github-com-montealegreluis-simple-simon"
+                    target="_blank"
+                    rel="noopener"
+                    class="code-badge"
+                >
+                    <img
+                        src="https://codebeat.co/badges/fc41b73e-e111-4349-bc44-6eb913087c40"
+                        alt="codebeat badge"
+                    >
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6 col-md-4 col-lg-3 grid-item workshop php">
+        <div class="panel panel-php">
+            <div class="panel-heading">
+                <i class="devicon-php-plain"></i>
+                Composer workshop
+            </div>
+            <div class="panel-body">
+                This workshop incrementally builds a simple web framework, adding a PHP library
+                with Composer on each phase.
+            </div>
+            <div class="panel-footer">
+                <a
                         href="https://github.com/ComPHPPuebla/taller-composer"
                         target="_blank"
                         rel="noopener"
-                        class="code-badge"
-                    >
-                        <img
-                            src="https://img.shields.io/github/license/mashape/apistatus.svg?maxAge=2592000"
-                            alt="license"
-                        >
-                    </a>
-                </div>
+                        class="github"
+                >
+                    <i class="devicon-github-plain"></i>
+                </a>
             </div>
         </div>
-        <div class="col-sm-6">
-            <div class="panel panel-php">
-                <div class="panel-heading">
-                    <i class="devicon-symfony-original"></i>
-                    Symfony 2 workshop
-                </div>
-                <div class="panel-body">
-                    The goal of this workshop is to start using the Symfony2 components in a legacy
-                    application in order to start using the full-stack framework at the end.
-                </div>
-                <div class="panel-footer">
-                    <a
+    </div>
+    <div class="col-sm-6 col-md-4 col-lg-3 grid-item tutorial php">
+        <div class="panel panel-php">
+            <div class="panel-heading">
+                <i class="devicon-php-plain"></i>
+                Slim 2 workshop <small>(spanish)</small>
+            </div>
+            <div class="panel-body">
+                <p>
+                    This is a Slim 2 workshop divided into two videos. It's a small
+                    application to upload, browse and play audio files.
+                </p>
+            </div>
+            <div class="panel-footer">
+                <a
+                        href="https://www.youtube.com/watch?v=P5s8Sydo154"
+                        target="_blank"
+                        rel="noopener"
+                        class="github"
+                >
+                    <i class="fa fa-youtube"></i> 1
+                </a>
+                <a
+                        href="https://www.youtube.com/watch?v=iRDwfnKOKtk"
+                        target="_blank"
+                        rel="noopener"
+                        class="github"
+                >
+                    <i class="fa fa-youtube"></i> 2
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6 col-md-4 col-lg-3 grid-item workshop php">
+        <div class="panel panel-php">
+            <div class="panel-heading">
+                <i class="devicon-symfony-original"></i>
+                Symfony 2 workshop
+            </div>
+            <div class="panel-body">
+                The goal of this workshop is to start using the Symfony2 components in a legacy
+                application in order to start using the full-stack framework at the end.
+            </div>
+            <div class="panel-footer">
+                <a
                         href="https://github.com/ComPHPPuebla/sf2workshop"
                         target="_blank"
                         rel="noopener"
-                        class="code-badge"
+                        class="github"
+                >
+                    <i class="devicon-github-plain"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6 col-md-4 col-lg-3 grid-item tutorial php">
+        <div class="panel panel-php">
+            <div class="panel-heading">
+                <i class="devicon-php-plain"></i>
+                TDD 101 <small>(spanish)</small>
+            </div>
+            <div class="panel-body">
+                <p>
+                    This is a live coding demo, to start doing TDD using PHPUnit. It also
+                    explains the difference between code transformations and refactoring.
+                </p>
+            </div>
+            <div class="panel-footer">
+                <a
+                        href="https://www.youtube.com/watch?v=2GuYLle45bw"
+                        target="_blank"
+                        rel="noopener"
+                        class="github"
+                >
+                    <i class="fa fa-youtube"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6 col-md-4 col-lg-3 grid-item application php">
+        <div class="panel panel-php">
+            <div class="panel-heading">
+                <i class="devicon-php-plain"></i>
+                PHP testing tools
+            </div>
+            <div class="panel-body">
+                Code examples with several PHP testing tools: Behat, phpspec,
+                PHPUnit, Mockery, Alice, Codeception, Eris, Humbug
+            </div>
+            <div class="panel-footer">
+                <a
+                    href="https://github.com/MontealegreLuis/php-testing-tools"
+                    target="_blank"
+                    rel="noopener"
+                    class="github"
+                >
+                    <i class="devicon-github-plain"></i>
+                </a>
+                <a
+                    href="https://travis-ci.org/MontealegreLuis/php-testing-tools"
+                    target="_blank"
+                    rel="noopener"
+                    class="code-badge"
+                >
+                    <img
+                        src="https://travis-ci.org/MontealegreLuis/php-testing-tools.svg?branch=master"
+                        alt="Build Status"
                     >
-                        <img
-                            src="https://img.shields.io/github/license/mashape/apistatus.svg?maxAge=2592000"
-                            alt="license"
-                        >
-                    </a>
-                </div>
+                </a>
+                <a
+                    href="https://codeclimate.com/github/MontealegreLuis/php-testing-tools"
+                    target="_blank"
+                    rel="noopener"
+                    class="code-badge"
+                >
+                    <img
+                        src="https://codeclimate.com/github/MontealegreLuis/php-testing-tools/badges/gpa.svg"
+                        alt="Code Climate"
+                    >
+                </a>
             </div>
         </div>
     </div>
-</section>
-<section id="video">
-    <h2 class="title">
-        <i class="fa fa-video-camera" aria-hidden="true"></i>
-        Video tutorials
-    </h2>
-    <div class="row">
-        <div class="col-sm-6">
-            <div class="panel panel-php">
-                <div class="panel-heading">
-                    <i class="devicon-php-plain"></i>
-                    TDD 101 <small>(spanish)</small>
-                </div>
-                <div class="panel-body">
-                    <div class="media">
-                        <div class="media-left">
-                            <a
-                                href="https://www.youtube.com/watch?v=2GuYLle45bw"
-                                target="_blank"
-                                rel="noopener"
-                                class="code-badge"
-                            >
-                                <img
-                                    src="http://i3.ytimg.com/vi/2GuYLle45bw/2.jpg"
-                                    alt="TDD 101"
-                                >
-                            </a>
-                        </div>
-                        <div class="media-body">
-                            This is a live coding demo, to start doing TDD using PHPUnit. It also
-                            explains the difference between code transformations and refactoring.
-                        </div>
-                    </div>
-                </div>
+    <div class="col-sm-6 col-md-4 col-lg-3 grid-item tutorial php">
+        <div class="panel panel-php">
+            <div class="panel-heading">
+                <i class="devicon-php-plain"></i>
+                PHP testing tools <small>(spanish)</small>
             </div>
-        </div>
-        <div class="col-sm-6">
-            <div class="panel panel-php">
-                <div class="panel-heading">
-                    <i class="devicon-php-plain"></i>
-                    An overview of testing libraries in PHP <small>(spanish)</small>
-                </div>
-                <div class="panel-body">
-                    <div class="media">
-                        <div class="media-left">
-                            <a
-                                href="https://www.youtube.com/watch?v=6IH2Un35pb0"
-                                target="_blank"
-                                rel="noopener"
-                                class="code-badge"
-                            >
-                                <img
-                                    src="http://i3.ytimg.com/vi/6IH2Un35pb0/2.jpg"
-                                    alt="Testing in PHP"
-                                >
-                            </a>
-                        </div>
-                        <div class="media-body">
-                            This is an introduction to testing in PHP using several libraries:
-                            Behat, phpspec, PHPUnit, Mockery, Alice, Codeception, Eris, and Humbug.
-                        </div>
-                    </div>
-                </div>
+            <div class="panel-body">
+                This is an introduction to testing in PHP using several libraries:
+                Behat, phpspec, PHPUnit, Mockery, Alice, Codeception, Eris, and Humbug.
             </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-sm-12">
-            <div class="panel panel-php">
-                <div class="panel-heading">
-                    <i class="devicon-php-plain"></i>
-                    Slim 2 workshop <small>(spanish)</small>
-                </div>
-                <div class="panel-body">
-                    <div class="media">
-                        <div class="media-left">
-                            <a
-                                href="https://www.youtube.com/watch?v=P5s8Sydo154"
-                                target="_blank"
-                                rel="noopener"
-                                class="code-badge"
-                            >
-                                <img
-                                    src="http://i3.ytimg.com/vi/P5s8Sydo154/2.jpg"
-                                    alt="Part 1"
-                                >
-                            </a>
-                        </div>
-                        <div class="media-body">
-                            This is a Slim 2 workshop divided into two videos. It's a small
-                            application to upload, browse and play audio files.
-                        </div>
-                        <div class="media-right">
-                            <a
-                                href="https://www.youtube.com/watch?v=iRDwfnKOKtk"
-                                target="_blank"
-                                rel="noopener"
-                                class="code-badge"
-                            >
-                                <img
-                                    src="http://i3.ytimg.com/vi/iRDwfnKOKtk/2.jpg"
-                                    alt="Part 2"
-                               >
-                            </a>
-                        </div>
-                    </div>
-                </div>
+            <div class="panel-footer">
+                <a
+                        href="https://www.youtube.com/watch?v=6IH2Un35pb0"
+                        target="_blank"
+                        rel="noopener"
+                        class="github"
+                >
+                    <i class="fa fa-youtube"></i>
+                </a>
             </div>
         </div>
     </div>
