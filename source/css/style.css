@@ -94,11 +94,6 @@ h2 {
     background-color: #D8D9DA;
 }
 
-.portfolio .panel-body {
-    min-height: 235px;
-    overflow: auto;
-}
-
 figcaption {
     margin-top: 1em;
     margin-bottom: 1em;
@@ -171,6 +166,20 @@ a, a:hover {
     text-decoration: none !important;
     height: .5em;
     display: inline-block;
+}
+
+@media screen and (min-width: 768px) {
+    .portfolio .panel-body {
+        min-height: 180px;
+        overflow: auto;
+    }
+}
+
+@media screen and (min-width: 992px) {
+    .portfolio .panel-body {
+        min-height: 220px;
+        overflow: auto;
+    }
 }
 
 .code-badge img {
