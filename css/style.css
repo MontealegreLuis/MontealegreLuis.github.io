@@ -107,7 +107,6 @@ a, a:hover {
     color: #00a79d;
 }
 
-
 .panel-primary {
     border-color: #00a79d;
 }
@@ -152,6 +151,13 @@ a, a:hover {
     color: #fff;
 }
 
+.panel-ruby > .panel-footer,
+.panel-ruby > .panel-heading {
+    background-color: #EB5745;
+    border-color: #EB5745;
+    color: #fff;
+}
+
 .github,
 .bitbucket {
     text-decoration: none !important;
@@ -188,7 +194,8 @@ a, a:hover {
 
 .panel-php > .panel-footer i,
 .panel-java > .panel-footer i,
-.panel-docker > .panel-footer i {
+.panel-docker > .panel-footer i,
+.panel-ruby > .panel-footer i {
     color: #fff;
 }
 
