@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html>
+<head lang="es-mx">
+    <title>Testing con Jasmine &mdash; Your argument is invalid &mdash; Luis Montealegre</title>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link
+    href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+    rel="stylesheet"
+    integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN"
+    crossorigin="anonymous"
+>
+<link
+    rel="stylesheet"
+    href="http://netdna.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+>
+<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+<!--[if lt IE 9]>
+<script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+<![endif]-->
+<link rel="stylesheet" href="/css/style.css" />
+<link href="/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+<link href="/favicon.ico" rel="icon" type="image/x-icon" />
+<link rel="alternate" type="application/atom+xml" href="/atom.xml" title="Your argument is invalid activity feed" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/styles/default.min.css" />
+</head>
+<body>
+    <header class="navigation">
+        <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Navegación</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="/" title="Your argument is invalid">
+                    <span class="glyphicon glyphicon-home"></span>
+                </a>
+            </div>
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                    <li><a href="/cv/">Curriculum</a></li>
+                    <li><a href="/portfolio/">Portafolio</a></li>
+                    <li><a href="/blog/">Blog</a></li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/cv-latest.pdf" title="Descargar CV">
+                            <img height="25px" src="/images/download.png" alt="Descargar CV">
+                        </a>
+                    </li>
+                    <li><a href="/">
+                        <span class="language language-current">MX</span>
+                    </a></li>
+                    <li><a href="/en/">
+                        <span class="language">US</span>
+                    </a></li>
+                    <li>
+                        <a href="/atom.xml" class="link-icon">
+                            <img src="/images/rss.png" alt="RSS">
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+    </header>
+
+    <div class="content container">
+        <div class="row">
+            <div class="col-sm-9">
+                    <article>
+        <header>
+            <h1 class="title">Testing con Jasmine</h1>
+            <p>
+                <span class="glyphicon glyphicon-time"></span>
+                noviembre 16 2014&nbsp;
+                <span class="glyphicon glyphicon-bookmark"></span>
+                <a href="/blog/categorias/JavaScript/">
+                    JavaScript
+                </a>&nbsp;
+                <span class="glyphicon glyphicon-tags"></span>&nbsp;
+                                    <a href="/blog/tags/Testing/">
+                        Testing
+                    </a>,                                     <a href="/blog/tags/Jasmine/">
+                        Jasmine
+                    </a>,                                     <a href="/blog/tags/jQuery/">
+                        jQuery
+                    </a>,                                     <a href="/blog/tags/RequireJS/">
+                        RequireJS
+                    </a>                            </p>
+        </header>
+        <div>
+            <p>Recientemente encontré un <a href="https://shanetomlinson.com/2013/testing-javascript-frontend-part-1-anti-patterns-and-fixes/">artículo</a> que trataba sobre como separar el código JavaScript de modo que podamos hacer
+pruebas unitarias a código que involucre la manipulación de <a href="http://es.wikipedia.org/wiki/Document_Object_Model">DOM</a> y solicitudes <a href="http://es.wikipedia.org/wiki/XMLHttpRequest">XHR</a>. Me di cuenta de lo poco que
+se sobre testing y código desacoplado en JavaScript y me decidí a escribir un ejemplo.</p>
+
+<p>El ejemplo trata de los clásicos <code>selects</code> encadenados, donde al seleccionar un valor del primer <code>select</code> se
+actualizan los valores del segundo, usando la típica relación estados-ciudades.</p>
+
+<p>El código que generalmente escribimos para tener este comportamiento es más o menos así:</p>
+
+<pre><code class="html">&lt;form role="form"&gt;
+    &lt;!-- ... --&gt;
+&lt;/form&gt;
+&lt;script&gt;
+    $('#states').on('change', function() {
+        var optionTemplate = '&lt;option value="{value}"&gt;{label}&lt;/option&gt;';
+        var options='', i, citiesCount;
+
+        $.ajax({
+            url: '/app/cities.json',
+            dataType: 'json',
+            data: {'state': $(this).val()},
+            success: function(cities) {
+                citiesCount = cities.length
+                for (i = 0; i &lt; citiesCount; i++) {
+                    options += optionTemplate
+                        .replace('{value}', cities[i].value)
+                        .replace('{label}', cities[i].label);
+                }
+                $('#cities').html(options);
+            }
+        });
+    });
+&lt;/script&gt;
+</code></pre>
+
+<p>Para simplificar el ejemplo, <code>/app/cities.json</code> es un archivo con extensión <code>.json</code> que tiene un contenido similar al
+siguiente.</p>
+
+<pre><code class="json">[
+    // ..
+    {
+        "value": "114",
+        "label": "Puebla"
+    },
+    // ..
+    {
+        "value": "207",
+        "label": "Zacapoaxtla"
+    }
+]
+</code></pre>
+
+<h2 id="problemas">Problemas</h2>
+
+<p>Este código si bien no es difícil de entender, resulta muy difícil de testear. El primero de los problemas
+que encontramos es que el código JavaScript está dentro del HTML y resulta imposible testearlo por separado. Segundo
+aunque estuviera en un archivo separado no cuenta con una interfaz pública que podamos validar a través de pruebas.
+Un punto más en contra es que tampoco es posible hacer pruebas a las funciones anónimas que utiliza. Además el uso de
+manejadores de eventos que actualizan el DOM es una muestra de la mezcla de responsabilidades dentro del código.
+Para terminar, el uso de solicitudes XHR sin un mecanismo que nos permita saber cuando terminaron su ejecución,
+complica aún más las cosas.</p>
+
+<h2 id="separando-responsabilidades">Separando responsabilidades</h2>
+
+<p>Podemos comenzar reemplazando el código que genera HTML concatenando cadenas, por una librería de plantillas que genere
+los elementos <code>option</code> de nuestro select. Para nuestro ejemplo usaremos <a href="https://github.com/justjohn/twig.js/">Twig.js</a> que es una implementación en
+JavaScript de <a href="http://twig.sensiolabs.org/">Twig</a>.</p>
+
+<p>Para generar los elementos <code>option</code> con Twig usamos una plantilla que itera sobre los resultados que nos devuelve
+nuestra llamada AJAX generando nuestros elementos <code>option</code>.</p>
+
+<pre><code class="twig">{% for city in cities %}
+    &lt;option value="{{ city.value }}"&gt;{{ city.label }}&lt;/option&gt;
+{% endfor %}
+</code></pre>
+
+<p>Para poder usar la plantilla debemos cargarla primero.</p>
+
+<pre><code class="javascript">twig({href: '/js/app/templates/cities.html.twig', id: 'cities', async: false});
+twig({ref: 'cities'}).render({cities: cities});
+</code></pre>
+
+<p>Así nuestra llamada AJAX quedaría de la siguiente forma:</p>
+
+<pre><code class="javascript">$.ajax({
+    url: '/app/cities.json',
+    dataType: 'json',
+    data: {'state': $(this).val()},
+    success: function(cities) {
+        twig({href: '/js/app/templates/cities.html.twig', id: 'cities', async: false});
+        $('#cities').html(twig({ref: 'cities'}).render({cities: cities}));
+    }
+});
+</code></pre>
+
+<p>El siguiente paso es convertir la función anónima que se ejecuta al finalizar la solicuitud AJAX (<code>success</code>) en un
+<a href="http://addyosmani.com/resources/essentialjsdesignpatterns/book/#modulepatternjavascript">módulo</a>. Con esto comenzaremos a dar una interfaz pública a nuestro código para poder testearlo por separado.</p>
+
+<pre><code class="javascript">var ShippingForm = function($city, view) {
+    'use strict';
+
+    this.refreshOptions = function(cities) {
+        $city.html(view({ref: 'cities'}).render({cities: cities}));
+    };
+
+    return this;
+};
+</code></pre>
+
+<p>Así en lugar de usar una función anónima podemos usar <code>ShippingForm.refreshOptions</code> como <a href="http://javascriptissexy.com/understand-javascript-callback-functions-and-use-them/">callback</a>.</p>
+
+<pre><code class="javascript">var form = new ShippingForm($('#cities'), twig);
+
+$.ajax({
+    url: '/app/cities.json',
+    dataType: 'json',
+    data: {'state': $(this).val()},
+    success: form.refreshOptions
+});
+</code></pre>
+
+<p>La lógica relacionada con el evento <code>change</code> de nuestro <code>select</code> de estados también es una función anónima que podemos
+mover dentro de nuestro módulo (<code>ShippingForm.getCities</code>).</p>
+
+<pre><code class="javascript">var ShippingForm = function($city, view, $state, $, citiesUrl, refreshOptions) {
+    'use strict';
+
+    var form = this;
+
+    //...
+
+    this.getCities = function() {
+        var stateId = $state.val();
+
+        if (!stateId) {
+            return;
+        }
+
+        refreshOptions = refreshOptions || form.refreshOptions;
+
+        $.ajax({
+            url: citiesUrl,
+            dataType: 'json',
+            data: {'state': stateId},
+            success: refreshOptions
+        });
+    };
+};
+</code></pre>
+
+<p>De nuevo reemplazamos la función anónima con el método <code>getCities</code> de nuestro módulo.</p>
+
+<pre><code class="javascript">var form = new ShippingForm($('#cities'), twig, $('#states'), $, '/app/cities.json');
+
+$('#states').on('change', form.getCities);
+</code></pre>
+
+<p>Por útlimo podemos encapsular la asociación del evento <code>change</code> con el método <code>getCities</code> dentro de nuestro módulo, lo
+cuál nos dará oportunidad de testear todo el código que teníamos al inicio. Es importante mencionar que estamos
+<a href="http://es.wikipedia.org/wiki/Inyecci%C3%B3n_de_dependencias">inyectando</a> todas nuestras dependencias (DOM y solictudes XHR) a fin de poder reemplazarlas por <a href="http://en.wikipedia.org/wiki/Test_double">dobles</a>
+en nuestras pruebas.</p>
+
+<pre><code class="javascript">var ShippingForm = function($city, view, $state, $, refreshOptions) {
+    //...
+};
+
+var form = new ShippingForm($('#cities'), twig, $('#states'), $);
+
+form.init();
+</code></pre>
+
+<p>Nuestro siguiente paso es mover nuestro módulo a un archivo separado. Para esto utilizaré <a href="http://requirejs.org/">RequireJS</a> que es un
+<code>loader</code> de módulos y archivos, optimizado para trabajar en navegadores. RequireJS utiliza un solo archivo como punto
+de entrada para nuestra aplicación, al cual generalmente se le nombra <code>main.js</code>.</p>
+
+<pre><code class="html">&lt;script data-main="js/app/main" src="js/vendor/requirejs/require.js"&gt;&lt;/script&gt;
+</code></pre>
+
+<p>El archivo <code>main.js</code> se usa para configurar las dependencias iniciales de nuestra aplicación, en nuestro caso
+jQuery y Twig. También es el encargado de iniciar nuestra aplicación a través de un módulo escrito por nosotros llamado
+<code>app</code>.</p>
+
+<pre><code class="javascript">require.config({
+    paths: {
+        'jquery': '../vendor/jquery/dist/jquery',
+        'twig': '../vendor/twig.js/twig.min'
+    },
+    baseUrl: '/js/app'
+});
+
+require(['./app'], function(app) {
+    app.init();
+});
+</code></pre>
+
+<p>El módulo <code>app</code> hace la carga inicial de dependencias, incluidos nuestros módulos (<code>ShippingForm</code>).</p>
+
+<pre><code class="javascript">define(['twig', 'jquery', './src/ShippingForm'], function (view, $, ShippingForm) {
+    'use strict';
+
+    var app = {};
+
+    app.init = function() {
+        var form;
+
+        view.twig({
+            href: '/js/app/templates/cities.html.twig',
+            async: false,
+            id: 'cities'
+        });
+
+        form = new ShippingForm($, $('#states'), $('#cities'), view, '/app/cities.json');
+        form.init();
+    };
+
+    return app;
+});
+</code></pre>
+
+<h2 id="escribiendo-los-tests">Escribiendo los tests</h2>
+
+<p>Para las pruebas usaré <a href="http://jasmine.github.io/">Jasmine</a> que es un framework para testing del tipo <a href="http://en.wikipedia.org/wiki/Behavior-driven_development">BDD</a> que se destaca por tener una
+sintaxis muy fácil de entender. Jasmine utiliza suites, que son un conjunto de casos de pruebas llamados specs.</p>
+
+<p>Usaremos <a href="https://www.npmjs.org/">npm</a> para instalar las dependencias. <code>npm</code> utiliza el archivo <code>package.json</code> para determinar cuales son
+las dependencias a instalar.</p>
+
+<pre><code class="json">{
+  "name": "@montealegreluis/testing",
+  "license": "MIT",
+  "devDependencies": {
+    "jasmine-node": "~1.14",
+    "requirejs": "~2.1"
+  },
+  "scripts": {
+    "test": "node ./specs-runner.js"
+  }
+}
+</code></pre>
+
+<p>Una vez definidas nuestras dependencias (Jasmine y RequireJS), las instalamos.</p>
+
+<pre><code class="bash">$ npm install
+</code></pre>
+
+<p>Para poder ejecutar nuestras pruebas, necesitamos configurar Jasmine y RequireJS para que funcionen de manera similar a
+como funcionan en un navegador, para esto necesitamos un <a href="https://github.com/MontealegreLuis/jstesting/blob/master/specs-runner.js">runner</a> especial, el cual está basado en la configuración
+de este repo de <a href="https://github.com/rjz/jasmine-require-coffee-backbone-node">Zaworski</a>.</p>
+
+<p>Con este archivo (el cuál se configura en la llave <code>scripts</code> del archivo <code>package.json</code>) podemos ya ejecutar nuestros
+tests desde la consola usando <code>npm</code></p>
+
+<pre><code class="bash">$ npm test
+</code></pre>
+
+<p>Nuestra suite verifica los métodos del módulo <code>ShippingForm</code>. Para esto debemos crear el archivo
+<code>js/app/spec/ShippingForm.spec.js</code>. Nuestro primer spec verifica que se inicialice correctamente el evento <code>change</code>
+de nuestro <code>select</code> de estados. Para esto creamos un doble del tipo <a href="http://xunitpatterns.com/Test%20Spy.html">spy</a> para nuestro elemento <code>$state</code> que
+verifica que se llame al método <code>on</code> con los parámetros correctos.</p>
+
+<pre><code class="javascript">define(['src/ShippingForm'], function(ShippingForm) {
+    'use strict';
+
+    describe('ShippingForm', function () {
+        it('should initialize onchange event', function () {
+            var $state = jasmine.createSpyObj('state', ['on']);
+            var form = new ShippingForm({}, $state);
+
+            form.init();
+
+            expect($state.on).toHaveBeenCalledWith('change', form.getCities);
+        });
+    });
+});
+</code></pre>
+
+<p>Nuestro segundo spec verifica que si el valor del elemento seleccionado en nuestro <code>select</code> es vacío, la llamada AJAX
+no se ejecute. En esta ocasión se crea un <a href="http://xunitpatterns.com/Test%20Stub.html">stub</a> para <code>$state</code> que nos devuelva una cadena vacía, que nos permita
+ verificar en el spy para <code>$</code> que el método <code>ajax</code> no se llamó.</p>
+
+<pre><code class="javascript">it('should skip getting the cities if there is no current state selected', function () {
+    var $state = {
+        val: function() {}
+    };
+    var $ = jasmine.createSpyObj('$', ['ajax']);
+    var form = new ShippingForm($, $state);
+
+    spyOn($state, 'val').andReturn('');
+
+    form.getCities();
+
+    expect($state.val).toHaveBeenCalled();
+    expect($.ajax).not.toHaveBeenCalled();
+});
+</code></pre>
+
+<p>Nuestro siguiente spec verifica que si se selecciona un valor no vacío en el <code>select</code> de estado, se realice la llamada
+AJAX que devuelva las ciudades. Para esto creamos un spy de la función <code>refreshOptions</code> para verificar que se llame al
+callback de éxito al terminar la solicitud AJAX, también necesitamos un stub de <code>$state</code> para que devuelva un valor no
+vacío y que el spy de <code>$</code> ejecute el método <code>ajax</code>.</p>
+
+<pre><code class="javascript">it('should get the cities when a state is selected', function () {
+    var $state = {
+        val: function() {}
+    };
+    var $ = {
+        ajax: function(options) {
+            options.success.call();
+        }
+    };
+    var refreshOptions = jasmine.createSpy('refreshOptions');
+    var form = new ShippingForm($, $state, {}, {}, '/app/cities.json', refreshOptions);
+
+    spyOn($state, 'val').andReturn('21');
+    spyOn($, 'ajax').andCallThrough();
+
+    form.getCities();
+
+    expect($state.val).toHaveBeenCalled();
+    expect($.ajax).toHaveBeenCalled();
+    expect(refreshOptions).toHaveBeenCalled();
+});
+</code></pre>
+
+<p>Por último verificamos que el método <code>refreshOptions</code> de nuestro módulo funcione correctamente. Para esto creamos un spy
+de <code>twig</code> y un spy de <code>$city</code> para verificar las llamadas a los métodos <code>render</code> y <code>html</code> respectivamente.</p>
+
+<pre><code class="javascript">it('should refresh the cities options', function () {
+    var $city = jasmine.createSpyObj('city', ['html']);
+    var view = {
+        twig: function() {
+            return {
+                render: function() {}
+            };
+        }
+    }
+    var form = new ShippingForm({}, {}, $city, view, '/app/cities.json');
+
+    spyOn(view, 'twig').andCallThrough();
+
+    form.refreshOptions([{value: 12, label: 'Puebla'}]);
+
+    expect($city.html).toHaveBeenCalled();
+    expect(view.twig).toHaveBeenCalled();
+});
+</code></pre>
+
+<p>Espero que este post te sea de utilidad para realizar testing a código JavaScript. Si tienes algun comentario lo
+agradeceré mucho. Puedes revisar el código completo en este repo en <a href="https://github.com/MontealegreLuis/jstesting">Github</a>. Si al probar el código algo no
+funciona y necesitas ayuda por favor deja tu pregunta <a href="http://preguntas.hfpuebla.org/">aquí</a> así más gente puede ayudarte y más se beneficiarán
+con la respuesta.</p>
+
+        </div>
+
+                    <nav>
+                <ul class="pagination">
+                                                            <li>
+                        <a href="/blog/2014/11/23/aplicaciones-desacopladas-con-flight-js/" title="Aplicaciones desacopladas con Flight JS">
+                            <span class="glyphicon glyphicon-arrow-right"></span>&nbsp;
+                            Aplicaciones desacopladas con Flight JS
+                        </a>
+                    </li>
+                                    </ul>
+            </nav>
+            </article>
+                <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'montealegreluis';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>
+    Please enable JavaScript to view the
+    <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+</noscript>
+            </div>
+            <div class="col-sm-3 sidebar">
+                <div class="panel panel-default">
+    <div class="panel-heading"><h3 class="panel-title">Categorías</h3></div>
+    <div class="list-group">
+                    <a href="/blog/categorias/PHP/" class="list-group-item">
+                PHP
+            </a>
+                    <a href="/blog/categorias/JavaScript/" class="list-group-item">
+                JavaScript
+            </a>
+            </div>
+</div>
+<div class="panel panel-default">
+    <div class="panel-heading"><h4 class="panel-title">Sitios de interés</h4></div>
+    <div class="list-group">
+        <a href="http://www.comunidadphppuebla.com/" target="_blank" class="list-group-item">
+            Comunidad PHP Puebla
+        </a>
+        <a href="http://www.hfpuebla.org/" target="_blank" class="list-group-item">
+            Hackers & Founders
+        </a>
+        <a href="http://www.montealegreluis.com/logica-programacion/" target="_blank" class="list-group-item">
+            Notas de Programación
+        </a>
+        <a href="http://scala.org.mx/" target="_blank" class="list-group-item">
+            Scala MX
+        </a>
+        <ul class="list-group-item list-unstyled">
+            <li>
+                <a href="http://scala.org.mx/news/2015/01/29/funciones-scala/" target="_blank">
+                    Funciones en Scala
+                </a>
+            </li>
+        </ul>
+        <a href="http://www.drupodcast.com/" class="list-group-item" target="_blank">
+            Drupodcast
+        </a>
+        <ul class="list-group-item list-unstyled">
+            <li>
+                <a href="http://www.drupodcast.com/podcast/drupodcast-s03-e09-con-luis-montealegre" target="_blank">
+                    Temporada 3, Episodio 9
+                </a>
+            </li>
+        </ul>
+        <a href="http://html5facil.com/" class="list-group-item" target="_blank">
+            HTML5 Fácil
+        </a>
+    </div>
+</div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+    2014 - 2017 Luis Montealegre
+    <p  class="pull-right">
+        <a href="http://creativecommons.org/licenses/by-nc/2.5/">
+            <img src="/images/cc.primary.srr.gif" alt="Algunos derechos reservados">
+        </a>
+    </p>
+</div>
+    </footer>
+
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+<script src="http://netdna.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js">
+</script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+    <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-56875620-1', 'auto');
+    ga('send', 'pageview');
+</script>
+    <script type="text/javascript">
+    var disqus_shortname = 'montealegreluis';
+
+    (function () {
+        var s = document.createElement('script'); s.async = true;
+        s.type = 'text/javascript';
+        s.src = 'https://' + disqus_shortname + '.disqus.com/count.js';
+        (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+    }());
+</script></body>
+</html>
