@@ -3,7 +3,7 @@
     <title><![CDATA[Your argument is invalid]]></title>
     <link href="http://www.montealegreluis.com/atom.xml" rel="self"/>
     <link href="http://www.montealegreluis.com/"/>
-    <updated>2018-01-02T02:29:29+00:00</updated>
+    <updated>2018-02-23T04:22:54+00:00</updated>
     <id>http://www.montealegreluis.com/</id>
             <author>
             <name><![CDATA[Luis Montealegre]]></name>            <email><![CDATA[montealegreluis@gmail.com]]></email>        </author>
@@ -24,7 +24,7 @@ crear un nuevo elemento de tipo <strong>moneda</strong>. Para esto realizaremos 
 <li>Plantilla para mostrar nuestro elemento moneda</li>
 </ul>
 
-<h2 id="creaci%C3%B3n-de-elemento-moneda">Creación de elemento moneda</h2>
+<h2 id="creaci%E3%B3n-de-elemento-moneda">Creación de elemento moneda</h2>
 
 <blockquote>
   <p>"If I had a dime for every time I've seen someone use FLOAT to store currency, I'd have $999.997634" -- <a href="https://twitter.com/billkarwin/status/347561901460447232">Bill Karwin</a></p>
@@ -592,7 +592,7 @@ tus aplicaciones Slim de forma similar a como lo harías con módulos. Para esto
 el ejemplo que he venido usando en post anteriores sobre una aplicación de catálago
 de productos.</p>
 
-<h2 id="estructurando-el-m%C3%B3dulo">Estructurando el Módulo</h2>
+<h2 id="estructurando-el-m%E3%B3dulo">Estructurando el Módulo</h2>
 
 <p>Supongamos que tienes una estructura de directorios similar a la siguiente para tu
 proyecto.</p>
@@ -615,7 +615,7 @@ proyecto.</p>
 <p>Y que queremos integrar de la forma más simple posible ese código con nuestra aplicación
 Slim.</p>
 
-<h2 id="instalaci%C3%B3n">Instalación</h2>
+<h2 id="instalaci%E3%B3n">Instalación</h2>
 
 <p>Primero instalamos el paquete con Composer.</p>
 
@@ -671,7 +671,7 @@ $twigProvider-&gt;register($app);
 $app-&gt;run();
 </code></pre>
 
-<h2 id="registrando-m%C3%B3dulos">Registrando módulos</h2>
+<h2 id="registrando-m%E3%B3dulos">Registrando módulos</h2>
 
 <p>La implementación para los servicios de un módulo es similar, solo que registraríamos
 controladores, repositorios, servicios de aplicación, formularios, etc. Por ejemplo:</p>
@@ -1111,7 +1111,7 @@ $loginForm-&gt;setErrorMessages($errors);
 // Render the form however you want...
 </code></pre>
 
-<h2 id="validaci%C3%B3n">Validación</h2>
+<h2 id="validaci%E3%B3n">Validación</h2>
 
 <p>Ya vimos que el formulario no necesita saber de un componente de validación, sin embargo el paquete
 proporciona una interfaz <code>EasyForms\Validation\FormValidator</code> que puedes usar para integrar cualquier
@@ -1186,7 +1186,7 @@ $validator-&gt;validate($form = new LoginForm());
 // Render the form however you want... Error messages will be set, if any
 </code></pre>
 
-<h2 id="integraci%C3%B3n-con-twig">Integración con Twig</h2>
+<h2 id="integraci%E3%B3n-con-twig">Integración con Twig</h2>
 
 <p>Como ya explicamos, el formulario puede usar cualquier mecanismo de validación, lo mismo sucede
 para la capa de presentación el formulario no necesita saber que apariencia tendrá.</p>
@@ -1519,7 +1519,7 @@ plantillas al tema, ya que este elemento es un <code>hidden</code> común en nue
 {{ form_end() }}
 </code></pre>
 
-<h2 id="modificaci%C3%B3n-din%C3%A1mica-de-un-formulario">Modificación dinámica de un formulario</h2>
+<h2 id="modificaci%E3%B3n-din%E3%A1mica-de-un-formulario">Modificación dinámica de un formulario</h2>
 
 <p>Al trabajar con formularios es común que llenemos sus valores con información de nuestra base
 de datos, o que agreguemos opciones a los <code>select</code> con los datos de una tabla, y que eso se
@@ -1737,7 +1737,7 @@ aceptación que podemos escribir con un framework de pruebas como <a href="http:
 <li>Escribir una prueba de aceptación para nuestra aplicación de muestra</li>
 </ul>
 
-<h2 id="configuraci%C3%B3n-de-codeception">Configuración de Codeception</h2>
+<h2 id="configuraci%E3%B3n-de-codeception">Configuración de Codeception</h2>
 
 <p>Codeception es un framework de pruebas para PHP cuyo objetivo es crear tests legibles que describan acciones desde la
 perspectiva del usuario.</p>
@@ -1789,7 +1789,7 @@ relacionados con ese tipo de pruebas.</p>
 └── unit.suite.yml
 </code></pre>
 
-<h3 id="algunos-conceptos-b%C3%A1sicos">Algunos conceptos básicos</h3>
+<h3 id="algunos-conceptos-b%E3%A1sicos">Algunos conceptos básicos</h3>
 
 <h4 id="actores">Actores</h4>
 
@@ -1853,7 +1853,7 @@ argumento un objeto actor y un escenario como segundo argumento.</p>
 <p>Los métoodos <code>_before</code> y <code>_after</code> son los equivalentes del <code>setUp</code> y <code>tearDown</code> en PHPUnit y se ejecutan antes y después
 de cada test respectivamente.</p>
 
-<h3 id="configuraci%C3%B3n-de-la-suite">Configuración de la suite</h3>
+<h3 id="configuraci%E3%B3n-de-la-suite">Configuración de la suite</h3>
 
 <p>Para nuestras pruebas usaremos el navegador headless de PhantomJS en el modo ghostdriver, para lo cual debemos modificar
 el archivo de configuración.</p>
@@ -2115,7 +2115,7 @@ class ShoppingCartCest
 }
 </code></pre>
 
-<h3 id="%C2%BFy-los-fixtures%3F">¿Y los fixtures?</h3>
+<h3 id="%E2%BFy-los-fixtures%3F">¿Y los fixtures?</h3>
 
 <p>Por último debemos generar el archivo <code>.yml</code> con los datos de prueba. Lo primero que necesita nuestro archivo es el nombre
 de la clase, cada entrada después del nombre de la clase representa un objeto de esa clase. Debemos colocarles un nombre
@@ -2213,7 +2213,7 @@ public function loadFixture($fixture, $persister, $providers = [])
 
 <p><img src="/images/content/datos-con-proveedor-de-faker.png" class="img-responsive img-thumbnail center-block" alt="Datos de proveedor de Faker"></p>
 
-<h2 id="las-pruebas-de-aceptaci%C3%B3n-por-fin...">Las pruebas de aceptación (por fin...)</h2>
+<h2 id="las-pruebas-de-aceptaci%E3%B3n-por-fin...">Las pruebas de aceptación (por fin...)</h2>
 
 <p>El objetivo de las pruebas es que describan las acciones como si fueran realizadas por un usuario de la aplicación. Para
 ese fin codeception nos proporciona algunos métodos para describir el objetivo de cada prueba similar al formato
@@ -2770,13 +2770,13 @@ del paquete (nombre y versión) y una URL de descarga (generalmente a un archivo
 <p>Si quieres aprender como funciona Composer revisa esta <a href="http://www.slideshare.net/rdohms/composer-for-busy-developers-phptek13">presentación de Rafael Dohms</a>. Ahora, si tu interés es
 aprender a construir paquetes para PHP te recomiendo mucho este <a href="https://leanpub.com/principles-of-php-package-design">libro de Matthias Noback</a>.</p>
 
-<h2 id="%C2%BFqu%C3%A9-es-satis%3F">¿Qué es Satis?</h2>
+<h2 id="%E2%BFqu%E3%A9-es-satis%3F">¿Qué es Satis?</h2>
 
 <p>Satis es un generador estático de repositorios del tipo <code>composer</code>, es de <a href="https://github.com/composer/satis">código abierto</a> y básicamente te permite tener
 una versión privada minimalista de Packagist. Es este post explicaré como instalar y configurar un repositorio de Satis
 con acceso SSH.</p>
 
-<h2 id="instalaci%C3%B3n">Instalación</h2>
+<h2 id="instalaci%E3%B3n">Instalación</h2>
 
 <p>Primero tienes que instalar Composer en el servidor donde quieres alojar tu repositorio de Satis. Supongamos que yo lo
 quiero alojar en <code>http://packages.montealegreluis.com</code>. Primero debo instalar Composer de forma global.</p>
@@ -2939,7 +2939,7 @@ con productos y una tabla donde se mostrarán los productos que vamos agregando,
 
 <p><img src="/images/content/flight-demo-page.png" class="img-responsive img-thumbnail" alt="Interfaz de carro de compras"></p>
 
-<h3 id="primero-los-m%C3%B3dulos">Primero los módulos</h3>
+<h3 id="primero-los-m%E3%B3dulos">Primero los módulos</h3>
 
 <p>Antes de iniciar con los componentes, pensemos en los <a href="http://eloquentjavascript.net/10_modules.html">módulos</a> que conforman nuestra aplicación. Necesitaremos un
 catálogo de productos para que los clientes puedan seleccionar lo que quieren comprar. Nuestro catálogo debe poder
