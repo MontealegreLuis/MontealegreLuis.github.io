@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
     <title><![CDATA[Your argument is invalid]]></title>
-    <link href="http://www.montealegreluis.com/atom.xml" rel="self"/>
-    <link href="http://www.montealegreluis.com/"/>
-    <updated>2018-02-26T16:00:41+00:00</updated>
-    <id>http://www.montealegreluis.com/</id>
+    <link href="https://www.montealegreluis.com/atom.xml" rel="self"/>
+    <link href="https://www.montealegreluis.com/"/>
+    <updated>2018-03-08T22:13:10+00:00</updated>
+    <id>https://www.montealegreluis.com/</id>
             <author>
             <name><![CDATA[Luis Montealegre]]></name>            <email><![CDATA[montealegreluis@gmail.com]]></email>        </author>
         <generator uri="http://sculpin.io/">Sculpin</generator>
             <entry>
             <title type="html"><![CDATA[Elementos compuestos en formularios]]></title>
-            <link href="http://www.montealegreluis.com/blog/2015/03/04/elementos-compuestos-en-formularios"/>
+            <link href="https://www.montealegreluis.com/blog/2015/03/04/elementos-compuestos-en-formularios"/>
             <updated>2015-03-04T00:00:00+00:00</updated>
-            <id>http://www.montealegreluis.com/blog/2015/03/04/elementos-compuestos-en-formularios</id>
+            <id>https://www.montealegreluis.com/blog/2015/03/04/elementos-compuestos-en-formularios</id>
             <content type="html"><![CDATA[<p>En nuestro <a href="http://www.montealegreluis.com/blog/2015/02/05/un-formulario-no-tiene-porque-hacer-todo/">post anterior sobre formularios</a> revisamos como usar el paquete
 <a href="http://comphppuebla.github.io/easy-forms/">comphppuebla/easyforms</a> En este post desarrollaremos un ejemplo para ilustrar
 como podemos combinar un elemento del tipo <code>text</code> y uno de tipo <code>select</code> para
@@ -572,9 +572,9 @@ comentarios, dudas, quejas, sugerencias o reclamaciones.</p>
         </entry>
             <entry>
             <title type="html"><![CDATA[Módulos con Slim]]></title>
-            <link href="http://www.montealegreluis.com/blog/2015/02/28/modulos-con-slim"/>
+            <link href="https://www.montealegreluis.com/blog/2015/02/28/modulos-con-slim"/>
             <updated>2015-02-28T00:00:00+00:00</updated>
-            <id>http://www.montealegreluis.com/blog/2015/02/28/modulos-con-slim</id>
+            <id>https://www.montealegreluis.com/blog/2015/02/28/modulos-con-slim</id>
             <content type="html"><![CDATA[<p>Uno de los conceptos más importantes que nos permite reusar código entre aplicaciones
 es el de <strong>módulo</strong>. Cada framework popular en PHP tiene su propia forma de estructurar
 módulos, e incluso distintas formas de nombrarlos. Por ejemplo en Zend Framework 2
@@ -1006,9 +1006,9 @@ $app-&gt;run();
         </entry>
             <entry>
             <title type="html"><![CDATA[Un formulario no tiene porque hacer todo]]></title>
-            <link href="http://www.montealegreluis.com/blog/2015/02/05/un-formulario-no-tiene-porque-hacer-todo"/>
+            <link href="https://www.montealegreluis.com/blog/2015/02/05/un-formulario-no-tiene-porque-hacer-todo"/>
             <updated>2015-02-05T00:00:00+00:00</updated>
-            <id>http://www.montealegreluis.com/blog/2015/02/05/un-formulario-no-tiene-porque-hacer-todo</id>
+            <id>https://www.montealegreluis.com/blog/2015/02/05/un-formulario-no-tiene-porque-hacer-todo</id>
             <content type="html"><![CDATA[<p>Una de las tareas más comunes a las que nos enfrentamos como desarrolladores Web, es el
 procesamiento de formularios.</p>
 
@@ -1720,9 +1720,9 @@ por ejemplo).</p>
         </entry>
             <entry>
             <title type="html"><![CDATA[Tests de aceptación con Codeception]]></title>
-            <link href="http://www.montealegreluis.com/blog/2014/12/15/tests-de-aceptacion-con-codeception"/>
+            <link href="https://www.montealegreluis.com/blog/2014/12/15/tests-de-aceptacion-con-codeception"/>
             <updated>2014-12-15T00:00:00+00:00</updated>
-            <id>http://www.montealegreluis.com/blog/2014/12/15/tests-de-aceptacion-con-codeception</id>
+            <id>https://www.montealegreluis.com/blog/2014/12/15/tests-de-aceptacion-con-codeception</id>
             <content type="html"><![CDATA[<p>Este post es una continuación al post de <a href="http://www.montealegreluis.com/blog/2014/11/23/testing-de-componentes-flight/">Testing de componentes Flight</a>, que trataba de una aplicación ficticia para
 la compra de productos, donde desarrollamos los specs para los componentes de Flight usando Jasmine. La configuración
 para los tests era un poco más complicada que la que se genera normalmente con <a href="https://github.com/flightjs/generator-flight">Yeoman</a>. El objetivo era evitar el
@@ -2309,9 +2309,9 @@ críticas y quejas en los comentarios.</p>
         </entry>
             <entry>
             <title type="html"><![CDATA[Testing de componentes Flight]]></title>
-            <link href="http://www.montealegreluis.com/blog/2014/12/04/testing-de-componentes-flight"/>
+            <link href="https://www.montealegreluis.com/blog/2014/12/04/testing-de-componentes-flight"/>
             <updated>2014-12-04T00:00:00+00:00</updated>
-            <id>http://www.montealegreluis.com/blog/2014/12/04/testing-de-componentes-flight</id>
+            <id>https://www.montealegreluis.com/blog/2014/12/04/testing-de-componentes-flight</id>
             <content type="html"><![CDATA[<p>Esta es la segunda parte del post de <a href="http://www.montealegreluis.com/blog/2014/11/23/aplicaciones-desacopladas-con-flight-js/">Aplicaciones desacopladas con Flight JS</a>. En esta segunda parte desarrollaremos
 las pruebas unitarias para los componentes de nuestra aplicación de ejemplo.</p>
 
@@ -2741,9 +2741,9 @@ beneficiarán con la respuesta.</p>
         </entry>
             <entry>
             <title type="html"><![CDATA[Configurando Satis con SSH]]></title>
-            <link href="http://www.montealegreluis.com/blog/2014/11/28/configurando-satis-con-ssh"/>
+            <link href="https://www.montealegreluis.com/blog/2014/11/28/configurando-satis-con-ssh"/>
             <updated>2014-11-28T00:00:00+00:00</updated>
-            <id>http://www.montealegreluis.com/blog/2014/11/28/configurando-satis-con-ssh</id>
+            <id>https://www.montealegreluis.com/blog/2014/11/28/configurando-satis-con-ssh</id>
             <content type="html"><![CDATA[<p><a href="https://getcomposer.org/">Composer</a> es una herramienta para el manejo de dependencias en PHP que nos permite declarar los paquetes que
 utilizan nuestros proyectos y los instala en la carpeta <code>vendor</code>. Composer basa su funcionamiento en dos conceptos
 importantes <strong>paquetes</strong> y <strong>repositorios</strong>.</p>
@@ -2912,9 +2912,9 @@ que quieras compartir te lo agradeceré mucho.</p>
         </entry>
             <entry>
             <title type="html"><![CDATA[Aplicaciones desacopladas con Flight JS]]></title>
-            <link href="http://www.montealegreluis.com/blog/2014/11/23/aplicaciones-desacopladas-con-flight-js"/>
+            <link href="https://www.montealegreluis.com/blog/2014/11/23/aplicaciones-desacopladas-con-flight-js"/>
             <updated>2014-11-23T00:00:00+00:00</updated>
-            <id>http://www.montealegreluis.com/blog/2014/11/23/aplicaciones-desacopladas-con-flight-js</id>
+            <id>https://www.montealegreluis.com/blog/2014/11/23/aplicaciones-desacopladas-con-flight-js</id>
             <content type="html"><![CDATA[<p><a href="http://flightjs.github.io/">Flight</a> es un framework Javascript ligero, basado en componentes y dirigido por eventos desarrollado por Twitter.
 Flight mapea componentes a nodos del <a href="http://es.wikipedia.org/wiki/Document_Object_Model">DOM</a> y refuerza la <a href="http://en.wikipedia.org/wiki/Separation_of_concerns">separación de responsabilidades</a> en nuestro código,
 ya que no es posible crear relaciones explícitas entre componentes. En su lugar los components de Flight publican
@@ -3424,9 +3424,9 @@ gente puede ayudarte y más personas se beneficiarán con la respuesta.</p>
         </entry>
             <entry>
             <title type="html"><![CDATA[Testing con Jasmine]]></title>
-            <link href="http://www.montealegreluis.com/blog/2014/11/17/testing-con-jasmine"/>
+            <link href="https://www.montealegreluis.com/blog/2014/11/17/testing-con-jasmine"/>
             <updated>2014-11-17T00:00:00+00:00</updated>
-            <id>http://www.montealegreluis.com/blog/2014/11/17/testing-con-jasmine</id>
+            <id>https://www.montealegreluis.com/blog/2014/11/17/testing-con-jasmine</id>
             <content type="html"><![CDATA[<p>Recientemente encontré un <a href="https://shanetomlinson.com/2013/testing-javascript-frontend-part-1-anti-patterns-and-fixes/">artículo</a> que trataba sobre como separar el código JavaScript de modo que podamos hacer
 pruebas unitarias a código que involucre la manipulación de <a href="http://es.wikipedia.org/wiki/Document_Object_Model">DOM</a> y solicitudes <a href="http://es.wikipedia.org/wiki/XMLHttpRequest">XHR</a>. Me di cuenta de lo poco que
 se sobre testing y código desacoplado en JavaScript y me decidí a escribir un ejemplo.</p>
