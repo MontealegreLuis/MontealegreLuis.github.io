@@ -16,7 +16,6 @@ use:
             <button type="button" data-filter="*" class="btn btn-primary active">Todo</button>
             <button type="button" data-filter="application" class="btn btn-primary">Aplicaciones</button>
             <button type="button" data-filter="library" class="btn btn-primary">Librerías</button>
-            <button type="button" data-filter="workshop" class="btn btn-primary">Talleres</button>
             <button type="button" data-filter="tutorial" class="btn btn-primary">Video tutoriales</button>
             <button type="button" data-filter="java" class="btn btn-primary">Java</button>
             <button type="button" data-filter="php" class="btn btn-primary">PHP</button>
@@ -26,6 +25,50 @@ use:
     </div>
 </div>
 <section class="portfolio grid row">
+    <div class="col-sm-6 col-md-4 col-lg-3 grid-item library php">
+        <div class="panel panel-php">
+            <div class="panel-heading">
+                <i class="devicon-php-plain"></i>
+                phUML
+            </div>
+            <div class="panel-body">
+                phUML es un generador completamente automático de diagramas de clase escrito en PHP.
+                Crea diagramas de clase basados en la especificación UML a partir de código orientado a objetos.
+            </div>
+            <div class="panel-footer">
+                <a
+                        href="https://github.com/MontealegreLuis/phuml"
+                        target="_blank"
+                        rel="noopener"
+                        class="github"
+                >
+                    <i class="devicon-github-original"></i>
+                </a>
+                <a
+                        href="https://travis-ci.org/github/MontealegreLuis/phuml"
+                        target="_blank"
+                        rel="noopener"
+                        class="code-badge"
+                >
+                    <img
+                            src="https://travis-ci.org/MontealegreLuis/phuml.svg?branch=master"
+                            alt="Build Status"
+                    >
+                </a>
+                <a
+                        href="https://scrutinizer-ci.com/g/MontealegreLuis/phuml/?branch=master"
+                        target="_blank"
+                        rel="noopener"
+                        class="code-badge"
+                >
+                    <img
+                            src="https://scrutinizer-ci.com/g/MontealegreLuis/phuml/badges/quality-score.png?b=master"
+                            alt="Scrutinizer"
+                    >
+                </a>
+            </div>
+        </div>
+    </div>
     <div class="col-sm-6 col-md-4 col-lg-3 grid-item application java">
         <div class="panel panel-java">
             <div class="panel-heading">
@@ -44,7 +87,7 @@ use:
                     rel="noopener"
                     class="github"
                 >
-                    <i class="devicon-github-plain"></i>
+                    <i class="devicon-github-original"></i>
                 </a>
                 <a
                     href="https://travis-ci.org/MontealegreLuis/spring-blog"
@@ -71,46 +114,46 @@ use:
             </div>
         </div>
     </div>
-    <div class="col-sm-6 col-md-4 col-lg-3 grid-item application php">
-        <div class="panel panel-php">
+    <div class="col-sm-6 col-md-4 col-lg-3 grid-item application ruby">
+        <div class="panel panel-ruby">
             <div class="panel-heading">
-                <i class="devicon-zend-plain"></i>
-                Cátalogo con ZF1/ZF2
+                <i class="devicon-ruby-plain"></i>
+                Contactos en Ruby
             </div>
             <div class="panel-body">
-                Catálogo de productos usando ZF1, que integran componentes más modernos, como el
-                service manager de ZF2, phpspec y Twig.
+                Applicación de línea de comandos para manejar los contactos de una persona.
+                Demuestra como escribir tests de integración usando rspec y SQLite
             </div>
             <div class="panel-footer">
                 <a
-                        href="https://bitbucket.org/MontealegreLuis/agata"
-                        target="_blank"
-                        rel="noopener"
-                        class="bitbucket"
-                >
-                    <i class="devicon-bitbucket-plain"></i>
-                </a>
-            </div>
-        </div>
-    </div>
-    <div class="col-sm-6 col-md-4 col-lg-3 grid-item application php">
-        <div class="panel panel-php">
-            <div class="panel-heading">
-                <i class="devicon-zend-plain"></i>
-                CMS usando ZF1
-            </div>
-            <div class="panel-body">
-                CMS personalizado escrito en ZF1 para una empresa consultora en bienes
-                raices. La aplicación cuenta con pruebas de integración en PHPUnit
-            </div>
-            <div class="panel-footer">
-                <a
-                        href="https://github.com/MontealegreLuis/edeco"
+                        href="https://github.com/MontealegreLuis/contacts-manager"
                         target="_blank"
                         rel="noopener"
                         class="github"
                 >
-                    <i class="devicon-github-plain"></i>
+                    <i class="devicon-github-original"></i>
+                </a>
+                <a
+                        href="https://travis-ci.org/MontealegreLuis/contacts-manager"
+                        target="_blank"
+                        rel="noopener"
+                        class="code-badge"
+                >
+                    <img
+                            src="https://travis-ci.org/MontealegreLuis/contacts-manager.svg?branch=master"
+                            alt="Build Status"
+                    >
+                </a>
+                <a
+                        href="https://codeclimate.com/github/MontealegreLuis/contacts-manager"
+                        target="_blank"
+                        rel="noopener"
+                        class="code-badge"
+                >
+                    <img
+                            src="https://codeclimate.com/github/MontealegreLuis/contacts-manager/badges/gpa.svg"
+                            alt="Code Climate"
+                    >
                 </a>
             </div>
         </div>
@@ -134,75 +177,51 @@ use:
                         rel="noopener"
                         class="github"
                 >
-                    <i class="devicon-github-plain"></i>
+                    <i class="devicon-github-original"></i>
                 </a>
             </div>
         </div>
     </div>
-    <div class="col-sm-6 col-md-4 col-lg-3 grid-item library php">
-        <div class="panel panel-php">
+    <div class="col-sm-6 col-md-4 col-lg-3 grid-item application javascript">
+        <div class="panel panel-javascript">
             <div class="panel-heading">
-                <i class="devicon-php-plain"></i>
-                Easy forms
+                <i class="devicon-javascript-plain"></i>
+                Simple Simon con ES6
             </div>
             <div class="panel-body">
-                <p>
-                    Librería para desacoplar el manejo de formularios. Separa las responsabiidades
-                    en 3 categorias: validación, traducción y representación.
-                </p>
+                Este es una implementación del juego Simple Simon, usando TDD. Utiliza
+                clases y módulos ES6 y las pruebas están escritas con Jasmine
             </div>
             <div class="panel-footer">
                 <a
-                        href="https://github.com/ComPHPPuebla/easy-forms"
+                        href="https://github.com/MontealegreLuis/simple-simon"
                         target="_blank"
                         rel="noopener"
                         class="github"
                 >
-                    <i class="devicon-github-plain"></i>
+                    <i class="devicon-github-original"></i>
                 </a>
                 <a
-                        href="https://travis-ci.org/ComPHPPuebla/easy-forms"
+                        href="https://travis-ci.org/MontealegreLuis/simple-simon"
                         target="_blank"
                         rel="noopener"
                         class="code-badge"
                 >
                     <img
-                            src="https://travis-ci.org/ComPHPPuebla/easy-forms.svg?branch=master"
+                            src="https://travis-ci.org/MontealegreLuis/simple-simon.svg?branch=master"
                             alt="Build Status"
                     >
                 </a>
                 <a
-                        href="https://insight.sensiolabs.com/projects/b21b5fac-a347-4c1a-b9b0-9965a93893ea"
+                        href="https://codebeat.co/projects/github-com-montealegreluis-simple-simon"
                         target="_blank"
                         rel="noopener"
                         class="code-badge"
                 >
                     <img
-                            src="https://insight.sensiolabs.com/projects/b21b5fac-a347-4c1a-b9b0-9965a93893ea/mini.png"
-                            alt="SensioLabsInsight"
+                            src="https://codebeat.co/badges/fc41b73e-e111-4349-bc44-6eb913087c40"
+                            alt="codebeat badge"
                     >
-                </a>
-            </div>
-        </div>
-    </div>
-    <div class="col-sm-6 col-md-4 col-lg-3 grid-item application php">
-        <div class="panel panel-php">
-            <div class="panel-heading">
-                <i class="devicon-laravel-plain"></i>
-                Fitbit OAuth en Laravel
-            </div>
-            <div class="panel-body">
-                Aplicación Web en Laravel para demostrar como autenticarse usando la API de
-                Fitbit
-            </div>
-            <div class="panel-footer">
-                <a
-                        href="https://github.com/MontealegreLuis/fitbit-example"
-                        target="_blank"
-                        rel="noopener"
-                        class="github"
-                >
-                    <i class="devicon-github-plain"></i>
                 </a>
             </div>
         </div>
@@ -226,7 +245,7 @@ use:
                         rel="noopener"
                         class="github"
                 >
-                    <i class="devicon-github-plain"></i>
+                    <i class="devicon-github-original"></i>
                 </a>
                 <a
                         href="https://travis-ci.org/ComPHPPuebla/dbal-fixtures"
@@ -253,6 +272,50 @@ use:
             </div>
         </div>
     </div>
+    <div class="col-sm-6 col-md-4 col-lg-3 grid-item application java">
+        <div class="panel panel-java">
+            <div class="panel-heading">
+                <i class="devicon-java-plain"></i>
+                Películas con Hibernate
+            </div>
+            <div class="panel-body">
+                Aplicación de línea de comandos, para buscar peliculas por categoría y título. El
+                mapeo de las entidades es en XML. Incluye varios ejemplos de queries con HQL.
+            </div>
+            <div class="panel-footer">
+                <a
+                        href="https://github.com/MontealegreLuis/hibernate-example"
+                        target="_blank"
+                        rel="noopener"
+                        class="github"
+                >
+                    <i class="devicon-github-original"></i>
+                </a>
+                <a
+                        href="https://travis-ci.org/MontealegreLuis/hibernate-example"
+                        target="_blank"
+                        rel="noopener"
+                        class="code-badge"
+                >
+                    <img
+                            src="https://travis-ci.org/MontealegreLuis/hibernate-example.svg?branch=master"
+                            alt="Build Status"
+                    >
+                </a>
+                <a
+                        href="https://codebeat.co/projects/github-com-montealegreluis-hibernate-example"
+                        target="_blank"
+                        rel="noopener"
+                        class="code-badge"
+                >
+                    <img
+                            src="https://codebeat.co/badges/df70242a-a3d4-4367-8785-6703e4e243e6"
+                            alt="codebeat badge"
+                    >
+                </a>
+            </div>
+        </div>
+    </div>
     <div class="col-sm-6 col-md-4 col-lg-3 grid-item library php">
         <div class="panel panel-php">
             <div class="panel-heading">
@@ -273,7 +336,7 @@ use:
                         rel="noopener"
                         class="github"
                 >
-                    <i class="devicon-github-plain"></i>
+                    <i class="devicon-github-original"></i>
                 </a>
                 <a
                         href="https://travis-ci.org/ComPHPPuebla/slim-modules"
@@ -304,50 +367,6 @@ use:
         <div class="panel panel-java">
             <div class="panel-heading">
                 <i class="devicon-java-plain"></i>
-                Películas con Hibernate
-            </div>
-            <div class="panel-body">
-                Aplicación de línea de comandos, para buscar peliculas por categoría y título. El
-                mapeo de las entidades es en XML. Incluye varios ejemplos de queries con HQL.
-            </div>
-            <div class="panel-footer">
-                <a
-                    href="https://github.com/MontealegreLuis/hibernate-example"
-                    target="_blank"
-                    rel="noopener"
-                    class="github"
-                >
-                    <i class="devicon-github-plain"></i>
-                </a>
-                <a
-                    href="https://travis-ci.org/MontealegreLuis/hibernate-example"
-                    target="_blank"
-                    rel="noopener"
-                    class="code-badge"
-                >
-                    <img
-                        src="https://travis-ci.org/MontealegreLuis/hibernate-example.svg?branch=master"
-                        alt="Build Status"
-                    >
-                </a>
-                <a
-                    href="https://codebeat.co/projects/github-com-montealegreluis-hibernate-example"
-                    target="_blank"
-                    rel="noopener"
-                    class="code-badge"
-                >
-                    <img
-                        src="https://codebeat.co/badges/df70242a-a3d4-4367-8785-6703e4e243e6"
-                        alt="codebeat badge"
-                    >
-                </a>
-            </div>
-        </div>
-    </div>
-    <div class="col-sm-6 col-md-4 col-lg-3 grid-item application java">
-        <div class="panel panel-java">
-            <div class="panel-heading">
-                <i class="devicon-java-plain"></i>
                 Películas con Servlets
             </div>
             <div class="panel-body">
@@ -356,33 +375,33 @@ use:
             </div>
             <div class="panel-footer">
                 <a
-                    href="https://github.com/MontealegreLuis/hibernate-example"
-                    target="_blank"
-                    rel="noopener"
-                    class="github"
+                        href="https://github.com/MontealegreLuis/hibernate-example"
+                        target="_blank"
+                        rel="noopener"
+                        class="github"
                 >
-                    <i class="devicon-github-plain"></i>
+                    <i class="devicon-github-original"></i>
                 </a>
                 <a
-                    href="https://travis-ci.org/MontealegreLuis/movies"
-                    target="_blank"
-                    rel="noopener"
-                    class="code-badge"
+                        href="https://travis-ci.org/MontealegreLuis/movies"
+                        target="_blank"
+                        rel="noopener"
+                        class="code-badge"
                 >
                     <img
-                        src="https://travis-ci.org/MontealegreLuis/movies.svg?branch=master"
-                        alt="Build Status"
+                            src="https://travis-ci.org/MontealegreLuis/movies.svg?branch=master"
+                            alt="Build Status"
                     >
                 </a>
                 <a
-                    href="https://codebeat.co/projects/github-com-montealegreluis-movies"
-                    target="_blank"
-                    rel="noopener"
-                    class="code-badge"
+                        href="https://codebeat.co/projects/github-com-montealegreluis-movies"
+                        target="_blank"
+                        rel="noopener"
+                        class="code-badge"
                 >
                     <img
-                        src="https://codebeat.co/badges/9a9920f0-dbf3-4424-a5dc-e7d429870bdc"
-                        alt="codebeat badge"
+                            src="https://codebeat.co/badges/9a9920f0-dbf3-4424-a5dc-e7d429870bdc"
+                            alt="codebeat badge"
                     >
                 </a>
             </div>
@@ -405,7 +424,7 @@ use:
                         rel="noopener"
                         class="github"
                 >
-                    <i class="devicon-github-plain"></i>
+                    <i class="devicon-github-original"></i>
                 </a>
                 <a
                         href="https://travis-ci.org/MontealegreLuis/readit"
@@ -432,122 +451,46 @@ use:
             </div>
         </div>
     </div>
-    <div class="col-sm-6 col-md-4 col-lg-3 grid-item application javascript">
-        <div class="panel panel-javascript">
+    <div class="col-sm-6 col-md-4 col-lg-3 grid-item application ruby">
+        <div class="panel panel-ruby">
             <div class="panel-heading">
-                <i class="devicon-javascript-plain"></i>
-                Simple Simon con ES6
+                <i class="devicon-ruby-plain"></i>
+                Chatbot en Ruby
             </div>
             <div class="panel-body">
-                Este es una implementación del juego Simple Simon, usando TDD. Utiliza
-                clases y módulos ES6 y las pruebas están escritas con Jasmine
+                Aplicación de línea de comandos con un Chatbot muy minimalístico.
+                Demuestra como implementar manipulación de cadenas en Rubi y como usar rspec para pruebas unitarias
             </div>
             <div class="panel-footer">
                 <a
-                    href="https://github.com/MontealegreLuis/simple-simon"
-                    target="_blank"
-                    rel="noopener"
-                    class="github"
+                        href="https://github.com/MontealegreLuis/chat-bot"
+                        target="_blank"
+                        rel="noopener"
+                        class="github"
                 >
-                    <i class="devicon-github-plain"></i>
+                    <i class="devicon-github-original"></i>
                 </a>
                 <a
-                    href="https://travis-ci.org/MontealegreLuis/simple-simon"
-                    target="_blank"
-                    rel="noopener"
-                    class="code-badge"
+                        href="https://travis-ci.org/MontealegreLuis/chat-bot"
+                        target="_blank"
+                        rel="noopener"
+                        class="code-badge"
                 >
                     <img
-                        src="https://travis-ci.org/MontealegreLuis/simple-simon.svg?branch=master"
-                        alt="Build Status"
+                            src="https://travis-ci.org/MontealegreLuis/chat-bot.svg?branch=master"
+                            alt="Build Status"
                     >
                 </a>
                 <a
-                    href="https://codebeat.co/projects/github-com-montealegreluis-simple-simon"
-                    target="_blank"
-                    rel="noopener"
-                    class="code-badge"
+                        href="https://codeclimate.com/github/MontealegreLuis/chat-bot"
+                        target="_blank"
+                        rel="noopener"
+                        class="code-badge"
                 >
                     <img
-                        src="https://codebeat.co/badges/fc41b73e-e111-4349-bc44-6eb913087c40"
-                        alt="codebeat badge"
+                            src="https://codeclimate.com/github/MontealegreLuis/chat-bot/badges/gpa.svg"
+                            alt="Code Climate"
                     >
-                </a>
-            </div>
-        </div>
-    </div>
-    <div class="col-sm-6 col-md-4 col-lg-3 grid-item workshop php">
-        <div class="panel panel-php">
-            <div class="panel-heading">
-                <i class="devicon-php-plain"></i>
-                Taller de Composer
-            </div>
-            <div class="panel-body">
-                En este taller construimos incrementalment un framework web sencillo, agregando
-                un paquete de PHP con composer en cada paso.
-            </div>
-            <div class="panel-footer">
-                <a
-                        href="https://github.com/ComPHPPuebla/taller-composer"
-                        target="_blank"
-                        rel="noopener"
-                        class="github"
-                >
-                    <i class="devicon-github-plain"></i>
-                </a>
-            </div>
-        </div>
-    </div>
-    <div class="col-sm-6 col-md-4 col-lg-3 grid-item tutorial php">
-        <div class="panel panel-php">
-            <div class="panel-heading">
-                <i class="devicon-php-plain"></i>
-                Taller de Slim 2 <small>(español)</small>
-            </div>
-            <div class="panel-body">
-                <p>
-                    Este es un taller de Slim 2 dividido en 2 videos. Se trata una pequeña
-                    aplicación para subir, navegar y reproducir archivos de audio.
-                </p>
-            </div>
-            <div class="panel-footer">
-                <a
-                        href="https://www.youtube.com/watch?v=P5s8Sydo154"
-                        target="_blank"
-                        rel="noopener"
-                        class="github"
-                >
-                    <i class="fa fa-youtube"></i> 1
-                </a>
-                <a
-                        href="https://www.youtube.com/watch?v=iRDwfnKOKtk"
-                        target="_blank"
-                        rel="noopener"
-                        class="github"
-                >
-                    <i class="fa fa-youtube"></i> 2
-                </a>
-            </div>
-        </div>
-    </div>
-    <div class="col-sm-6 col-md-4 col-lg-3 grid-item workshop php">
-        <div class="panel panel-php">
-            <div class="panel-heading">
-                <i class="devicon-symfony-original"></i>
-                Taller de Symfony 2
-            </div>
-            <div class="panel-body">
-                El objetivo del taller es empezar a usar los componentes de Symfony2 en una
-                aplicacion legacy, como una introducción antes de migrar el framework full-stack.
-            </div>
-            <div class="panel-footer">
-                <a
-                        href="https://github.com/ComPHPPuebla/sf2workshop"
-                        target="_blank"
-                        rel="noopener"
-                        class="github"
-                >
-                    <i class="devicon-github-plain"></i>
                 </a>
             </div>
         </div>
@@ -576,6 +519,40 @@ use:
             </div>
         </div>
     </div>
+    <div class="col-sm-6 col-md-4 col-lg-3 grid-item application java">
+        <div class="panel panel-java">
+            <div class="panel-heading">
+                <i class="devicon-java-plain"></i>
+                Yelp API en Spring Boot
+            </div>
+            <div class="panel-body">
+                Aplicación Web escrita en Spring Boot.
+                Permite buscar por ubicación y categoría usando la API Yelp Fusion.
+                Demuestra como usar los endpoints de búsqueda, reviews y negocios.
+            </div>
+            <div class="panel-footer">
+                <a
+                        href="https://github.com/MontealegreLuis/yelp-demo"
+                        target="_blank"
+                        rel="noopener"
+                        class="github"
+                >
+                    <i class="devicon-github-original"></i>
+                </a>
+                <a
+                        href="https://codebeat.co/projects/github-com-montealegreluis-yelp-demo-master"
+                        target="_blank"
+                        rel="noopener"
+                        class="code-badge"
+                >
+                    <img
+                            src="https://codebeat.co/badges/0704b6a2-cd9a-446b-bc67-4db792c641a0"
+                            alt="Codebeat"
+                    >
+                </a>
+            </div>
+        </div>
+    </div>
     <div class="col-sm-6 col-md-4 col-lg-3 grid-item application php">
         <div class="panel panel-php">
             <div class="panel-heading">
@@ -593,7 +570,7 @@ use:
                     rel="noopener"
                     class="github"
                 >
-                    <i class="devicon-github-plain"></i>
+                    <i class="devicon-github-original"></i>
                 </a>
                 <a
                     href="https://travis-ci.org/MontealegreLuis/php-testing-tools"
@@ -640,6 +617,82 @@ use:
                     class="github"
                 >
                     <i class="fa fa-youtube"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6 col-md-4 col-lg-3 grid-item library java">
+        <div class="panel panel-java">
+            <div class="panel-heading">
+                <i class="devicon-java-plain"></i>
+                Cliente Java Yelp Fusion
+            </div>
+            <div class="panel-body">
+                Cliente en Java para la API Yelp Fusion.
+                Actualmente soporta los endpoints de búsqueda, reviews y negocios
+            </div>
+            <div class="panel-footer">
+                <a
+                        href="https://github.com/MontealegreLuis/yelpv3-java-client"
+                        target="_blank"
+                        rel="noopener"
+                        class="github"
+                >
+                    <i class="devicon-github-original"></i>
+                </a>
+                <a
+                        href="https://travis-ci.org/MontealegreLuis/yelpv3-java-client"
+                        target="_blank"
+                        rel="noopener"
+                        class="code-badge"
+                >
+                    <img
+                            src="https://travis-ci.org/MontealegreLuis/yelpv3-java-client.svg?branch=master"
+                            alt="Build Status"
+                    >
+                </a>
+                <a
+                        href="https://codebeat.co/projects/github-com-montealegreluis-yelpv3-java-client-master"
+                        target="_blank"
+                        rel="noopener"
+                        class="code-badge"
+                >
+                    <img
+                            src="https://codebeat.co/badges/6af99e8b-adb4-4f26-9fa8-e586aa7986e6"
+                            alt="Codebeat badge"
+                    >
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6 col-md-4 col-lg-3 grid-item tutorial php">
+        <div class="panel panel-php">
+            <div class="panel-heading">
+                <i class="devicon-php-plain"></i>
+                Taller de Slim 2 <small>(español)</small>
+            </div>
+            <div class="panel-body">
+                <p>
+                    Este es un taller de Slim 2 dividido en 2 videos. Se trata una pequeña
+                    aplicación para subir, navegar y reproducir archivos de audio.
+                </p>
+            </div>
+            <div class="panel-footer">
+                <a
+                        href="https://www.youtube.com/watch?v=P5s8Sydo154"
+                        target="_blank"
+                        rel="noopener"
+                        class="github"
+                >
+                    <i class="fa fa-youtube"></i> 1
+                </a>
+                <a
+                        href="https://www.youtube.com/watch?v=iRDwfnKOKtk"
+                        target="_blank"
+                        rel="noopener"
+                        class="github"
+                >
+                    <i class="fa fa-youtube"></i> 2
                 </a>
             </div>
         </div>

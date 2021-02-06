@@ -16,7 +16,6 @@ use:
             <button type="button" data-filter="*" class="btn btn-primary active">All</button>
             <button type="button" data-filter="application" class="btn btn-primary">Applications</button>
             <button type="button" data-filter="library" class="btn btn-primary">Libraries</button>
-            <button type="button" data-filter="workshop" class="btn btn-primary">Workshops</button>
             <button type="button" data-filter="tutorial" class="btn btn-primary">Video tutorials</button>
             <button type="button" data-filter="java" class="btn btn-primary">Java</button>
             <button type="button" data-filter="php" class="btn btn-primary">PHP</button>
@@ -27,6 +26,50 @@ use:
     </div>
 </div>
 <section class="portfolio grid row">
+    <div class="col-sm-6 col-md-4 col-lg-3 grid-item library php">
+        <div class="panel panel-php">
+            <div class="panel-heading">
+                <i class="devicon-php-plain"></i>
+                phUML
+            </div>
+            <div class="panel-body">
+                phUML is a fully automatic UML class diagram generator written in PHP.
+                It creates a class diagram from an OO codebase based on the UML specification.
+            </div>
+            <div class="panel-footer">
+                <a
+                        href="https://github.com/MontealegreLuis/phuml"
+                        target="_blank"
+                        rel="noopener"
+                        class="github"
+                >
+                    <i class="devicon-github-original"></i>
+                </a>
+                <a
+                        href="https://travis-ci.org/github/MontealegreLuis/phuml"
+                        target="_blank"
+                        rel="noopener"
+                        class="code-badge"
+                >
+                    <img
+                            src="https://travis-ci.org/MontealegreLuis/phuml.svg?branch=master"
+                            alt="Build Status"
+                    >
+                </a>
+                <a
+                        href="https://scrutinizer-ci.com/g/MontealegreLuis/phuml/?branch=master"
+                        target="_blank"
+                        rel="noopener"
+                        class="code-badge"
+                >
+                    <img
+                            src="https://scrutinizer-ci.com/g/MontealegreLuis/phuml/badges/quality-score.png?b=master"
+                            alt="Scrutinizer"
+                    >
+                </a>
+            </div>
+        </div>
+    </div>
     <div class="col-sm-6 col-md-4 col-lg-3 grid-item application java">
         <div class="panel panel-java">
             <div class="panel-heading">
@@ -45,7 +88,7 @@ use:
                     rel="noopener"
                     class="github"
                 >
-                    <i class="devicon-github-plain"></i>
+                    <i class="devicon-github-original"></i>
                 </a>
                 <a
                     href="https://travis-ci.org/MontealegreLuis/spring-blog"
@@ -72,28 +115,6 @@ use:
             </div>
         </div>
     </div>
-    <div class="col-sm-6 col-md-4 col-lg-3 grid-item application php">
-        <div class="panel panel-php">
-            <div class="panel-heading">
-                <i class="devicon-zend-plain"></i>
-                Catalog using ZF1 & ZF2
-            </div>
-            <div class="panel-body">
-                Catalog of products written in ZF1. It integrates more modern components, like ZF2
-                service manager, phpspec and Twig.
-            </div>
-            <div class="panel-footer">
-                <a
-                        href="https://bitbucket.org/MontealegreLuis/agata"
-                        target="_blank"
-                        rel="noopener"
-                        class="bitbucket"
-                >
-                    <i class="devicon-bitbucket-plain"></i>
-                </a>
-            </div>
-        </div>
-    </div>
     <div class="col-sm-6 col-md-4 col-lg-3 grid-item application ruby">
         <div class="panel panel-ruby">
             <div class="panel-heading">
@@ -111,7 +132,7 @@ use:
                     rel="noopener"
                     class="github"
                 >
-                    <i class="devicon-github-plain"></i>
+                    <i class="devicon-github-original"></i>
                 </a>
                 <a
                     href="https://travis-ci.org/MontealegreLuis/contacts-manager"
@@ -138,28 +159,6 @@ use:
             </div>
         </div>
     </div>
-    <div class="col-sm-6 col-md-4 col-lg-3 grid-item application php">
-        <div class="panel panel-php">
-            <div class="panel-heading">
-                <i class="devicon-zend-plain"></i>
-                Custom CMS using ZF1
-            </div>
-            <div class="panel-body">
-                This is a custom CMS written in ZF1 for a Real Estate Consulting Company. The
-                application has integration tests written in PHPUnit
-            </div>
-            <div class="panel-footer">
-                <a
-                        href="https://bitbucket.org/MontealegreLuis/edeco"
-                        target="_blank"
-                        rel="noopener"
-                        class="github"
-                >
-                    <i class="devicon-github-plain"></i>
-                </a>
-            </div>
-        </div>
-    </div>
     <div class="col-sm-6 col-md-4 col-lg-3 grid-item library docker">
         <div class="panel panel-docker">
             <div class="panel-heading">
@@ -177,117 +176,51 @@ use:
                         rel="noopener"
                         class="github"
                 >
-                    <i class="devicon-github-plain"></i>
+                    <i class="devicon-github-original"></i>
                 </a>
             </div>
         </div>
     </div>
-    <div class="col-sm-6 col-md-4 col-lg-3 grid-item application ruby">
-        <div class="panel panel-ruby">
+    <div class="col-sm-6 col-md-4 col-lg-3 grid-item application javascript">
+        <div class="panel panel-javascript">
             <div class="panel-heading">
-                <i class="devicon-ruby-plain"></i>
-                Chatbot in Ruby
+                <i class="devicon-javascript-plain"></i>
+                Simple Simon game ES6
             </div>
             <div class="panel-body">
-                Command line application with a very minimalistic Chatbot. It demonstrates strings
-                manipulation in Ruby and how to use rspec to unit test.
+                This is an implementation of the Simple Simon Game using TDD. It uses ES6 classes
+                and modules. Tests are written in Jasmine
             </div>
             <div class="panel-footer">
                 <a
-                    href="https://github.com/MontealegreLuis/chat-bot"
-                    target="_blank"
-                    rel="noopener"
-                    class="github"
-                >
-                    <i class="devicon-github-plain"></i>
-                </a>
-                <a
-                    href="https://travis-ci.org/MontealegreLuis/chat-bot"
-                    target="_blank"
-                    rel="noopener"
-                    class="code-badge"
-                >
-                    <img
-                        src="https://travis-ci.org/MontealegreLuis/chat-bot.svg?branch=master"
-                        alt="Build Status"
-                    >
-                </a>
-                <a
-                    href="https://codeclimate.com/github/MontealegreLuis/chat-bot"
-                    target="_blank"
-                    rel="noopener"
-                    class="code-badge"
-                >
-                    <img
-                        src="https://codeclimate.com/github/MontealegreLuis/chat-bot/badges/gpa.svg"
-                        alt="Code Climate"
-                    >
-                </a>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-sm-6 col-md-4 col-lg-3 grid-item library php">
-        <div class="panel panel-php">
-            <div class="panel-heading">
-                <i class="devicon-php-plain"></i>
-                Easy forms
-            </div>
-            <div class="panel-body">
-                Light library to decouple form responsibilities into 3 categories:
-                validation, rendering and translation.
-            </div>
-            <div class="panel-footer">
-                <a
-                        href="https://github.com/ComPHPPuebla/easy-forms"
+                        href="https://github.com/MontealegreLuis/simple-simon"
                         target="_blank"
                         rel="noopener"
                         class="github"
                 >
-                    <i class="devicon-github-plain"></i>
+                    <i class="devicon-github-original"></i>
                 </a>
                 <a
-                        href="https://travis-ci.org/ComPHPPuebla/easy-forms"
+                        href="https://travis-ci.org/MontealegreLuis/simple-simon"
                         target="_blank"
                         rel="noopener"
                         class="code-badge"
                 >
                     <img
-                            src="https://travis-ci.org/ComPHPPuebla/easy-forms.svg?branch=master"
+                            src="https://travis-ci.org/MontealegreLuis/simple-simon.svg?branch=master"
                             alt="Build Status"
                     >
                 </a>
                 <a
-                        href="https://insight.sensiolabs.com/projects/b21b5fac-a347-4c1a-b9b0-9965a93893ea"
+                        href="https://codebeat.co/projects/github-com-montealegreluis-simple-simon"
                         target="_blank"
                         rel="noopener"
                         class="code-badge"
                 >
                     <img
-                            src="https://insight.sensiolabs.com/projects/b21b5fac-a347-4c1a-b9b0-9965a93893ea/mini.png"
-                            alt="SensioLabsInsight"
+                            src="https://codebeat.co/badges/fc41b73e-e111-4349-bc44-6eb913087c40"
+                            alt="codebeat badge"
                     >
-                </a>
-            </div>
-        </div>
-    </div>
-    <div class="col-sm-6 col-md-4 col-lg-3 grid-item application php">
-        <div class="panel panel-php">
-            <div class="panel-heading">
-                <i class="devicon-laravel-plain"></i>
-                Fitbit OAuth with Laravel
-            </div>
-            <div class="panel-body">
-                Laravel application to demo how to authenticate using the Fitbit API
-            </div>
-            <div class="panel-footer">
-                <a
-                        href="https://github.com/MontealegreLuis/fitbit-example"
-                        target="_blank"
-                        rel="noopener"
-                        class="github"
-                >
-                    <i class="devicon-github-plain"></i>
                 </a>
             </div>
         </div>
@@ -309,7 +242,7 @@ use:
                         rel="noopener"
                         class="code-badge"
                 >
-                    <i class="devicon-github-plain"></i>
+                    <i class="devicon-github-original"></i>
                 </a>
                 <a
                         href="https://travis-ci.org/ComPHPPuebla/dbal-fixtures"
@@ -336,6 +269,51 @@ use:
             </div>
         </div>
     </div>
+    <div class="col-sm-6 col-md-4 col-lg-3 grid-item application java">
+        <div class="panel panel-java">
+            <div class="panel-heading">
+                <i class="devicon-java-plain"></i>
+                Movies with Hibernate
+            </div>
+            <div class="panel-body">
+                Command line application to search movies by category or title. The entities are
+                mapped using XML. It includes several examples of queries with HQL.
+                Tests demonstrate the use of JUnit + Hamcrest and Mockito.
+            </div>
+            <div class="panel-footer">
+                <a
+                        href="https://github.com/MontealegreLuis/hibernate-example"
+                        target="_blank"
+                        rel="noopener"
+                        class="github"
+                >
+                    <i class="devicon-github-original"></i>
+                </a>
+                <a
+                        href="https://travis-ci.org/MontealegreLuis/hibernate-example"
+                        target="_blank"
+                        rel="noopener"
+                        class="code-badge"
+                >
+                    <img
+                            src="https://travis-ci.org/MontealegreLuis/hibernate-example.svg?branch=master"
+                            alt="Build Status"
+                    >
+                </a>
+                <a
+                        href="https://codebeat.co/projects/github-com-montealegreluis-hibernate-example"
+                        target="_blank"
+                        rel="noopener"
+                        class="code-badge"
+                >
+                    <img
+                            src="https://codebeat.co/badges/df70242a-a3d4-4367-8785-6703e4e243e6"
+                            alt="codebeat badge"
+                    >
+                </a>
+            </div>
+        </div>
+    </div>
     <div class="col-sm-6 col-md-4 col-lg-3 grid-item library php">
         <div class="panel panel-php">
             <div class="panel-heading">
@@ -354,7 +332,7 @@ use:
                     rel="noopener"
                     class="github"
                 >
-                    <i class="devicon-github-plain"></i>
+                    <i class="devicon-github-original"></i>
                 </a>
                 <a
                         href="https://travis-ci.org/ComPHPPuebla/slim-modules"
@@ -385,51 +363,6 @@ use:
         <div class="panel panel-java">
             <div class="panel-heading">
                 <i class="devicon-java-plain"></i>
-                Movies with Hibernate
-            </div>
-            <div class="panel-body">
-                Command line application to search movies by category or title. The entities are
-                mapped using XML. It includes several examples of queries with HQL.
-                Tests demonstrate the use of JUnit + Hamcrest and Mockito.
-            </div>
-            <div class="panel-footer">
-                <a
-                    href="https://github.com/MontealegreLuis/hibernate-example"
-                    target="_blank"
-                    rel="noopener"
-                    class="github"
-                >
-                    <i class="devicon-github-plain"></i>
-                </a>
-                <a
-                    href="https://travis-ci.org/MontealegreLuis/hibernate-example"
-                    target="_blank"
-                    rel="noopener"
-                    class="code-badge"
-                >
-                    <img
-                        src="https://travis-ci.org/MontealegreLuis/hibernate-example.svg?branch=master"
-                        alt="Build Status"
-                    >
-                </a>
-                <a
-                    href="https://codebeat.co/projects/github-com-montealegreluis-hibernate-example"
-                    target="_blank"
-                    rel="noopener"
-                    class="code-badge"
-                >
-                    <img
-                        src="https://codebeat.co/badges/df70242a-a3d4-4367-8785-6703e4e243e6"
-                        alt="codebeat badge"
-                    >
-                </a>
-            </div>
-        </div>
-    </div>
-    <div class="col-sm-6 col-md-4 col-lg-3 grid-item application java">
-        <div class="panel panel-java">
-            <div class="panel-heading">
-                <i class="devicon-java-plain"></i>
                 Movies with Servlets
             </div>
             <div class="panel-body">
@@ -443,7 +376,7 @@ use:
                     rel="noopener"
                     class="github"
                 >
-                    <i class="devicon-github-plain"></i>
+                    <i class="devicon-github-original"></i>
                 </a>
                 <a
                     href="https://travis-ci.org/MontealegreLuis/movies"
@@ -487,7 +420,7 @@ use:
                         rel="noopener"
                         class="github"
                 >
-                    <i class="devicon-github-plain"></i>
+                    <i class="devicon-github-original"></i>
                 </a>
                 <a
                         href="https://travis-ci.org/MontealegreLuis/readit"
@@ -514,122 +447,46 @@ use:
             </div>
         </div>
     </div>
-    <div class="col-sm-6 col-md-4 col-lg-3 grid-item application javascript">
-        <div class="panel panel-javascript">
+    <div class="col-sm-6 col-md-4 col-lg-3 grid-item application ruby">
+        <div class="panel panel-ruby">
             <div class="panel-heading">
-                <i class="devicon-javascript-plain"></i>
-                Simple Simon game ES6
+                <i class="devicon-ruby-plain"></i>
+                Chatbot in Ruby
             </div>
             <div class="panel-body">
-                This is an implementation of the Simple Simon Game using TDD. It uses ES6 classes
-                and modules. Tests are written in Jasmine
+                Command line application with a very minimalistic Chatbot. It demonstrates strings
+                manipulation in Ruby and how to use rspec to unit test.
             </div>
             <div class="panel-footer">
                 <a
-                    href="https://github.com/MontealegreLuis/simple-simon"
-                    target="_blank"
-                    rel="noopener"
-                    class="github"
+                        href="https://github.com/MontealegreLuis/chat-bot"
+                        target="_blank"
+                        rel="noopener"
+                        class="github"
                 >
-                    <i class="devicon-github-plain"></i>
+                    <i class="devicon-github-original"></i>
                 </a>
                 <a
-                    href="https://travis-ci.org/MontealegreLuis/simple-simon"
-                    target="_blank"
-                    rel="noopener"
-                    class="code-badge"
+                        href="https://travis-ci.org/MontealegreLuis/chat-bot"
+                        target="_blank"
+                        rel="noopener"
+                        class="code-badge"
                 >
                     <img
-                        src="https://travis-ci.org/MontealegreLuis/simple-simon.svg?branch=master"
-                        alt="Build Status"
+                            src="https://travis-ci.org/MontealegreLuis/chat-bot.svg?branch=master"
+                            alt="Build Status"
                     >
                 </a>
                 <a
-                    href="https://codebeat.co/projects/github-com-montealegreluis-simple-simon"
-                    target="_blank"
-                    rel="noopener"
-                    class="code-badge"
+                        href="https://codeclimate.com/github/MontealegreLuis/chat-bot"
+                        target="_blank"
+                        rel="noopener"
+                        class="code-badge"
                 >
                     <img
-                        src="https://codebeat.co/badges/fc41b73e-e111-4349-bc44-6eb913087c40"
-                        alt="codebeat badge"
+                            src="https://codeclimate.com/github/MontealegreLuis/chat-bot/badges/gpa.svg"
+                            alt="Code Climate"
                     >
-                </a>
-            </div>
-        </div>
-    </div>
-    <div class="col-sm-6 col-md-4 col-lg-3 grid-item workshop php">
-        <div class="panel panel-php">
-            <div class="panel-heading">
-                <i class="devicon-php-plain"></i>
-                Composer workshop
-            </div>
-            <div class="panel-body">
-                This workshop incrementally builds a simple web framework, adding a PHP library
-                with Composer on each phase.
-            </div>
-            <div class="panel-footer">
-                <a
-                        href="https://github.com/ComPHPPuebla/taller-composer"
-                        target="_blank"
-                        rel="noopener"
-                        class="github"
-                >
-                    <i class="devicon-github-plain"></i>
-                </a>
-            </div>
-        </div>
-    </div>
-    <div class="col-sm-6 col-md-4 col-lg-3 grid-item tutorial php">
-        <div class="panel panel-php">
-            <div class="panel-heading">
-                <i class="devicon-php-plain"></i>
-                Slim 2 workshop <small>(spanish)</small>
-            </div>
-            <div class="panel-body">
-                <p>
-                    This is a Slim 2 workshop divided into two videos. It's a small
-                    application to upload, browse and play audio files.
-                </p>
-            </div>
-            <div class="panel-footer">
-                <a
-                        href="https://www.youtube.com/watch?v=P5s8Sydo154"
-                        target="_blank"
-                        rel="noopener"
-                        class="github"
-                >
-                    <i class="fa fa-youtube"></i> 1
-                </a>
-                <a
-                        href="https://www.youtube.com/watch?v=iRDwfnKOKtk"
-                        target="_blank"
-                        rel="noopener"
-                        class="github"
-                >
-                    <i class="fa fa-youtube"></i> 2
-                </a>
-            </div>
-        </div>
-    </div>
-    <div class="col-sm-6 col-md-4 col-lg-3 grid-item workshop php">
-        <div class="panel panel-php">
-            <div class="panel-heading">
-                <i class="devicon-symfony-original"></i>
-                Symfony 2 workshop
-            </div>
-            <div class="panel-body">
-                The goal of this workshop is to start using the Symfony2 components in a legacy
-                application in order to start using the full-stack framework at the end.
-            </div>
-            <div class="panel-footer">
-                <a
-                        href="https://github.com/ComPHPPuebla/sf2workshop"
-                        target="_blank"
-                        rel="noopener"
-                        class="github"
-                >
-                    <i class="devicon-github-plain"></i>
                 </a>
             </div>
         </div>
@@ -658,6 +515,40 @@ use:
             </div>
         </div>
     </div>
+    <div class="col-sm-6 col-md-4 col-lg-3 grid-item application java">
+        <div class="panel panel-java">
+            <div class="panel-heading">
+                <i class="devicon-java-plain"></i>
+                Yelp API in Spring Boot
+            </div>
+            <div class="panel-body">
+                Web application written in Spring boot. Users can search by location and category
+                using the Yelp Fusion API. It shows how to use the search, reviews and business
+                endpoints.
+            </div>
+            <div class="panel-footer">
+                <a
+                        href="https://github.com/MontealegreLuis/yelp-demo"
+                        target="_blank"
+                        rel="noopener"
+                        class="github"
+                >
+                    <i class="devicon-github-original"></i>
+                </a>
+                <a
+                        href="https://codebeat.co/projects/github-com-montealegreluis-yelp-demo-master"
+                        target="_blank"
+                        rel="noopener"
+                        class="code-badge"
+                >
+                    <img
+                            src="https://codebeat.co/badges/0704b6a2-cd9a-446b-bc67-4db792c641a0"
+                            alt="Codebeat"
+                    >
+                </a>
+            </div>
+        </div>
+    </div>
     <div class="col-sm-6 col-md-4 col-lg-3 grid-item application php">
         <div class="panel panel-php">
             <div class="panel-heading">
@@ -675,7 +566,7 @@ use:
                     rel="noopener"
                     class="github"
                 >
-                    <i class="devicon-github-plain"></i>
+                    <i class="devicon-github-original"></i>
                 </a>
                 <a
                     href="https://travis-ci.org/MontealegreLuis/php-testing-tools"
@@ -741,7 +632,7 @@ use:
                         rel="noopener"
                         class="github"
                 >
-                    <i class="devicon-github-plain"></i>
+                    <i class="devicon-github-original"></i>
                 </a>
                 <a
                     href="https://travis-ci.org/MontealegreLuis/yelpv3-java-client"
@@ -768,36 +659,34 @@ use:
             </div>
         </div>
     </div>
-    <div class="col-sm-6 col-md-4 col-lg-3 grid-item application java">
-        <div class="panel panel-java">
+    <div class="col-sm-6 col-md-4 col-lg-3 grid-item tutorial php">
+        <div class="panel panel-php">
             <div class="panel-heading">
-                <i class="devicon-java-plain"></i>
-                Yelp API in Spring Boot
+                <i class="devicon-php-plain"></i>
+                Slim 2 workshop <small>(spanish)</small>
             </div>
             <div class="panel-body">
-                Web application written in Spring boot. Users can search by location and category
-                using the Yelp Fusion API. It shows how to use the search, reviews and business
-                endpoints.
+                <p>
+                    This is a Slim 2 workshop divided into two videos. It's a small
+                    application to upload, browse and play audio files.
+                </p>
             </div>
             <div class="panel-footer">
                 <a
-                    href="https://github.com/MontealegreLuis/yelp-demo"
-                    target="_blank"
-                    rel="noopener"
-                    class="github"
+                        href="https://www.youtube.com/watch?v=P5s8Sydo154"
+                        target="_blank"
+                        rel="noopener"
+                        class="github"
                 >
-                    <i class="devicon-github-plain"></i>
+                    <i class="fa fa-youtube"></i> 1
                 </a>
                 <a
-                    href="https://codebeat.co/projects/github-com-montealegreluis-yelp-demo-master"
-                    target="_blank"
-                    rel="noopener"
-                    class="code-badge"
+                        href="https://www.youtube.com/watch?v=iRDwfnKOKtk"
+                        target="_blank"
+                        rel="noopener"
+                        class="github"
                 >
-                    <img
-                        src="https://codebeat.co/badges/0704b6a2-cd9a-446b-bc67-4db792c641a0"
-                        alt="Codebeat"
-                    >
+                    <i class="fa fa-youtube"></i> 2
                 </a>
             </div>
         </div>
