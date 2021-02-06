@@ -2,56 +2,79 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://www.montealegreluis.com</loc>
-    <lastmod>2018-07-13</lastmod>
+    <lastmod>2021-02-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
-  </url>
-    <url>
-    <loc>https://www.montealegreluis.com/blog/2015/03/04/elementos-compuestos-en-formularios/</loc>
-    <lastmod>2015-03-04T00:00:00+00:00</lastmod>
+  </url>  <url>
+    <loc>https://www.montealegreluis.com
+Deprecated: array_key_exists(): Using array_key_exists() on objects is deprecated. Use isset() or property_exists() instead in /Users/luis/PhpstormProjects/blog/vendor/twig/twig/lib/Twig/Template.php on line 580
+/blog/2015/03/04/elementos-compuestos-en-formularios/</loc>
+    <lastmod>
+Deprecated: array_key_exists(): Using array_key_exists() on objects is deprecated. Use isset() or property_exists() instead in /Users/luis/PhpstormProjects/blog/vendor/twig/twig/lib/Twig/Template.php on line 580
+2015-03-04T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>1.0</priority>
-  </url>
-    <url>
-    <loc>https://www.montealegreluis.com/blog/2015/02/28/modulos-con-slim/</loc>
-    <lastmod>2015-02-28T00:00:00+00:00</lastmod>
+  </url>  <url>
+    <loc>https://www.montealegreluis.com
+Deprecated: array_key_exists(): Using array_key_exists() on objects is deprecated. Use isset() or property_exists() instead in /Users/luis/PhpstormProjects/blog/vendor/twig/twig/lib/Twig/Template.php on line 580
+/blog/2015/02/28/modulos-con-slim/</loc>
+    <lastmod>
+Deprecated: array_key_exists(): Using array_key_exists() on objects is deprecated. Use isset() or property_exists() instead in /Users/luis/PhpstormProjects/blog/vendor/twig/twig/lib/Twig/Template.php on line 580
+2015-02-28T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>1.0</priority>
-  </url>
-    <url>
-    <loc>https://www.montealegreluis.com/blog/2015/02/05/un-formulario-no-tiene-porque-hacer-todo/</loc>
-    <lastmod>2015-02-05T00:00:00+00:00</lastmod>
+  </url>  <url>
+    <loc>https://www.montealegreluis.com
+Deprecated: array_key_exists(): Using array_key_exists() on objects is deprecated. Use isset() or property_exists() instead in /Users/luis/PhpstormProjects/blog/vendor/twig/twig/lib/Twig/Template.php on line 580
+/blog/2015/02/05/un-formulario-no-tiene-porque-hacer-todo/</loc>
+    <lastmod>
+Deprecated: array_key_exists(): Using array_key_exists() on objects is deprecated. Use isset() or property_exists() instead in /Users/luis/PhpstormProjects/blog/vendor/twig/twig/lib/Twig/Template.php on line 580
+2015-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>1.0</priority>
-  </url>
-    <url>
-    <loc>https://www.montealegreluis.com/blog/2014/12/15/tests-de-aceptacion-con-codeception/</loc>
-    <lastmod>2014-12-15T00:00:00+00:00</lastmod>
+  </url>  <url>
+    <loc>https://www.montealegreluis.com
+Deprecated: array_key_exists(): Using array_key_exists() on objects is deprecated. Use isset() or property_exists() instead in /Users/luis/PhpstormProjects/blog/vendor/twig/twig/lib/Twig/Template.php on line 580
+/blog/2014/12/15/tests-de-aceptacion-con-codeception/</loc>
+    <lastmod>
+Deprecated: array_key_exists(): Using array_key_exists() on objects is deprecated. Use isset() or property_exists() instead in /Users/luis/PhpstormProjects/blog/vendor/twig/twig/lib/Twig/Template.php on line 580
+2014-12-15T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>1.0</priority>
-  </url>
-    <url>
-    <loc>https://www.montealegreluis.com/blog/2014/12/04/testing-de-componentes-flight/</loc>
-    <lastmod>2014-12-04T00:00:00+00:00</lastmod>
+  </url>  <url>
+    <loc>https://www.montealegreluis.com
+Deprecated: array_key_exists(): Using array_key_exists() on objects is deprecated. Use isset() or property_exists() instead in /Users/luis/PhpstormProjects/blog/vendor/twig/twig/lib/Twig/Template.php on line 580
+/blog/2014/12/04/testing-de-componentes-flight/</loc>
+    <lastmod>
+Deprecated: array_key_exists(): Using array_key_exists() on objects is deprecated. Use isset() or property_exists() instead in /Users/luis/PhpstormProjects/blog/vendor/twig/twig/lib/Twig/Template.php on line 580
+2014-12-04T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>1.0</priority>
-  </url>
-    <url>
-    <loc>https://www.montealegreluis.com/blog/2014/11/28/configurando-satis-con-ssh/</loc>
-    <lastmod>2014-11-28T00:00:00+00:00</lastmod>
+  </url>  <url>
+    <loc>https://www.montealegreluis.com
+Deprecated: array_key_exists(): Using array_key_exists() on objects is deprecated. Use isset() or property_exists() instead in /Users/luis/PhpstormProjects/blog/vendor/twig/twig/lib/Twig/Template.php on line 580
+/blog/2014/11/28/configurando-satis-con-ssh/</loc>
+    <lastmod>
+Deprecated: array_key_exists(): Using array_key_exists() on objects is deprecated. Use isset() or property_exists() instead in /Users/luis/PhpstormProjects/blog/vendor/twig/twig/lib/Twig/Template.php on line 580
+2014-11-28T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>1.0</priority>
-  </url>
-    <url>
-    <loc>https://www.montealegreluis.com/blog/2014/11/23/aplicaciones-desacopladas-con-flight-js/</loc>
-    <lastmod>2014-11-23T00:00:00+00:00</lastmod>
+  </url>  <url>
+    <loc>https://www.montealegreluis.com
+Deprecated: array_key_exists(): Using array_key_exists() on objects is deprecated. Use isset() or property_exists() instead in /Users/luis/PhpstormProjects/blog/vendor/twig/twig/lib/Twig/Template.php on line 580
+/blog/2014/11/23/aplicaciones-desacopladas-con-flight-js/</loc>
+    <lastmod>
+Deprecated: array_key_exists(): Using array_key_exists() on objects is deprecated. Use isset() or property_exists() instead in /Users/luis/PhpstormProjects/blog/vendor/twig/twig/lib/Twig/Template.php on line 580
+2014-11-23T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>1.0</priority>
-  </url>
-    <url>
-    <loc>https://www.montealegreluis.com/blog/2014/11/17/testing-con-jasmine/</loc>
-    <lastmod>2014-11-17T00:00:00+00:00</lastmod>
+  </url>  <url>
+    <loc>https://www.montealegreluis.com
+Deprecated: array_key_exists(): Using array_key_exists() on objects is deprecated. Use isset() or property_exists() instead in /Users/luis/PhpstormProjects/blog/vendor/twig/twig/lib/Twig/Template.php on line 580
+/blog/2014/11/17/testing-con-jasmine/</loc>
+    <lastmod>
+Deprecated: array_key_exists(): Using array_key_exists() on objects is deprecated. Use isset() or property_exists() instead in /Users/luis/PhpstormProjects/blog/vendor/twig/twig/lib/Twig/Template.php on line 580
+2014-11-17T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>1.0</priority>
-  </url>
-  </urlset>
+  </url></urlset>
